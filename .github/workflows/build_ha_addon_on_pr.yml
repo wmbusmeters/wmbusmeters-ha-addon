@@ -1,0 +1,87 @@
+name: Build HA addon edge on PR
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'wmbusmeters-ha-addon/**'
+
+concurrency:
+  group: ha-addon-build-edge
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          token: '${{ secrets.HA_PAT }}'
+
+      - name: Update README and set version in config.json
+        id: version
+        run: |
+          if [[ $(cat wmbusmeters-ha-addon-edge/config.json | grep version | awk -F \- '{print NF-1}') == 1 ]]; then
+            v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4) 
+            ver="${v}-1"
+          else 
+            v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
+            fp=${v:0:-1}            
+            lc=${v: -1}
+            nlc=$((++lc))
+            ver="$fp$nlc"
+          fi
+          echo "version=$ver" >> $GITHUB_OUTPUT
+          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$ver\"\,|g" wmbusmeters-ha-addon-edge/config.json
+          sed -i "1s|^|## $ver \n- Updated to version [$ver](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ha-addon_artifact-${{ steps.version.outputs.version }}
+          path: ${{ github.workspace }}
+          retention-days: 1
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    name: Build ${{ matrix.arch }} ${{ matrix.addon }} add-on
+    strategy:
+      matrix:
+        addon: ["wmbusmeters"]
+        arch: ["amd64", "armv7", "aarch64"]
+    steps: 
+      - uses: actions/download-artifact@v3
+        with:
+          name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+
+      - name: Build ${{ matrix.addon }} ${{ matrix.arch }} HA add-on
+        uses: home-assistant/builder@master
+        with:
+          args: |
+            --${{ matrix.arch }} \
+            --target wmbusmeters-ha-addon-edge \
+            --version ${{ needs.prepare.outputs.version }}
+
+  update-repo:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
+
+      - name: Push changed files back to repo
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: "Auto Push - update ha-addon config and changelog for ${{ needs.prepare.outputs.version }} - [no ci]"

@@ -1,0 +1,26 @@
+name: Update Docker Hub Description
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker_README.md
+      - .github/workflows/dockerhub-description.yml
+jobs:
+  dockerHubDescription:
+    strategy:
+      matrix:
+        release: [wmbusmeters-ha-addon, wmbusmeters-ha-addon-edge]
+        arch: [amd64, aarch64, armv7]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Docker Hub Description - ${{ matrix.release }}-${{ matrix.arch }}
+      uses: peter-evans/dockerhub-description@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_PASS }}
+        repository: wmbusmeters/${{ matrix.release }}-${{ matrix.arch }}
+        readme-filepath: ./docker_README.md
+        short-description: "wmbusmeters Home Assistant add-on docker container"
