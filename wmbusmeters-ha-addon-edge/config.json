@@ -7,8 +7,6 @@
     "url": "https://github.com/wmbusmeters/wmbusmeters-ha-addon",
     "image": "wmbusmeters/wmbusmeters-ha-addon-edge-{arch}",
     "init" : false,
-    "startup": "application",
-    "boot": "auto",
     "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0"],
     "usb": true,
     "uart": true,
