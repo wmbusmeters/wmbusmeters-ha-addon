@@ -30,10 +30,10 @@ jobs:
             ver="${v}-1"
           else
             v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
-            fp=${v:0:-1}
-            lc=${v: -1}
+            fp=${v%-*}
+            lc=${v##*-}
             nlc=$((++lc))
-            ver="$fp$nlc"
+            ver="$fp-$nlc"
           fi
           echo "version=$ver" >> $GITHUB_OUTPUT
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$ver\"\,|g" wmbusmeters-ha-addon-edge/config.json

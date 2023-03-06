@@ -18,9 +18,9 @@ or to install manually simply add wmbusmeters Home Assistant Add-on repository:
 ```
 https://github.com/wmbusmeters/wmbusmeters-ha-addon
 ```
-Please refer to the wmbusmeters [documentation](https://github.com/weetmuts/wmbusmeters/blob/master/README.md) and add-on [documentation](https://github.com/wmbusmeters/wmbusmeters-ha-addon/blob/main/wmbusmeters-ha-addon-edge/DOCS.md) for detailed information on how to install and configure the Add-on.
+Please refer to the wmbusmeters [documentation](https://github.com/wmbusmeters/wmbusmeters/blob/master/README.md) and add-on [documentation](https://github.com/wmbusmeters/wmbusmeters-ha-addon/blob/main/wmbusmeters-ha-addon-edge/DOCS.md) for detailed information on how to install and configure the Add-on.
 
 ## Issues
-Issues are being tracked centrally, so if you find any issues with the add-on, please check the [central issue tracker](https://github.com/weetmuts/wmbusmeters/issues) for similar issues and open new if needed. 
+Issues are being tracked centrally, so if you find any issues with the add-on, please check the [central issue tracker](https://github.com/wmbusmeters/wmbusmeters/issues) for similar issues and open new if needed. 
 
 Feel free to [create a PR](CONTRIBUTING.md) for fixes and enhancements here.

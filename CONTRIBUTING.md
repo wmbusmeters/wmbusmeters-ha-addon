@@ -10,11 +10,11 @@ You can contribute to the wmbusmeters-ha-addon content and site in several ways.
 
 #### Create a new issue
 
-If you spot a problem, [search if an issue already exists](https://github.com/weetmuts/wmbusmeters/labels/ha-addon). If a related issue doesn't exist, you can open a new issue using a relevant [issue form](https://github.com/weetmuts/wmbusmeters/issues/new?assignees=&labels=ha-addon&template=ha-addon-request.yml). 
+If you spot a problem, [search if an issue already exists](https://github.com/wmbusmeters/wmbusmeters/labels/ha-addon). If a related issue doesn't exist, you can open a new issue using a relevant [issue form](https://github.com/wmbusmeters/wmbusmeters/issues/new?assignees=&labels=ha-addon&template=ha-addon-request.yml). 
 
 #### Solve an issue
 
-Scan through our [existing issues](https://github.com/weetmuts/wmbusmeters/labels/ha-addon) to find one that interests you. As a general rule, we don’t assign issues to anyone. If you find an issue to work on, you are welcome to open a PR with a fix.
+Scan through our [existing issues](https://github.com/wmbusmeters/wmbusmeters/labels/ha-addon) to find one that interests you. As a general rule, we don’t assign issues to anyone. If you find an issue to work on, you are welcome to open a PR with a fix.
 
 ### Make Changes
 

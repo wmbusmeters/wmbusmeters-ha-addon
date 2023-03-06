@@ -126,5 +126,5 @@ You have several options to get them answered:
 [contributors]: https://github.com/wmbusmeters/wmbusmeters-ha-addon/graphs/contributors
 [forum]: https://community.home-assistant.io/c/home-assistant-os/25
 [github]: https://github.com/wmbusmeters/wmbusmeters-ha-addon
-[issue]: https://github.com/weetmuts/wmbusmeters/issues
+[issue]: https://github.com/wmbusmeters/wmbusmeters/issues
 [reddit]: https://reddit.com/r/homeassistant

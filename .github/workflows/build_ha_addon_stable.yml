@@ -22,7 +22,7 @@ jobs:
           rsync -a --delete wmbusmeters-ha-addon-edge/ wmbusmeters-ha-addon/ --exclude CHANGELOG.md
           sed -i 's/\[edge\] //g; s/-edge//g' wmbusmeters-ha-addon/config.json
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"${{ github.event.client_payload.ver }}\"\,|g" wmbusmeters-ha-addon/config.json
-          sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/weetmuts/wmbusmeters/blob/master/CHANGES)\n|" wmbusmeters-ha-addon/CHANGELOG.md
+          sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)\n|" wmbusmeters-ha-addon/CHANGELOG.md
 
       - uses: actions/upload-artifact@v3
         with:

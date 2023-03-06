@@ -20,7 +20,7 @@ jobs:
       - name: Update README and set version in config.json
         run: |
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"${{ github.event.client_payload.ver }}\"\,|g" wmbusmeters-ha-addon-edge/config.json
-          sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/weetmuts/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
+          sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
 
       - uses: actions/upload-artifact@v3
         with:
