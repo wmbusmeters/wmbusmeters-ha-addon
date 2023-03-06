@@ -26,11 +26,11 @@ jobs:
         id: version
         run: |
           if [[ $(cat wmbusmeters-ha-addon-edge/config.json | grep version | awk -F \- '{print NF-1}') == 1 ]]; then
-            v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4) 
-            ver="${v}-1"
-          else 
             v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
-            fp=${v:0:-1}            
+            ver="${v}-1"
+          else
+            v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
+            fp=${v:0:-1}
             lc=${v: -1}
             nlc=$((++lc))
             ver="$fp$nlc"
@@ -53,7 +53,7 @@ jobs:
       matrix:
         addon: ["wmbusmeters"]
         arch: ["amd64", "armv7", "aarch64"]
-    steps: 
+    steps:
       - uses: actions/download-artifact@v3
         with:
           name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
@@ -61,8 +61,8 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASS }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PAT }}
 
       - name: Build ${{ matrix.addon }} ${{ matrix.arch }} HA add-on
         uses: home-assistant/builder@master
