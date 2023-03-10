@@ -18,7 +18,11 @@ RUN mkdir build && cd build && cmake ../ && make
 
 FROM $BUILD_FROM AS scratch
 ENV QEMU_EXECVE=1
-RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb ncurses rtl-sdr netcat-openbsd
+RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb ncurses rtl-sdr netcat-openbsd nginx
+# Install Flask
+RUN apk add --update py3-pip
+RUN pip install flask requests waitress
+
 WORKDIR /wmbusmeters
 COPY --from=build /wmbusmeters/build/wmbusmeters /wmbusmeters/wmbusmeters
 COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
@@ -29,5 +33,10 @@ RUN chmod a+x /mqtt_discovery.sh
 
 COPY run.sh /
 RUN chmod a+x /run.sh
+
+COPY rootfs /
+RUN chmod a+x /etc/services.d/nginx/run
+RUN chmod a+x /etc/services.d/nginx/finish
+RUN chmod a+x /etc/cont-init.d/nginx.sh
 
 CMD ["/run.sh"]
