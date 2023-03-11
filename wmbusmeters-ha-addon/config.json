@@ -52,7 +52,7 @@
         "enable_mqtt_discovery": "bool?",
         "mqtt": {
           "host": "str?",
-          "port": "port?",
+          "port": "str?",
           "user": "str?",
           "password": "str?"
         },
