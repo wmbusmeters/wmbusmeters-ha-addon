@@ -8,7 +8,7 @@
     "image": "wmbusmeters/wmbusmeters-ha-addon-edge-{arch}",
     "panel_icon": "mdi:home-automation",
     "init" : false,
-    "ingress": "true",
+    "ingress": true,
     "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0"],
     "usb": true,
     "uart": true,
@@ -26,7 +26,5 @@
     "map": [
       "share:rw",
       "config:rw"
-    ],
-    "options": {},
-    "schema": false
+    ]
 }
