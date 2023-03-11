@@ -18,17 +18,14 @@ input:required:invalid{
 <div class="container">
     <h1 class="mb-3">wmbusmeters HA addon configuration</h1>
     <form id="json-form" method="POST">
-        <label class="form-label" for="file-path">File Path:</label>
-        <div class="col-md-4">
-            <input class="form-control" type="text" id="file-path" name="file_path" required>
-        </div>
-        <label class="mqtt-status" for="file-path">Enable mqtt discovery:</label>
-        <div class="col-md-4">
-            <input class="form-control" type="text" id="mqtt-status" name="mqtt-status" value="false" required>
-        </div>
 
-
-        <br>
+        <div class="input-group">
+            <span class="input-group-text" id="basic">wmbusmeters config location</span>
+            <span class="input-group-text">=</span>
+            <input type="text" class="form-control" id="file-path" name="file_path" required>
+        </div>
+	
+        <br />
         <div id="json-editor">
             <h4 class="mb-3">wmbusmeters configuration</h4>
             <div id="conf"></div>
@@ -39,10 +36,21 @@ input:required:invalid{
             <div id="sections"></div>
             <button id="add-section" class="btn btn-outline-primary" type="button">Add New meter</button>
             <hr class="my-4">
-            <div class="form-check">
-                <label class="form-label" for="mqtt-enabled">Custom MQTT configuration</label>
-                <input class="form-check-input" type="checkbox" id="mqtt-enabled" name="mqtt_enabled">
+            <h4 class="mb-3">MQTT section</h4>
+            <div class="input-group mb-3 mt-3">
+                <span class="input-group-text" id="basic">Enable mqtt discovery</span>
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" id="mqtt-status" name="mqtt-status" value="false">
+                </div>
             </div>
+
+            <div class="input-group mb-3 mt-3">
+                <span class="input-group-text" id="basic">Custom MQTT configuration</span>
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" id="mqtt-enabled" name="mqtt_enabled">
+                </div>
+            </div>
+
             <div id="mqtt"></div>
         </div>
         <br>

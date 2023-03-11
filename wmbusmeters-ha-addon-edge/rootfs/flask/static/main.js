@@ -3,6 +3,7 @@ function renderJsonPair(key = '', value = '') {
     const newPair = document.createElement('div');
     newPair.className = 'json-pair input-group mb-3';
     newPair.innerHTML = `<input class="key form-control" type="text" value="${key}" required>
+                         <span class="input-group-text">=</span>
                          <input class="value form-control" type="text" value="${value}" required>
                          <button class="delete-pair btn btn-outline-danger">Delete</button>`;
     document.getElementById('conf').appendChild(newPair);
@@ -22,6 +23,7 @@ window.addEventListener('load', () => {
                     case 'enable_mqtt_discovery':
                         if (dataForParse[key]) {
                             document.getElementById('mqtt-status').value = true;
+                            document.getElementById('mqtt-status').checked = true;
                         }
                         break;
                     case 'conf':
@@ -72,6 +74,7 @@ window.addEventListener('load', () => {
                 mqttFieldsHtml += `
                     <div class="input-group mb-3">
                         <input class="mqtt-key form-control" type="text" value="${keys[i]}" required>
+                        <span class="input-group-text">=</span>
                         <input class="mqtt-value form-control" value="${values[i]}" type="text" required>
                     </div>`;
             }
@@ -88,6 +91,17 @@ window.addEventListener('load', () => {
             document.getElementById('mqtt').removeChild(input);
         }
     });
+
+    document.getElementById('mqtt-status').addEventListener('change', event => {
+        if (event.target.checked) {
+            document.getElementById('mqtt-status').value = true;
+            document.getElementById('mqtt-status').checked = true;
+        } else {
+            document.getElementById('mqtt-status').value = false;
+            document.getElementById('mqtt-status').checked = false;
+        }
+    });
+
 
     document.getElementById('add-pair').addEventListener('click', () => {
         renderJsonPair();
@@ -112,6 +126,7 @@ window.addEventListener('load', () => {
             newSectionHtml += `
                 <div class="json-pair input-group mb-3">
                     <input class="section-key form-control" value="${keys[i]}" type="text" required>
+                    <span class="input-group-text">=</span>
                     <input class="section-value form-control" value="${values[i]}" type="text" required>
                     <button class="delete-pair btn btn-outline-danger" type="button">Delete</button>
                 </div>`;
@@ -134,6 +149,7 @@ window.addEventListener('load', () => {
             const newPair = document.createElement('div');
             newPair.className = 'json-pair input-group mb-3';
             newPair.innerHTML = `<input class="section-key form-control" type="text" required>
+                                 <span class="input-group-text">=</span>
                                  <input class="section-value form-control" type="text" required>
                                  <button class="delete-pair btn btn-outline-danger">Delete</button>`;
             event.target.parentNode.insertBefore(newPair, event.target);
