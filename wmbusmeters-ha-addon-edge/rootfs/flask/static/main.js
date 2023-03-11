@@ -41,9 +41,10 @@ window.addEventListener('load', () => {
                     case 'mqtt':
                         const mqttValuesForRendering = Object.values(dataForParse[key]);
                         if (mqttValuesForRendering.length) {
-                            renderMqtt(mqttValuesForRendering);
+                            const keys = Object.keys(dataForParse[key]);
+                            const values = Object.values(dataForParse[key]);
+                            renderMqtt(keys, values);
                             document.getElementById('mqtt-enabled').checked = true;
-
                         }
 
                 }
@@ -63,14 +64,14 @@ window.addEventListener('load', () => {
         } else {return unsafe;}
     }
 
-    function renderMqtt(values=['', '', '', '']) {
+    function renderMqtt(keys=['server', 'port', 'username', 'password'], values=['', '', '', '']) {
             const newMqtt = document.createElement('div');
             let mqttFieldsHtml = '';
-            const MQTT_FIELDS = ['server', 'port', 'username', 'password'];
-            for (let i = 0; i < values.length; i++) {
+            const MQTT_FIELDS = '';
+            for (let i = 0; i < keys.length; i++) {
                 mqttFieldsHtml += `
                     <div class="input-group mb-3">
-                        <input class="mqtt-key form-control" type="text" value="${MQTT_FIELDS[i]}" required>
+                        <input class="mqtt-key form-control" type="text" value="${keys[i]}" required>
                         <input class="mqtt-value form-control" value="${values[i]}" type="text" required>
                     </div>`;
             }
