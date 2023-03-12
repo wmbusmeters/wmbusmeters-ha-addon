@@ -1,14 +1,14 @@
 {
     "name": "Wmbusmeters (W-MBus to MQTT)",
-    "version": "1.11.0-5",
+    "version": "1.12.0",
     "slug": "wmbusmeters-ha-addon",
     "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
     "arch": ["armv7", "aarch64", "amd64"],
     "url": "https://github.com/wmbusmeters/wmbusmeters-ha-addon",
-    "image": "wmbusmeters/wmbusmeters-ha-addon-edge-{arch}",
+    "image": "wmbusmeters/wmbusmeters-ha-addon-{arch}",
+    "panel_icon": "mdi:home-automation",
     "init" : false,
-    "startup": "application",
-    "boot": "auto",
+    "ingress": true,
     "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0"],
     "usb": true,
     "uart": true,
@@ -26,52 +26,5 @@
     "map": [
       "share:rw",
       "config:rw"
-    ],
-    "options": {
-        "data_path": "/config/wmbusmeters",
-        "enable_mqtt_discovery": false,
-        "conf": {
-            "loglevel": "normal",
-            "device": "auto:t1",
-            "donotprobe": "/dev/ttyAMA0",
-            "logtelegrams": false,
-            "format": "json",
-            "logfile": "/dev/stdout",
-            "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""
-          },
-        "meters": {
-            "name": "ElectricityMeter",
-            "driver": "amiplus",
-            "id": "12345678",
-            "key": "DEADBEEF1337DEADBEEF1337DEADBEEF"
-          },
-        "mqtt": {}
-    },
-    "schema": {
-        "data_path": "str",
-        "enable_mqtt_discovery": "bool?",
-        "mqtt": {
-          "host": "str?",
-          "port": "port?",
-          "user": "str?",
-          "password": "str?"
-        },
-        "conf": {
-          "loglevel": "str",
-          "device": "str",
-          "donotprobe": "str?",
-          "logtelegrams": "bool?",
-          "format": "str",
-          "logfile": "str",
-          "shell": "str"
-        },
-        "meters": [
-          {
-            "name": "str?",
-            "driver": "str?",
-            "id": "str?",
-            "key": "str?"
-          }
-        ]
-    }
+    ]
 }

@@ -1,8 +1,13 @@
 #!/usr/bin/with-contenv bashio
 
-CONFIG_PATH=/data/options.json
+CONFIG_PATH=/data/options_custom.json
 
-CONFIG_DATA_PATH=$(bashio::config 'data_path')
+if [ ! -f ${CONFIG_PATH} ]
+then
+    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [{"name": "ExampleMeter", "driver": "amiplus", "id": "12345678", "key": "NOKEY"}], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+fi
+
+CONFIG_DATA_PATH=$(bashio::jq "${CONFIG_PATH}" '.data_path')
 CONFIG_CONF=$(bashio::jq "${CONFIG_PATH}" '.conf')
 CONFIG_METERS=$(bashio::jq "${CONFIG_PATH}" '.meters')
 
@@ -21,6 +26,28 @@ fi
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
 
+# read each line of config file
+while read -r line; do
+    # split the line into parameter and values
+    param="${line%=*}"
+    values="${line#*=}"
+    # check if values contain the delimiter ";"
+    if [[ "$values" == *";"* ]]; then
+        # split values into an array using ";" as the delimiter
+        IFS=";" read -ra arr <<< "$values"
+        # extract the first key from the parameter
+        first_key="${param%=*}"
+        # loop through the array and create separate key-value pairs
+        for value in "${arr[@]}"; do
+            echo "$first_key=$value"
+        done
+    else
+        # if values do not contain ";", print the original key-value pair
+        echo "$line"
+    fi
+done < $CONFIG_DATA_PATH/etc/wmbusmeters.conf > $CONFIG_DATA_PATH/etc/wmbusmeters.conf_tmp
+mv $CONFIG_DATA_PATH/etc/wmbusmeters.conf_tmp $CONFIG_DATA_PATH/etc/wmbusmeters.conf
+
 bashio::log.info "Registering meters ..."
 rm -f $CONFIG_DATA_PATH/etc/wmbusmeters.d/*
 meter_no=0
@@ -35,12 +62,12 @@ do
 done
 
 bashio::log.info "Generating MQTT configuration ... "
-if bashio::config.exists "mqtt.host"
+if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.server"
 then
-  MQTT_HOST=$(bashio::config "mqtt.host")
-  if bashio::config.exists "mqtt.port"; then MQTT_PORT=$(bashio::config "mqtt.port"); fi
-  if bashio::config.exists "mqtt.user"; then MQTT_USER=$(bashio::config "mqtt.user"); fi
-  if bashio::config.exists "mqtt.password"; then MQTT_PASSWORD=$(bashio::config "mqtt.password"); fi
+  MQTT_HOST=$(bashio::jq "${CONFIG_PATH}" ".mqtt.server")
+  if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.port"; then MQTT_PORT=$(bashio::jq "${CONFIG_PATH}" ".mqtt.port"); fi
+  if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.username"; then MQTT_USER=$(bashio::jq "${CONFIG_PATH}" ".mqtt.username"); fi
+  if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.password"; then MQTT_PASSWORD=$(bashio::jq "${CONFIG_PATH}" ".mqtt.password"); fi
 else
   MQTT_HOST=$(bashio::services mqtt "host")
   MQTT_PORT=$(bashio::services mqtt "port")
@@ -65,6 +92,9 @@ chmod a+x /wmbusmeters/mosquitto_pub.sh
 
 # Running MQTT discovery
 /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
+
+bashio::log.info "Starting web configuration service."
+python3 /flask/app.py &
 
 bashio::log.info "Running wmbusmeters ..."
 /wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH
