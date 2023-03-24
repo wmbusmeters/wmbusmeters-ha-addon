@@ -10,14 +10,14 @@ Stable - will contain wmbusmeters stable release combained with add-on changes o
 
 # Upgrade from older add-on versions
 
-1. Backup existing configs and uninstall wmbusmeters addon
+1. Manualy backup existing configs and uninstall wmbusmeters addon
 1. Navigate to Add-ons > Add-on Store > Repositories
 1. Remove https://github.com/weetmuts/wmbusmeters and add https://github.com/wmbusmeters/wmbusmeters-ha-addon
 1. Navigate to Add-ons > Add-on Store and press "Ctrl+R" or reload page in other way
 1. Install wmbusmeters add-on
 1. Enable "Show in sidebar"
 1. Start the addon container
-1. Navigate to wmbusmeter in sidebar, restore configuration and save it.
+1. Navigate to wmbusmeter in sidebar, manualy restore configuration and save it.
 
 # Installation
 Simply click this button:
