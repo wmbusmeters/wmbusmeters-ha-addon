@@ -21,7 +21,7 @@ ENV QEMU_EXECVE=1
 RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb ncurses rtl-sdr netcat-openbsd nginx
 # Install Flask
 RUN apk add --update py3-pip
-RUN pip install flask requests waitress xmltodict pycryptodome
+RUN pip install flask requests waitress xmltodict pycrypto
 
 WORKDIR /wmbusmeters
 COPY --from=build /wmbusmeters/build/wmbusmeters /wmbusmeters/wmbusmeters
