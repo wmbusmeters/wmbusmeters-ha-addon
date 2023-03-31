@@ -1,64 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wmbusmeters HA addon configuration</title>
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="all">
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
-</head>
-
-<body>
-<style>
-input:required:invalid{
-  border-color: red;
-}
-</style>
-<div class="container">
-    <h1 class="mb-3">wmbusmeters HA addon configuration</h1>
-    <form id="json-form" method="POST">
-
-        <div class="input-group">
-            <span class="input-group-text" id="basic">wmbusmeters config location</span>
-            <span class="input-group-text">=</span>
-            <input type="text" class="form-control" id="file-path" name="file_path" required>
+  </head>
+  <body>
+    <style>
+      input:required:invalid {
+        border-color: red;
+      }
+    </style>
+    <div class="container">
+      <nav style="background-color: #e3f2fd;">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <img src="{{ url_for('static', filename='wmbusmeters.png') }}" width="40" height="40" class="d-inline-block align-top b-2" alt="">
+          <a href="/" class="nav-link active" id="nav-home-tab" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
+          <a href="/kem" class="nav-link" id="nav-profile-tab" role="tab" aria-controls="nav-profile" aria-selected="false">KEM processing</a>
         </div>
-	
+      </nav>
+      <h1 class="mb-3">wmbusmeters HA addon configuration</h1>
+      <form id="json-form" method="POST">
+        <div class="input-group">
+          <span class="input-group-text" id="basic">wmbusmeters config location</span>
+          <span class="input-group-text">=</span>
+          <input type="text" class="form-control" id="file-path" name="file_path" required>
+        </div>
         <br />
         <div id="json-editor">
-            <h4 class="mb-3">wmbusmeters configuration</h4>
-            <div id="conf"></div>
-            <button id="add-pair" class="btn btn-outline-success" type="button">Add New parameter</button>
-            <hr class="my-4">
-            <h4 class="mb-3">Meters</h4>
-            <hr class="my-4">
-            <div id="sections"></div>
-            <button id="add-section" class="btn btn-outline-primary" type="button">Add New meter</button>
-            <hr class="my-4">
-            <h4 class="mb-3">MQTT section</h4>
-            <div class="input-group mb-3 mt-3">
-                <span class="input-group-text" id="basic">Enable mqtt discovery</span>
-                <div class="input-group-text">
-                    <input class="form-check-input mt-0" type="checkbox" id="mqtt-status" name="mqtt-status" value="false">
-                </div>
+          <h4 class="mb-3">wmbusmeters configuration</h4>
+          <div id="conf"></div>
+          <button id="add-pair" class="btn btn-outline-success" type="button">Add New parameter</button>
+          <hr class="my-4">
+          <h4 class="mb-3">Meters</h4>
+          <hr class="my-4">
+          <div id="sections"></div>
+          <button id="add-section" class="btn btn-outline-primary" type="button">Add New meter</button>
+          <hr class="my-4">
+          <h4 class="mb-3">MQTT section</h4>
+          <div class="input-group mb-3 mt-3">
+            <span class="input-group-text" id="basic">Enable mqtt discovery</span>
+            <div class="input-group-text">
+              <input class="form-check-input mt-0" type="checkbox" id="mqtt-status" name="mqtt-status" value="false">
             </div>
-
-            <div class="input-group mb-3 mt-3">
-                <span class="input-group-text" id="basic">Custom MQTT configuration</span>
-                <div class="input-group-text">
-                    <input class="form-check-input mt-0" type="checkbox" id="mqtt-enabled" name="mqtt_enabled">
-                </div>
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <span class="input-group-text" id="basic">Custom MQTT configuration</span>
+            <div class="input-group-text">
+              <input class="form-check-input mt-0" type="checkbox" id="mqtt-enabled" name="mqtt_enabled">
             </div>
-
-            <div id="mqtt"></div>
+          </div>
+          <div id="mqtt"></div>
         </div>
         <br>
         <hr class="my-4">
         <button id="save-json" name="save_json" class="btn btn-outline-success" type="submit">Save Changes</button>
         <hr class="my-4">
-
-    </form>
-</div>
-</body>
+      </form>
+    </div>
+  </body>
 </html>
