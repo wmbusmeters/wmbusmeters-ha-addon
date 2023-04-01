@@ -79,7 +79,7 @@ _Please note:
 
 ## Caveat
 
-In case of wrong configuration, addon will stop after start. To fix that - go to HassOS console and enter `login`, this will drop you to root shell. Enter `vi /mnt/data/supervisor/addons/data/[image_id]_wmbusmeters-ha-addon/options_custom.json`, fix error, save and start addon.
+In case of wrong configuration, addon will stop after start. To fix that - go to HassOS console and enter `login`, this will drop you to root shell. Enter `vi /mnt/data/supervisor/addons/data/[image_id]_wmbusmeters-ha-addon/options_custom.json`, fix error, save and start addon. [See here](https://developers.home-assistant.io/docs/operating-system/debugging/) how to get remote ssh access to supervisor in order to be able to edit file.
 
 ## Support
 
