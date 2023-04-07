@@ -81,7 +81,7 @@
       "value_template": "{{ value_json.{attribute} }}",
       "json_attributes_topic": "wmbusmeters/{name}",
       "icon": "mdi:gauge",
-      "unit_of_measurement": "m³h",
+      "unit_of_measurement": "m³/h",
       "device_class": "water",
       "enabled_by_default": true
     }
