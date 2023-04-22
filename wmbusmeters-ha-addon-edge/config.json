@@ -26,5 +26,11 @@
     "map": [
       "share:rw",
       "config:rw"
-    ]
+    ],
+    "options": {
+      "reset_config": "no"
+    },
+    "schema": {
+      "reset_config": "list(no|yes)"
+    }
 }
