@@ -1,6 +1,6 @@
 {
     "name": "Wmbusmeters (W-MBus to MQTT)",
-    "version": "1.12.0",
+    "version": "1.13.1",
     "slug": "wmbusmeters-ha-addon",
     "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
     "arch": ["armv7", "aarch64", "amd64"],
@@ -26,5 +26,11 @@
     "map": [
       "share:rw",
       "config:rw"
-    ]
+    ],
+    "options": {
+      "reset_config": "no"
+    },
+    "schema": {
+      "reset_config": "list(no|yes)"
+    }
 }

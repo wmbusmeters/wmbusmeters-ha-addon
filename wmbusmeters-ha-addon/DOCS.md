@@ -23,7 +23,7 @@ comparison to installing any other community-driven Home Assistant add-on.
 
 Once the wmbusmeters is receiving the telegrams you need to configure your meter using `meters` section (see below) to pass the readings to MQTT topic.
 
-#### Option: `data_path`
+#### Option: `wmbusmeters config location`
 
 Path relative for add-on where wmbusmeters files are stored:
 ```
@@ -77,6 +77,11 @@ _Please note:
 - `MainWater` is the water meter name used in `meters` configuration._
 - `device_class` is necessary to be adapt on your meters type (water, gas, etc.) [see here](https://developers.home-assistant.io/docs/core/entity/sensor/#available-device-classes)
 
+## Caveat
+
+In case of wrong configuration, addon will stop working. To fix that - go to addon configuration tab, select `yes` for config reset, save and restart addon. After restart default configuration should be in place.
+
+Or to edit config file manually - go to HassOS console and enter `login`, this will drop you to root shell. Enter `vi /mnt/data/supervisor/addons/data/[image_id]_wmbusmeters-ha-addon/options_custom.json`, fix error, save and start addon. [See here](https://developers.home-assistant.io/docs/operating-system/debugging/) how to get remote ssh access to supervisor in order to be able to edit file.
 
 ## Support
 

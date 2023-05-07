@@ -1,0 +1,68 @@
+{
+   "total_energy_consumption_kwh":{
+      "component":"sensor",
+      "discovery_payload":{
+         "device":{
+            "identifiers":["wmbusmeters_{id}"],
+            "manufacturer":"ABB",
+            "model":"B23",
+            "name":"{name}",
+            "hw_version":"{id}"
+         },
+         "name":"{name} total energy consumption",
+         "unique_id":"wmbusmeters_{id}_{attribute}",
+         "state_topic":"wmbusmeters/{name}",
+         "value_template":"{{ value_json.{attribute} }}",
+         "json_attributes_topic":"wmbusmeters/{name}",
+         "icon":"mdi:transmission-tower-import",
+         "unit_of_measurement":"kWh",
+         "state_class":"total_increasing",
+         "device_class":"energy",
+         "enabled_by_default":true
+     }
+   },
+
+   "timestamp":{
+      "component":"sensor",
+      "discovery_payload":{
+         "device":{
+            "identifiers":["wmbusmeters_{id}"],
+            "manufacturer":"ABB",
+            "model":"B23",
+            "name":"{name}",
+            "hw_version":"{id}"
+         },
+         "entity_category":"diagnostic",
+         "name":"{name} timestamp",
+         "unique_id":"wmbusmeters_{id}_{attribute}",
+         "state_topic":"wmbusmeters/{name}",
+         "value_template":"{{ value_json.{attribute} }}",
+         "icon":"mdi:calendar-clock",
+         "device_class":"timestamp",
+         "enabled_by_default":false
+      }
+   },
+
+   "rssi_dbm":{
+      "component":"sensor",
+      "discovery_payload":{
+         "device":{
+            "identifiers":["wmbusmeters_{id}"],
+            "manufacturer":"ABB",
+            "model":"B23",
+            "name":"{name}",
+            "hw_version":"{id}"
+         },
+         "entity_category":"diagnostic",
+         "name":"{name} rssi",
+         "unique_id":"wmbusmeters_{id}_{attribute}",
+         "state_topic":"wmbusmeters/{name}",
+         "value_template":"{{ value_json.{attribute} }}",
+         "icon":"mdi:signal",
+         "unit_of_measurement":"dBm",
+         "device_class":"signal_strength",
+         "state_class":"measurement",
+         "enabled_by_default":false
+      }
+   }
+}

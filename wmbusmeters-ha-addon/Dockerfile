@@ -20,8 +20,8 @@ FROM $BUILD_FROM AS scratch
 ENV QEMU_EXECVE=1
 RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb ncurses rtl-sdr netcat-openbsd nginx
 # Install Flask
-RUN apk add --update py3-pip
-RUN pip install flask requests waitress
+RUN apk add --update py3-pip py3-cryptography
+RUN pip install flask requests waitress xmltodict
 
 WORKDIR /wmbusmeters
 COPY --from=build /wmbusmeters/build/wmbusmeters /wmbusmeters/wmbusmeters

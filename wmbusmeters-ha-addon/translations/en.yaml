@@ -1,0 +1,5 @@
+---
+configuration:
+  reset_config:
+    name: Reset add-on configuration
+    description: If set to `yes`, add-on configuration will be reset to default.
