@@ -9,7 +9,7 @@
                 "manufacturer": "Engelmann",
                 "model": "HCA e2",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "json_attributes_topic": "wmbusmeters/{name}",
@@ -32,7 +32,7 @@
                 "manufacturer": "Engelmann",
                 "model": "HCA e2",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -56,7 +56,7 @@
 			   "manufacturer": "Engelmann",
 			   "model": "HCA e2",
 			   "name": "{name}",
-			   "sw_version": "{id}"
+			   "hw_version": "{id}"
 			},
 			"entity_category": "diagnostic",
 			"name": "{name} timestamp",
@@ -76,7 +76,7 @@
                 "manufacturer": "Engelmann",
                 "model": "HCA e2",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
