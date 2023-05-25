@@ -101,7 +101,7 @@
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",
       "icon": "mdi:signal",
-      "unit_of_measurement": "dbm",
+      "unit_of_measurement": "dBm",
       "device_class": "signal_strength",
       "state_class": "measurement",
       "enabled_by_default": false
