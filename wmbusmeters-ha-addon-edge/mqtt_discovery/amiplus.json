@@ -11,7 +11,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} total energy consumption",
+        "name":"total energy consumption",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -35,7 +35,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} total energy production",
+        "name":"total energy production",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -59,7 +59,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} current power consumption",
+        "name":"current power consumption",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -83,7 +83,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} current power production",
+        "name":"current power production",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -107,7 +107,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} voltage at phase 1",
+        "name":"voltage at phase 1",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -130,7 +130,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} voltage at phase 2",
+        "name":"voltage at phase 2",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -153,7 +153,7 @@
            "name":"{name}",
            "hw_version":"{id}"
         },
-        "name":"{name} voltage at phase 3",
+        "name":"voltage at phase 3",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -177,7 +177,7 @@
            "hw_version":"{id}"
         },
         "entity_category":"diagnostic",
-        "name":"{name} timestamp",
+        "name":"timestamp",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -199,7 +199,7 @@
            "hw_version":"{id}"
         },
         "entity_category":"diagnostic",
-        "name":"{name} Device date and time",
+        "name":"Device date and time",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -221,7 +221,7 @@
            "hw_version":"{id}"
         },
         "entity_category":"diagnostic",
-        "name":"{name} rssi",
+        "name":"rssi",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",

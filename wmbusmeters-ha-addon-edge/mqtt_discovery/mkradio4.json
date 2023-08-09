@@ -9,7 +9,7 @@
                 "name": "{name}",
                 "hw_version": "{id}"
             },
-            "name": "{name} total",
+            "name": "total",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "state_topic": "wmbusmeters/{name}",
             "value_template": "{{ value_json.{attribute} }}",
@@ -35,7 +35,7 @@
             "enabled_by_default": true,
             "state_class": "total",
             "device_class": "water",
-            "name": "{name} target",
+            "name": "target",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³",
@@ -55,7 +55,7 @@
                 "hw_version": "{id}"
             },
             "entity_category": "diagnostic",
-            "name": "{name} timestamp",
+            "name": "timestamp",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "state_topic": "wmbusmeters/{name}",
             "value_template": "{{ value_json.{attribute} }}",
