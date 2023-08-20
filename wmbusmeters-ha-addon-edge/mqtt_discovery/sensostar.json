@@ -352,13 +352,13 @@
                 "name": "{name}",
                 "sw_version": "{id}"
             },
-            "enabled_by_default": false,
-            "state_class": "measurement",
+            "enabled_by_default": true,
             "name": "Meter timestamp",
+            "entity_category": "diagnostic",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "value_template": "{{ value_json.{attribute} }}",
-            "icon": "mdi:timeline-clock"
+            "icon": "mdi:clock"
         }
     },
 
@@ -372,9 +372,10 @@
                 "name": "{name}",
                 "sw_version": "{id}"
             },
-            "enabled_by_default": false,
-            "state_class": "measurement",
+            "enabled_by_default": true,
             "name": "Timestamp",
+            "entity_category": "diagnostic",
+            "device_class": "timestamp",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "value_template": "{{ value_json.{attribute} }}",
