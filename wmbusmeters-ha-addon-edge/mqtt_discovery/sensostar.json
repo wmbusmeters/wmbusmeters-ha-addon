@@ -164,7 +164,6 @@
                 "sw_version": "{id}"
             },
             "enabled_by_default": true,
-            "device_class": "problem",
             "name": "Status OK",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
@@ -311,7 +310,6 @@
                 "sw_version": "{id}"
             },
             "enabled_by_default": true,
-            "device_class": "problem",
             "name": "Status OK (instrument reset)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
@@ -332,7 +330,7 @@
                 "sw_version": "{id}"
             },
             "enabled_by_default": true,
-            "device_class": "problem",
+            "device_class": "battery",
             "name": "Status OK (battery low)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
