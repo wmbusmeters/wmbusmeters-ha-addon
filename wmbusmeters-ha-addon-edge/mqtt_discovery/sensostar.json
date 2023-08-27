@@ -12,7 +12,7 @@
             "enabled_by_default": true,
             "state_class": "total",
             "device_class": "water",
-            "name": "total water volume",
+            "name": "Total water volume",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³",
@@ -33,7 +33,7 @@
             },
             "enabled_by_default": true,
             "state_class": "measurement",
-            "name": "water volume flow",
+            "name": "Water volume flow",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³/h",
@@ -56,7 +56,7 @@
             "json_attributes_topic": "wmbusmeters/{name}",
             "state_class": "total",
             "device_class": "energy",
-            "name": "total energy consumption",
+            "name": "Total energy consumption",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "kWh",
@@ -78,7 +78,7 @@
             "enabled_by_default": true,
             "state_class": "measurement",
             "device_class": "power",
-            "name": "current power consumption",
+            "name": "Current power consumption",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "kW",
@@ -100,7 +100,7 @@
             "enabled_by_default": true,
             "state_class": "measurement",
             "device_class": "temperature",
-            "name": "forward water temperature",
+            "name": "Forward water temperature",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "°C",
@@ -122,7 +122,7 @@
             "enabled_by_default": true,
             "state_class": "measurement",
             "device_class": "temperature",
-            "name": "return water temperature",
+            "name": "Return water temperature",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "°C",
@@ -144,7 +144,7 @@
             "enabled_by_default": true,
             "state_class": "measurement",
             "device_class": "temperature",
-            "name": "water temperature difference forward-return",
+            "name": "Water temperature difference forward-return",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "°C",
@@ -164,11 +164,10 @@
                 "sw_version": "{id}"
             },
             "enabled_by_default": true,
-            "device_class": "problem",
-            "name": "status OK",
+            "name": "Status OK",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'OK' in value_json.status }}",
+            "value_template": "{{ 'OK' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -186,10 +185,10 @@
             },
             "enabled_by_default": true,
             "device_class": "problem",
-            "name": "status error (Temperature Sensor 1 Cable Break)",
+            "name": "Status error (Temperature Sensor 1 Cable Break)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_CABLE_BREAK' in value_json.status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_CABLE_BREAK' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -207,10 +206,10 @@
             },
             "enabled_by_default": true,
             "device_class": "problem",
-            "name": "status error (Temperature Sensor 1 Short Circuit)",
+            "name": "Status error (Temperature Sensor 1 Short Circuit)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_SHORT_CIRCUIT' in value_json.status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_SHORT_CIRCUIT' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -228,10 +227,10 @@
             },
             "enabled_by_default": true,
             "device_class": "problem",
-            "name": "status error (Temperature Sensor 2 Cable Break)",
+            "name": "Status error (Temperature Sensor 2 Cable Break)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_CABLE_BREAK' in value_json.status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_CABLE_BREAK' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -249,10 +248,10 @@
             },
             "enabled_by_default": true,
             "device_class": "problem",
-            "name": "status error (Temperature Sensor 2 Short Circuit)",
+            "name": "Status error (Temperature Sensor 2 Short Circuit)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_SHORT_CIRCUIT' in value_json.status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_SHORT_CIRCUIT' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -270,10 +269,10 @@
             },
             "enabled_by_default": true,
             "device_class": "problem",
-            "name": "status error (Flow Management System)",
+            "name": "Status error (Flow Management System)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_FLOW_MEASUREMENT_SYSTEM_ERROR' in value_json.status }}",
+            "value_template": "{{ 'ERROR_FLOW_MEASUREMENT_SYSTEM_ERROR' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -291,10 +290,10 @@
             },
             "enabled_by_default": true,
             "device_class": "problem",
-            "name": "status error (Electronics Defective)",
+            "name": "Status error (Electronics Defective)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_ELECTRONICS_DEFECT' in value_json.status }}",
+            "value_template": "{{ 'ERROR_ELECTRONICS_DEFECT' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -311,11 +310,10 @@
                 "sw_version": "{id}"
             },
             "enabled_by_default": true,
-            "device_class": "problem",
-            "name": "status OK (instrument reset)",
+            "name": "Status OK (instrument reset)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'OK_INSTRUMENT_RESET' in value_json.status }}",
+            "value_template": "{{ 'OK_INSTRUMENT_RESET' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -332,11 +330,11 @@
                 "sw_version": "{id}"
             },
             "enabled_by_default": true,
-            "device_class": "problem",
-            "name": "status OK (battery low)",
+            "device_class": "battery",
+            "name": "Status OK (battery low)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'OK_BATTERY_LOW' in value_json.status }}",
+            "value_template": "{{ 'OK_BATTERY_LOW' in value_json.current_status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -352,13 +350,13 @@
                 "name": "{name}",
                 "sw_version": "{id}"
             },
-            "enabled_by_default": false,
-            "state_class": "measurement",
-            "name": "meter timestamp",
+            "enabled_by_default": true,
+            "name": "Meter timestamp",
+            "entity_category": "diagnostic",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "value_template": "{{ value_json.{attribute} }}",
-            "icon": "mdi:timeline-clock"
+            "icon": "mdi:clock"
         }
     },
 
@@ -372,9 +370,10 @@
                 "name": "{name}",
                 "sw_version": "{id}"
             },
-            "enabled_by_default": false,
-            "state_class": "measurement",
-            "name": "timestamp",
+            "enabled_by_default": true,
+            "name": "Timestamp",
+            "entity_category": "diagnostic",
+            "device_class": "timestamp",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "value_template": "{{ value_json.{attribute} }}",
@@ -398,7 +397,7 @@
             "entity_category": "diagnostic",
             "device_class": "signal_strength",
             "state_class": "measurement",
-            "name": "rssi",
+            "name": "Rssi",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "dBm",
