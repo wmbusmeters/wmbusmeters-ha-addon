@@ -1,6 +1,6 @@
 {
   "name": "Wmbusmeters (W-MBus to MQTT)",
   "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
-  "url": "https://github.com/wmbusmeters/wmbusmeters-ha-addon",
+  "url": "https://github.com/spectrality-github/wmbusmeters-ha-addon",
   "maintainer": "weetmuts"
 }
