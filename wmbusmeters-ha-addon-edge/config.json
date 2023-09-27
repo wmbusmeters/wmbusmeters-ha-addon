@@ -28,9 +28,7 @@
       "config:rw"
     ],
     "options": {
-      "reset_config": "no"
-    },
-    "options": {
+      "reset_config": "no",
       "MbusTTY": "/root/ttyMBUS0"
     },
     "schema": {
