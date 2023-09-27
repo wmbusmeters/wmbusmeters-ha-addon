@@ -4,7 +4,7 @@
     "slug": "wmbusmeters-ha-addon-edge",
     "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
     "arch": ["armv7", "aarch64", "amd64"],
-    "url": "https://github.com/wmbusmeters/wmbusmeters-ha-addon",
+    "url": "https://github.com/spectrality-github/wmbusmeters-ha-addon",
     "image": "wmbusmeters/wmbusmeters-ha-addon-edge-{arch}",
     "panel_icon": "mdi:home-automation",
     "init" : false,
@@ -30,7 +30,11 @@
     "options": {
       "reset_config": "no"
     },
+    "options": {
+      "MbusTTY": "/root/ttyMBUS0"
+    },
     "schema": {
-      "reset_config": "list(no|yes)"
+      "reset_config": "list(no|yes)",
+    "MbusTTY": ""    
     }
 }
