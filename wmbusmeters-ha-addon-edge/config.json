@@ -1,6 +1,6 @@
 {
     "name": "[edge] Wmbusmeters (W-MBus to MQTT)",
-    "version": "1.14.0-31(test)",
+    "version": "1.14.0-31-test",
     "slug": "wmbusmeters-ha-addon-edge",
     "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
     "arch": ["armv7", "aarch64", "amd64"],
