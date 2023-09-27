@@ -34,7 +34,6 @@
       "MbusTTY": "/root/ttyMBUS0"
     },
     "schema": {
-      "reset_config": "list(no|yes)",
-    "MbusTTY": ""    
+      "reset_config": "list(no|yes)"
     }
 }
