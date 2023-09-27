@@ -3,7 +3,7 @@ FROM $BUILD_FROM AS build
 
 ENV LANG C.UTF-8
 
-RUN apk add --no-cache alpine-sdk gcc linux-headers librtlsdr-dev cmake libusb-dev
+RUN apk add --no-cache alpine-sdk gcc linux-headers librtlsdr-dev cmake libusb-dev socat
 
 ADD https://api.github.com/repos/wmbusmeters/wmbusmeters/git/refs/heads/master version.json
 RUN git clone https://github.com/wmbusmeters/wmbusmeters.git && \
