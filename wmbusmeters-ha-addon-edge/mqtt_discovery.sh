@@ -39,6 +39,7 @@ if [ $CONFIG_MQTTDISCOVERY_ENABLED == "true" ]; then
             aryKV["name"]=$(printf '%s\n' $meter | jq --raw-output -c -M '.name')
             aryKV["id"]=$(printf '%s\n' $meter | jq --raw-output -c -M '.id')
             aryKV["driver"]=$(printf '%s\n' $meter | jq --raw-output -c -M '.driver')
+            aryKV["driver"]=${aryKV["driver"]%%:*}
 
         done
         bashio::log.info " Adding meter: ${aryKV['name']} ..."
