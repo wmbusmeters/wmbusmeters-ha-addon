@@ -42,13 +42,13 @@ donotprobe: /dev/ttyUSB0
 ```
 In web configuration interface it should be provided in one line using `;` delimiter between values, like: `donotprobe=/dev/ttyAMA0;/dev/ttyUSB0`
 
-See [project README for more information][github]
+See [project README for more information][docs]
 
 #### Section: `meters`
 
 Specify your meters configuration parameters. The `driver` and `id` values can be read from the add-on logs after the initial start (with empty `meters` configuration). The `name` is your label for the meter and `key` is the encryption key to decrypt telegrams (if your meter use any).
 
-See [project README for more information][github]
+See [project README for more information][docs]
 
 #### Section: `Custom MQTT configuration`
 
@@ -100,5 +100,6 @@ You have several options to get them answered:
 [contributors]: https://github.com/wmbusmeters/wmbusmeters-ha-addon/graphs/contributors
 [forum]: https://community.home-assistant.io/c/home-assistant-os/25
 [github]: https://github.com/wmbusmeters/wmbusmeters-ha-addon
+[docs]: https://github.com/wmbusmeters/wmbusmeters
 [issue]: https://github.com/wmbusmeters/wmbusmeters/issues
 [reddit]: https://reddit.com/r/homeassistant
