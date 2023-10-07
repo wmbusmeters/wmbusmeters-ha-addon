@@ -14,8 +14,9 @@ comparison to installing any other community-driven Home Assistant add-on.
 1. Enable "Show in sidebar"
 1. Plug-in your radio receiver USB dongle
 1. Start the addon container
-1. In the logs you should see all the W-Mbus telegrams that wmbusmeter is able to receive. <br> _If you don't see anything, check the logs carefully. <br> If you configure it late evening or in the night, please note the radio modules often send telegrams less frequently than in typical working hours or don't send them at all. <br> If your antenna is in a distance to the radio module, try to locate it closer._
-1. You are ready to configure! Go to wmbusmeter in sidebar, make necessary configuration and save it.
+1. In the log tab in the add-on, not in the sidebar, you should see all the W-Mbus telegrams that wmbusmeter is able to receive. <br> _If you don't see anything, check the logs carefully. <br> If you configure it late evening or in the night, please note the radio modules often send telegrams less frequently than in typical working hours or don't send them at all. <br> If your antenna is in a distance to the radio module, try to locate it closer._
+1. You are ready to configure! Go to wmbusmeter in sidebar, add necessary configuration and save it. <br> _Once you configure your first meter, you will no longer see meter output in the log.  Check your MQTT server and make sure you set up the sensor, per the next step._
+   **Note:** A meter requires four values, name, driver, id, and key
 1. Finally, don't forget about adding the MQTT sensor into your Home Assistant.
 
 
