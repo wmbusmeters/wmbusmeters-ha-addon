@@ -1,0 +1,181 @@
+{
+    "total_m3": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "BMETERS",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "device_class": "water",
+            "state_class": "total_increasing",
+            "name": "total",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:gauge"
+        }
+    },
+
+    "status_OK": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "BMETERS",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "name": "Status OK",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'OK' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ALARM": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "BMETERS",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "device_class": "problem",
+            "name": "Status error (ALARM)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ALARM' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_POWER_LOW": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "BMETERS",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "device_class": "battery",
+            "name": "Battery",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'POWER_LOW' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_PERMANENT_ERROR": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "BMETERS",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "device_class": "problem",
+            "name": "Status error (Permanent Error)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'PERMANENT_ERROR' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_TEMPORARY_ERROR": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "BMETERS",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "device_class": "problem",
+            "name": "Status error (Temporary Error)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'TEMPORARY_ERROR' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+  "timestamp": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "BMETERS",
+        "model": "{driver}",
+        "name": "{name}",
+        "hw_version": "{id}"
+      },
+      "entity_category": "diagnostic",
+      "name": "timestamp",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "state_topic": "wmbusmeters/{name}",
+      "value_template": "{{ value_json.{attribute} }}",
+      "icon": "mdi:calendar-clock",
+      "enabled_by_default": false
+    }
+  },
+
+  "rssi_dbm": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "BMETERS",
+        "model": "{driver}",
+        "name": "{name}",
+        "hw_version": "{id}"
+      },
+      "entity_category": "diagnostic",
+      "name": "rssi",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "state_topic": "wmbusmeters/{name}",
+      "value_template": "{{ value_json.{attribute} }}",
+      "icon": "mdi:signal",
+      "unit_of_measurement": "dBm",
+      "device_class": "signal_strength",
+      "state_class": "measurement",
+      "enabled_by_default": true
+    }
+  }
+}
