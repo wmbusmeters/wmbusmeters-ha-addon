@@ -15,7 +15,7 @@
             "json_attributes_topic": "wmbusmeters/{name}",
             "device_class": "water",
             "state_class": "total_increasing",
-            "name": "total",
+            "name": "Total",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³",
@@ -145,7 +145,7 @@
         "hw_version": "{id}"
       },
       "entity_category": "diagnostic",
-      "name": "timestamp",
+      "name": "Timestamp",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",
