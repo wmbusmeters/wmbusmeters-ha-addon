@@ -39,7 +39,7 @@ jobs:
         addon: ["wmbusmeters"]
         arch: ["amd64", "armv7", "aarch64"]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: ha-addon_artifact-${{ github.event.client_payload.ver }}
 
@@ -61,7 +61,7 @@ jobs:
     needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: ha-addon_artifact-${{ github.event.client_payload.ver }}
 
