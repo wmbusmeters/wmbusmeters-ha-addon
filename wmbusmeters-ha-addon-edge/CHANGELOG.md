@@ -1,3 +1,5 @@
+## 1.14.0-122 
+- Updated to version [1.14.0-122](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 1.14.0-121 
 - Updated to version [1.14.0-121](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 1.14.0-120 
