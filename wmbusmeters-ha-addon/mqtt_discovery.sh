@@ -25,11 +25,8 @@ if [ $CONFIG_MQTTDISCOVERY_ENABLED == "true" ]; then
     bashio::log.info "\nMQTT Discovery ..."
 
     # Copy template files
-    templatedir="$(mktemp -d -p /dev/shm/)"
-    wget -O - https://github.com/wmbusmeters/wmbusmeters/archive/refs/heads/master.tar.gz 2> /dev/null | tar xz --strip=3 "wmbusmeters-master/ha-addon/mqtt_discovery" -C $templatedir || true
     [ ! -d $CONFIG_DATA_PATH/etc/mqtt_discovery ] && mkdir -p $CONFIG_DATA_PATH/etc/mqtt_discovery
-    cp -u ${templatedir}/* ${CONFIG_DATA_PATH}/etc/mqtt_discovery/ 2>/dev/null || true
-    rm -r $templatedir
+    cp -u /mqtt_discovery/* ${CONFIG_DATA_PATH}/etc/mqtt_discovery/ 2>/dev/null || true
 
     # Enumerate defined meters
     IFS=$'\n'
@@ -42,6 +39,7 @@ if [ $CONFIG_MQTTDISCOVERY_ENABLED == "true" ]; then
             aryKV["name"]=$(printf '%s\n' $meter | jq --raw-output -c -M '.name')
             aryKV["id"]=$(printf '%s\n' $meter | jq --raw-output -c -M '.id')
             aryKV["driver"]=$(printf '%s\n' $meter | jq --raw-output -c -M '.driver')
+            aryKV["driver"]=${aryKV["driver"]%%:*}
 
         done
         bashio::log.info " Adding meter: ${aryKV['name']} ..."

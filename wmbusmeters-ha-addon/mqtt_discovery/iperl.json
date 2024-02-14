@@ -9,7 +9,7 @@
         "name": "{name}",
         "hw_version": "{id}"
       },
-      "name": "{name} total",
+      "name": "total",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",
@@ -33,7 +33,7 @@
         "hw_version": "{id}"
       },
       "entity_category": "diagnostic",
-      "name": "{name} timestamp",
+      "name": "timestamp",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",
@@ -53,12 +53,12 @@
         "hw_version": "{id}"
       },
       "entity_category": "diagnostic",
-      "name": "{name} rssi",
+      "name": "rssi",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",
       "icon": "mdi:signal",
-      "unit_of_measurement": "dbm",
+      "unit_of_measurement": "dBm",
       "device_class": "signal_strength",
       "state_class": "measurement",
       "enabled_by_default": false
@@ -75,7 +75,7 @@
             "name": "{name}",
             "hw_version": "{id}"
         },
-      "name": "{name} max flow",
+      "name": "max flow",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",

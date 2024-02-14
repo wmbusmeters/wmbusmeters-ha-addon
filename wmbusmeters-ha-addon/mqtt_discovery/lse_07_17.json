@@ -15,7 +15,7 @@
             "json_attributes_topic": "wmbusmeters/{name}",
             "device_class": "water",
             "state_class": "total",
-            "name": "{name} total",
+            "name": "total",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³",
@@ -39,10 +39,10 @@
             "entity_category": "diagnostic",
             "device_class": "signal_strength",
             "state_class": "measurement",
-            "name": "{name} rssi",
+            "name": "rssi",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "unit_of_measurement": "dbm",
+            "unit_of_measurement": "dBm",
             "value_template": "{{ value_json.{attribute} }}",
             "icon": "mdi:signal"
         }
