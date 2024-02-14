@@ -3,7 +3,7 @@ FROM $BUILD_FROM AS build
 
 ENV LANG C.UTF-8
 
-RUN apk add --no-cache alpine-sdk gcc linux-headers librtlsdr-dev libxml2-dev cmake libusb-dev bash samurai
+RUN apk add --no-cache alpine-sdk gcc linux-headers libxml2-dev cmake libusb-dev bash samurai
 
 ADD https://api.github.com/repos/wmbusmeters/wmbusmeters/git/refs/heads/master version.json
 RUN git clone https://github.com/steve-m/librtlsdr.git && \
@@ -37,7 +37,7 @@ RUN make
 
 FROM $BUILD_FROM AS scratch
 ENV QEMU_EXECVE=1
-RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb rtl-sdr libxml2 netcat-openbsd nginx
+RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx
 
 # Install Flask
 RUN apk add --update py3-pip py3-cryptography
