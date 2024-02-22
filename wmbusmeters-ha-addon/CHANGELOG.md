@@ -1,3 +1,5 @@
+## 1.16.1 
+- Updated to version [1.16.1](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)
 ## 1.15.0 
 - Updated to version [1.15.0](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)
 ## 1.14.0 
