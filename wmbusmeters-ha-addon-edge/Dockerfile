@@ -10,11 +10,11 @@ RUN git clone https://github.com/spectrality-github/wmbusmeters.git && \
     git clone https://github.com/weetmuts/rtl-wmbus.git && \
     git clone https://github.com/merbanan/rtl_433.git
 WORKDIR /wmbusmeters
-#RUN make
+RUN make
 WORKDIR /rtl-wmbus
-#RUN make release && chmod 755 build/rtl_wmbus
+RUN make release && chmod 755 build/rtl_wmbus
 WORKDIR /rtl_433
-#RUN mkdir build && cd build && cmake ../ && make
+RUN mkdir build && cd build && cmake ../ && make
 
 FROM $BUILD_FROM AS scratch
 ENV QEMU_EXECVE=1
