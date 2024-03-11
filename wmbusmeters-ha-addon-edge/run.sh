@@ -106,7 +106,8 @@ bashio::log.info "Starting web configuration service."
 python3 /flask/app.py &
 
 bashio::log.info "Running socat ..."
-socat -d -d pty,group-late=tty,link=/root/ttyMBUS0,mode=660,rawer,echo=0,b2400,waitslave,ignoreeof tcp:192.168.3.119:2003&
+#socat -d -d pty,group-late=tty,link=/root/ttyMBUS0,mode=660,rawer,echo=0,b2400,waitslave,ignoreeof tcp:192.168.3.119:2003&
+while true; do socat pty,group-late=tty,link=/root/ttyMBUS0,mode=660,rawer,echo=0,b2400,waitslave,ignoreeof tcp:192.168.3.119:2003; done&
 
 bashio::log.info "Running wmbusmeters ..."
 /wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH
