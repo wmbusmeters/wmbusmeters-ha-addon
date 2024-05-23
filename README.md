@@ -1,23 +1,23 @@
 # wmbusmeters Home Assistant Add-on
-This add-on allows you to acquire utility meter readings without the vendors bridge or gateway as long as they support C1, T1 or S1 telegrams using the wireless mbus protocol (WMBUS).
+This add-on allows you to acquire utility meter readings without the vendors bridge or gateway as long as they support C1, T1, or S1 telegrams using the wireless mbus protocol (WMBUS).
 
 # Releases
 This repository contains two versions of add-on:
 
-Edge - that will contain latest changes from both wmbusmeters and add-on changes. This can be used by users that want or need latest changes in wmbusmeters repository.
+Edge - that will contain the latest changes from both wmbusmeters and add-on changes. This can be used by users that want or need the latest changes in wmbusmeters repository.
 
-Stable - will contain wmbusmeters stable release combained with add-on changes on that time. 
+Stable - will contain wmbusmeters stable release combined with add-on changes on that time. 
 
 # Upgrade from older add-on versions
 
 1. Manualy backup existing configs and uninstall wmbusmeters addon
 1. Navigate to Add-ons > Add-on Store > Repositories
 1. Remove https://github.com/weetmuts/wmbusmeters and add https://github.com/wmbusmeters/wmbusmeters-ha-addon
-1. Navigate to Add-ons > Add-on Store and press "Ctrl+R" or reload page in other way
+1. Navigate to Add-ons > Add-on Store and press "Ctrl+R" or reload the page in another way
 1. Install wmbusmeters add-on
 1. Enable "Show in sidebar"
 1. Start the addon container
-1. Navigate to wmbusmeter in sidebar, manualy restore configuration and save it.
+1. Navigate to wmbusmeter in sidebar, manually restore the configuration and save it.
 
 # Installation
 Simply click this button:
