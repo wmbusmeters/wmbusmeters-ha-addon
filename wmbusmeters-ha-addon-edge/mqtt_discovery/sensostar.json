@@ -7,7 +7,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "total",
@@ -29,7 +29,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -50,7 +50,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "json_attributes_topic": "wmbusmeters/{name}",
@@ -73,7 +73,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -95,7 +95,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -117,7 +117,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -139,7 +139,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -161,7 +161,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "name": "Status OK",
@@ -181,7 +181,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "problem",
@@ -202,7 +202,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "problem",
@@ -223,7 +223,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "problem",
@@ -244,7 +244,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "problem",
@@ -265,7 +265,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "problem",
@@ -286,7 +286,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "problem",
@@ -307,7 +307,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "name": "Status OK (instrument reset)",
@@ -327,7 +327,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "device_class": "battery",
@@ -348,7 +348,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "name": "Meter timestamp",
@@ -368,7 +368,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "name": "Timestamp",
@@ -391,7 +391,7 @@
                 "manufacturer": "Engelmann",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "entity_category": "diagnostic",
