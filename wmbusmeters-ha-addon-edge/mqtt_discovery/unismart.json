@@ -7,7 +7,7 @@
         "manufacturer": "APATOR METRIX",
         "model": "at-wmbus-g-01 Lena",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "name": "total",
       "unique_id": "wmbusmeters_{id}_{attribute}",
@@ -30,7 +30,7 @@
         "manufacturer": "APATOR METRIX",
         "model": "at-wmbus-g-01 Lena",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "entity_category": "diagnostic",
       "name": "timestamp",
@@ -50,7 +50,7 @@
         "manufacturer": "APATOR METRIX",
         "model": "at-wmbus-g-01 Lena",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "entity_category": "diagnostic",
       "name": "rssi",
