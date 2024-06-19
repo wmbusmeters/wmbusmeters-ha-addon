@@ -1,0 +1,201 @@
+{
+    "total_energy_consumption_kwh": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "total",
+            "device_class": "energy",
+            "name": "total energy consumption",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kWh",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:home-lightning-bolt-outline"
+        }
+    },
+
+    "total_cooling_consumption_kwh": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "total",
+            "device_class": "energy",
+            "name": "total cooling consumption",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kWh",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:home-lightning-bolt-outline"
+        }
+    },
+	
+	"total_volume_m3": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "total",
+            "device_class": "water",
+            "name": "total volume",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:water"
+        }
+    },
+
+    "volume_flow_m3h": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "name": "volume flow",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³/h",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:waves-arrow-right"
+        }
+    },
+
+    "flow_temperature_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "IN temperature",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:thermometer-water"
+        }
+    },
+
+    "return_temperature_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "RETURN temperature",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:thermometer-water"
+        }
+    },
+	
+	"power_kw": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "power",
+            "name": "current power consumption",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kW",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:waves-arrow-right"
+        }
+    },
+	
+	"timestamp": {
+		"component": "sensor",
+		"discovery_payload": {
+			"device": {
+				"identifiers": ["wmbusmeters_{id}"],
+				"manufacturer": "Diehl",
+				"model": "SHARKY",
+				"name": "{name}",
+				"hw_version": "{id}"
+			},
+			"entity_category": "diagnostic",
+			"name": "timestamp",
+			"unique_id": "wmbusmeters_{id}_{attribute}",
+			"state_topic": "wmbusmeters/{name}",
+			"value_template": "{{ value_json.{attribute} }}",
+			"icon": "mdi:calendar-clock",
+			"enabled_by_default": false
+		}
+	},
+    
+    "rssi_dbm": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Diehl",
+                "model": "SHARKY",
+                "name": "{name}",
+		"hw_version": "{id}"
+            },
+            "enabled_by_default": false,
+            "entity_category": "diagnostic",
+            "device_class": "signal_strength",
+            "state_class": "measurement",
+            "name": "rssi",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "dBm",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:signal"
+        }
+    }
+}
