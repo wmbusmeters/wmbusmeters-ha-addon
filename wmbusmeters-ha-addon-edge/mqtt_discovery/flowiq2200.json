@@ -7,7 +7,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "json_attributes_topic": "wmbusmeters/{name}",
@@ -29,7 +29,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "state_class": "total",
@@ -50,7 +50,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "state_class": "measurement",
@@ -70,7 +70,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": false,
       "state_class": "measurement",
@@ -90,7 +90,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": false,
       "state_class": "measurement",
@@ -110,7 +110,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": false,
       "state_class": "measurement",
@@ -131,7 +131,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": false,
       "state_class": "measurement",
@@ -152,7 +152,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": false,
       "state_class": "measurement",
@@ -173,7 +173,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "device_class": "problem",
@@ -193,7 +193,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "device_class": "problem",
@@ -213,7 +213,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "device_class": "problem",
@@ -233,7 +233,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": true,
       "device_class": "problem",
@@ -253,7 +253,7 @@
         "manufacturer": "Kamstrup",
         "model": "{driver}",
         "name": "{name}",
-        "sw_version": "{id}"
+        "hw_version": "{id}"
       },
       "enabled_by_default": false,
       "entity_category": "diagnostic",
