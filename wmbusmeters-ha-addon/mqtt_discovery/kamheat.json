@@ -7,7 +7,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "json_attributes_topic": "wmbusmeters/{name}",
@@ -30,7 +30,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "total",
@@ -52,7 +52,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -73,7 +73,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -95,7 +95,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "state_class": "measurement",
@@ -117,7 +117,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "json_attributes_topic": "wmbusmeters/{name}",
@@ -140,7 +140,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "json_attributes_topic": "wmbusmeters/{name}",
@@ -163,7 +163,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -171,7 +171,7 @@
             "name": "voltage interrupted",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'VOLTAGE_INTERRUPTED' in value_json.current_status }}",
+            "value_template": "{{ 'VOLTAGE_INTERRUPTED' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -185,7 +185,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": true,
             "entity_category": "diagnostic",
@@ -193,7 +193,7 @@
             "name": "low battery level",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'LOW_BATTERY_LEVEL' in value_json.current_status }}",
+            "value_template": "{{ 'LOW_BATTERY_LEVEL' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -207,7 +207,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -215,7 +215,7 @@
             "name": "sensor T1 above range",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'SENSOR_T1_ABOVE_MEASURING_RANGE' in value_json.current_status }}",
+            "value_template": "{{ 'SENSOR_T1_ABOVE_MEASURING_RANGE' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -229,7 +229,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -237,7 +237,7 @@
             "name": "sensor T2 above range",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'SENSOR_T2_ABOVE_MEASURING_RANGE' in value_json.current_status }}",
+            "value_template": "{{ 'SENSOR_T2_ABOVE_MEASURING_RANGE' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -251,7 +251,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -259,7 +259,7 @@
             "name": "sensor T1 below range",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'SENSOR_T1_BELOW_MEASURING_RANGE' in value_json.current_status }}",
+            "value_template": "{{ 'SENSOR_T1_BELOW_MEASURING_RANGE' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -273,7 +273,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -281,7 +281,7 @@
             "name": "sensor T2 below range",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'SENSOR_T2_BELOW_MEASURING_RANGE' in value_json.current_status }}",
+            "value_template": "{{ 'SENSOR_T2_BELOW_MEASURING_RANGE' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -295,7 +295,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -303,7 +303,7 @@
             "name": "temp diff wrong polarity",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'TEMP_DIFF_WRONG_POLARITY' in value_json.current_status }}",
+            "value_template": "{{ 'TEMP_DIFF_WRONG_POLARITY' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -317,7 +317,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -325,7 +325,7 @@
             "name": "flow sensor weak or air",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'FLOW_SENSOR_WEAK_OR_AIR' in value_json.current_status }}",
+            "value_template": "{{ 'FLOW_SENSOR_WEAK_OR_AIR' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -339,7 +339,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -347,7 +347,7 @@
             "name": "wrong flow direction",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'WRONG_FLOW_DIRECTION' in value_json.current_status }}",
+            "value_template": "{{ 'WRONG_FLOW_DIRECTION' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -361,7 +361,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -369,7 +369,7 @@
             "name": "unknown",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'UNKNOWN' in value_json.current_status }}",
+            "value_template": "{{ 'UNKNOWN' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -383,7 +383,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
@@ -391,7 +391,7 @@
             "name": "flow increased",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'FLOW_INCREASED' in value_json.current_status }}",
+            "value_template": "{{ 'FLOW_INCREASED' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -405,7 +405,7 @@
                 "manufacturer": "Kamstrup",
                 "model": "{driver}",
                 "name": "{name}",
-                "sw_version": "{id}"
+                "hw_version": "{id}"
             },
             "enabled_by_default": false,
             "entity_category": "diagnostic",
