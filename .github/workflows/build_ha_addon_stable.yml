@@ -65,6 +65,7 @@ jobs:
         with:
           name: ha-addon_artifact-${{ github.event.client_payload.ver }}
 
+      - run: git pull
       - name: Push changed files back to repo
         uses: EndBug/add-and-commit@v9
         with:
