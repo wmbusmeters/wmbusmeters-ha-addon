@@ -9,7 +9,7 @@
     "panel_icon": "mdi:home-automation",
     "init" : false,
     "ingress": true,
-    "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0"],
+    "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0", "/dev/ttyACM0" ],
     "usb": true,
     "uart": true,
     "ports": {
