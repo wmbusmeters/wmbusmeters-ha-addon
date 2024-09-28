@@ -76,6 +76,11 @@ jobs:
     needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: '${{ secrets.HA_PAT }}'
+
       - uses: actions/download-artifact@v4
         with:
           name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
