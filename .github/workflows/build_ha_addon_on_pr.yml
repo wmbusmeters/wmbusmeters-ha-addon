@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'TestSourceCommit'
     paths-ignore:
       - 'wmbusmeters-ha-addon/**'
 
