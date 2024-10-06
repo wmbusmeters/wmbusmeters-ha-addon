@@ -1,5 +1,5 @@
 import json, requests, os, re, base64, zipfile, xmltodict
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from waitress import serve
 from threading import Thread
 from xml.dom import minidom
@@ -10,6 +10,7 @@ from cryptography.hazmat.backends import default_backend
 app = Flask(__name__, static_url_path='')
 
 cfgfile = '/data/options_custom.json'
+DRIVER_DIRECTORY = '/data/drivers'
 RESTART_URL = "http://supervisor/addons/self/restart"
 URL_HEADER = { "Authorization": "Bearer " + os.environ.get('SUPERVISOR_TOKEN'), "content-type": "application/json" }
 
@@ -106,6 +107,54 @@ def decrypt():
         return jsonify({'OK': {'id': meterid, 'key': meterkey}})	
     else:
         return jsonify({'ERROR': 'Unable to extract details from file'})
+        
+@app.route('/drivers')
+def drivers():
+    files = os.listdir(DRIVER_DIRECTORY)
+    return render_template('drivers.html', files=files)
+
+@app.route('/edit_driver/<filename>', methods=['GET', 'POST'])
+def edit_driver(filename):
+    filepath = os.path.join(DRIVER_DIRECTORY, filename)
+    if request.method == 'POST':
+        content = request.form['content']
+        with open(filepath, 'w') as f:
+            f.write(content)
+        return redirect(url_for('drivers'))
+
+    with open(filepath, 'r') as f:
+        content = f.read()
+    return render_template('edit_driver.html', filename=filename, content=content)
+
+@app.route('/add_driver', methods=['GET', 'POST'])
+def add_driver():
+    if request.method == 'POST':
+        filename = request.form['filename']
+        content = request.form['content']
+        filepath = os.path.join(DRIVER_DIRECTORY, filename)
+        with open(filepath, 'w') as f:
+            f.write(content)
+        return redirect(url_for('drivers'))
+    return render_template('add_driver.html', filename='', content='')
+
+@app.route('/delete_driver/<filename>', methods=['POST'])
+def delete_driver(filename):
+    filepath = os.path.join(DRIVER_DIRECTORY, filename)
+    if os.path.exists(filepath):
+        os.remove(filepath)
+    return redirect(url_for('drivers'))
+    
+@app.route('/check_filename', methods=['POST'])
+def check_filename():
+    data = request.json
+    filename = data.get('filename')
+    if not filename:
+        return jsonify({'error': 'No filename provided'}), 400
+    file_path = os.path.join(DRIVER_DIRECTORY, filename)
+    if os.path.exists(file_path):
+        return jsonify({'exists': True})
+    else:
+        return jsonify({'exists': False})
 
 if __name__ == '__main__':
     serve(app, host="127.0.0.1", port=5000)

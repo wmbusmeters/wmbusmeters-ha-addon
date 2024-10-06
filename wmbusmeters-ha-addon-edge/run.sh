@@ -5,13 +5,13 @@ RESET_CONF=$(bashio::config 'reset_config')
 
 if [ ! -f ${CONFIG_PATH} ]
 then
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "driversdir": "/data/drivers", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
 fi
 
 if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "driversdir": "/data/drivers", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
     bashio::addon.option "reset_config" "no"
     bashio::addon.restart
 fi
@@ -31,6 +31,10 @@ if ! bashio::fs.directory_exists "${CONFIG_DATA_PATH}/logs/meter_readings"; then
 fi
 if ! bashio::fs.directory_exists "${CONFIG_DATA_PATH}/etc/wmbusmeters.d"; then
     mkdir -p "${CONFIG_DATA_PATH}/etc/wmbusmeters.d"
+fi
+if [ ! -d /data/drivers ]
+then
+    mkdir -p /data/drivers
 fi
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
