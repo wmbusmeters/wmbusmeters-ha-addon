@@ -40,7 +40,7 @@ then
     mkdir -p /data/drivers
 fi
 rm -rf ${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/*
-cp /data/drivers/* ${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/
+cp /data/drivers/* ${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/ || true
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
 
@@ -75,7 +75,7 @@ do
     meter_no=$(( meter_no+1 ))
     METER_NAME=$(printf 'meter-%04d' "$(( meter_no ))")
     bashio::log.info "Adding $METER_NAME ..."
-    METER_DATA=$(printf '%s\n' $meter | jq --raw-output -c -M '.') 
+    METER_DATA=$(printf '%s\n' $meter | jq --raw-output -c -M '.')
     echo -e "$METER_DATA" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.d/$METER_NAME
 done
 
