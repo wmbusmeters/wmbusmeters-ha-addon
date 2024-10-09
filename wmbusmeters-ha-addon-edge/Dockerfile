@@ -3,11 +3,12 @@ FROM $BUILD_FROM AS build
 
 ENV LANG C.UTF-8
 
-RUN apk add --no-cache alpine-sdk gcc linux-headers libxml2-dev cmake libusb-dev bash samurai
+RUN apk add --no-cache alpine-sdk gcc linux-headers libxml2-dev cmake libusb-dev bash samurai libxslt1-dev pkg-config jq
 
 ADD https://api.github.com/repos/wmbusmeters/wmbusmeters/git/refs/heads/master version.json
 RUN git clone https://github.com/steve-m/librtlsdr.git && \
     git clone https://github.com/wmbusmeters/wmbusmeters.git && \
+    git clone https://github.com/libxmq/xmq.git && \
     git clone https://github.com/weetmuts/rtl-wmbus.git && \
     git clone https://github.com/merbanan/rtl_433.git && \
     git clone https://github.com/ED6E0F17/rtl_reset.git
@@ -21,8 +22,14 @@ RUN cmake -B build -G Ninja \
     cmake --build build && \
     cmake --install build
 
+WORKDIR /xmq
+RUN ./configure && make && make install
+
 WORKDIR /wmbusmeters
 RUN make
+
+WORKDIR /wmbusmeters/drivers
+RUN make generate_ha_discovery
 
 WORKDIR /rtl-wmbus
 RUN make release && chmod 755 build/rtl_wmbus
@@ -48,6 +55,7 @@ COPY --from=build /librtlsdr/build/src/librtlsdr.so.* /usr/lib/
 COPY --from=build /librtlsdr/rtl-sdr.rules /usr/lib/udev/rules.d/rtl-sdr.rules
 COPY --from=build /librtlsdr/build/src/rtl_* /usr/bin/
 COPY --from=build /wmbusmeters/build/wmbusmeters /wmbusmeters/wmbusmeters
+COPY --from=build /wmbusmeters/drivers/build/ha_mqtt_discovery/ /ha_mqtt_discovery/
 COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
