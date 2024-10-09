@@ -22,11 +22,11 @@ RUN cmake -B build -G Ninja \
     cmake --build build && \
     cmake --install build
 
-WORKDIR /xmq
-RUN ./configure && make && make install
-
 WORKDIR /wmbusmeters
 RUN make
+
+WORKDIR /xmq
+RUN ./configure && make && make install
 
 WORKDIR /wmbusmeters/drivers
 RUN make generate_ha_discovery
