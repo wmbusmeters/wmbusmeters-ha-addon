@@ -25,11 +25,11 @@ RUN cmake -B build -G Ninja \
 WORKDIR /wmbusmeters
 RUN make
 
-WORKDIR /xmq
-RUN ./configure && make && make install
+#WORKDIR /xmq
+#RUN ./configure && make && make install
 
-WORKDIR /wmbusmeters/drivers
-RUN make generate_ha_discovery
+#WORKDIR /wmbusmeters/drivers
+#RUN make generate_ha_discovery
 
 WORKDIR /rtl-wmbus
 RUN make release && chmod 755 build/rtl_wmbus
@@ -55,7 +55,7 @@ COPY --from=build /librtlsdr/build/src/librtlsdr.so.* /usr/lib/
 COPY --from=build /librtlsdr/rtl-sdr.rules /usr/lib/udev/rules.d/rtl-sdr.rules
 COPY --from=build /librtlsdr/build/src/rtl_* /usr/bin/
 COPY --from=build /wmbusmeters/build/wmbusmeters /wmbusmeters/wmbusmeters
-COPY --from=build /wmbusmeters/drivers/build/ha_mqtt_discovery/ /ha_mqtt_discovery/
+#COPY --from=build /wmbusmeters/drivers/build/ha_mqtt_discovery/ /ha_mqtt_discovery/
 COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
