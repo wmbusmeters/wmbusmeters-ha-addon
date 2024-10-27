@@ -31,6 +31,7 @@
             title="Filename should only contain letters, numbers, underscores, or hyphens, and must end with .xmq" 
             required>
         </h1>
+        <input type="hidden" id="prefix" name="prefix" value="{{ http_x_ingress_path }}">
         <div id="editor" style="height: 400px; width: 100%;">{{ content }}</div>
         <textarea id="content" name="content" style="display:none;"></textarea>
         <br>

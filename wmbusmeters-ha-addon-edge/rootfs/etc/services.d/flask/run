@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start flask web configuration service
+# ==============================================================================
+
+bashio::log.info "Starting web configuration service."
+python3 /flask/app.py &

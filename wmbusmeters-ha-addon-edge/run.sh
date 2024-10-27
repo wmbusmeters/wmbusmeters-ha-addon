@@ -111,8 +111,8 @@ chmod a+x /wmbusmeters/mosquitto_pub.sh
 # Running MQTT discovery
 /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
 
-bashio::log.info "Starting web configuration service."
-python3 /flask/app.py &
+#bashio::log.info "Starting web configuration service."
+#python3 /flask/app.py &
 
 bashio::log.info "Running wmbusmeters ..."
 /wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH
