@@ -4,4 +4,4 @@
 # ==============================================================================
 
 bashio::log.info "Starting web configuration service."
-python3 /flask/app.py &
+exec python3 /flask/app.py
