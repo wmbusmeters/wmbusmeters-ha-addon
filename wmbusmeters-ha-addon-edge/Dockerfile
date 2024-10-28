@@ -70,6 +70,8 @@ RUN chmod a+x /run.sh
 COPY rootfs /
 RUN chmod a+x /etc/services.d/nginx/run
 RUN chmod a+x /etc/services.d/nginx/finish
+RUN chmod a+x /etc/services.d/flask/run
+RUN chmod a+x /etc/services.d/flask/finish
 RUN chmod a+x /etc/cont-init.d/nginx.sh
 
 CMD ["/run.sh"]
