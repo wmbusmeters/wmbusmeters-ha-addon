@@ -25,6 +25,7 @@
       </nav>
       <h1 class="mb-3">Edit Driver: {{ filename }}</h1>
       <form action="{{ url_for('edit_driver', filename=filename) }}" method="POST">
+        <input type="hidden" id="prefix" name="prefix" value="{{ http_x_ingress_path }}">
         <div id="editor" style="height: 400px; width: 100%;">{{ content }}</div>
         <textarea id="content" name="content" style="display:none;"></textarea>
         <br>
