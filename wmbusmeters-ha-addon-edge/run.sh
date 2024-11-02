@@ -115,7 +115,4 @@ chmod a+x /wmbusmeters/mosquitto_pub.sh
 #python3 /flask/app.py &
 
 bashio::log.info "Running wmbusmeters ..."
-/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH
-
-bashio::log.info "Run indefinitely, even if wmbusmetersd fails"
-tail -f /dev/null
+/wmbusmeters/wmbusmeters --usestdoutforlogging --useconfig=$CONFIG_DATA_PATH 
