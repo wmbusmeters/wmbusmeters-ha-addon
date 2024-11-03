@@ -73,6 +73,7 @@ RUN chmod a+x /etc/services.d/nginx/finish
 RUN chmod a+x /etc/services.d/flask/run
 RUN chmod a+x /etc/services.d/flask/finish
 RUN chmod a+x /etc/services.d/wmbusmeters/run
+RUN chmod a+x /etc/services.d/wmbusmeters/finish
 RUN chmod a+x /etc/cont-init.d/nginx.sh
 
 ENTRYPOINT ["/init"]
