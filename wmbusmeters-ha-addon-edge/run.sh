@@ -40,7 +40,9 @@ then
     mkdir -p /data/drivers
 fi
 rm -rf ${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/*
-cp /data/drivers/* ${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/ || true
+if [ -n "$(ls -A /data/drivers 2>/dev/null)" ]; then
+    cp /data/drivers/* "${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/"
+fi
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
 
@@ -111,8 +113,5 @@ chmod a+x /wmbusmeters/mosquitto_pub.sh
 # Running MQTT discovery
 /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
 
-#bashio::log.info "Starting web configuration service."
-#python3 /flask/app.py &
-
 bashio::log.info "Running wmbusmeters ..."
-/wmbusmeters/wmbusmeters --usestdoutforlogging --useconfig=$CONFIG_DATA_PATH 
+/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 
