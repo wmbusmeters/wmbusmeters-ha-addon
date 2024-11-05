@@ -1,5 +1,5 @@
 {
-    "total_energy_consumption_kwh": {
+    "total_kwh": {
         "component": "sensor",
         "discovery_payload": {
             "device": {
@@ -23,7 +23,7 @@
             "icon": "mdi:gauge"
         }
     },
-    "total_volume_m3": {
+    "total_m3": {
         "component": "sensor",
         "discovery_payload": {
             "device": {
@@ -37,7 +37,7 @@
             },
             "enabled_by_default": true,
             "json_attributes_topic": "wmbusmeters/{name}",
-            "device_class": "water",
+            "device_class": "volume",
             "state_class": "total",
             "name": "total",
             "state_topic": "wmbusmeters/{name}",
