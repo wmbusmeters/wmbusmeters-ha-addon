@@ -1,3 +1,5 @@
+## 1.17.1-29-11 
+- Updated to version [1.17.1-29-11](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
 ## 1.17.1-29-10 
 - Updated to version [1.17.1-29-10](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
 ## 1.17.1-29-9 
