@@ -1,0 +1,191 @@
+{
+    "total_kwh": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "total",
+            "device_class": "energy",
+            "name": "Total Energy",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kWh",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:gauge"
+        }
+    },
+    "flow_m3h": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "measurement",
+            "device_class": "water",
+            "name": "Flow",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:gauge"
+        }
+    },
+    "total_m3": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "total",
+            "device_class": "water",
+            "name": "Total Flow",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:gauge"
+        }
+    },
+    "power_kw": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "measurement",
+            "device_class": "power",
+            "name": "Power Consumption",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kW",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:gauge"
+        }
+    },
+    "forward_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "Temperature Forward",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:temperature-celsius"
+        }
+    },
+    "return_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "Temperature Return",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:temperature-celsius"
+        }
+    },
+    "rssi_dbm": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "device_class": "signal_strength",
+            "state_class": "measurement",
+            "name": "Signal Strength",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "dBm",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:signal"
+        }
+    },
+    "timestamp": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Sensus",
+                "model": "{driver}",
+                "name": "{name}",
+		"serial_number": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "name": "Timestamp",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:calendar-clock"
+        }
+    }
+}
