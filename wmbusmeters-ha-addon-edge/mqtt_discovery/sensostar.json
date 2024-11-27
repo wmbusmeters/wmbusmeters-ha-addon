@@ -340,26 +340,6 @@
         }
     },
 
-    "meter_timestamp": {
-        "component": "sensor",
-        "discovery_payload": {
-            "device": {
-                "identifiers": ["wmbusmeters_{id}"],
-                "manufacturer": "Engelmann",
-                "model": "{driver}",
-                "name": "{name}",
-                "hw_version": "{id}"
-            },
-            "enabled_by_default": true,
-            "name": "Meter timestamp",
-            "entity_category": "diagnostic",
-            "state_topic": "wmbusmeters/{name}",
-            "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ value_json.{attribute} }}",
-            "icon": "mdi:clock"
-        }
-    },
-
     "timestamp": {
         "component": "sensor",
         "discovery_payload": {
