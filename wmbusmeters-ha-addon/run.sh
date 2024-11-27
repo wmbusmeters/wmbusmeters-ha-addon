@@ -32,6 +32,17 @@ fi
 if ! bashio::fs.directory_exists "${CONFIG_DATA_PATH}/etc/wmbusmeters.d"; then
     mkdir -p "${CONFIG_DATA_PATH}/etc/wmbusmeters.d"
 fi
+if ! bashio::fs.directory_exists "${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d"; then
+    mkdir -p "${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d"
+fi
+if [ ! -d /data/drivers ]
+then
+    mkdir -p /data/drivers
+fi
+rm -rf ${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/*
+if [ -n "$(ls -A /data/drivers 2>/dev/null)" ]; then
+    cp /data/drivers/* "${CONFIG_DATA_PATH}/etc/wmbusmeters.drivers.d/"
+fi
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
 
@@ -66,7 +77,7 @@ do
     meter_no=$(( meter_no+1 ))
     METER_NAME=$(printf 'meter-%04d' "$(( meter_no ))")
     bashio::log.info "Adding $METER_NAME ..."
-    METER_DATA=$(printf '%s\n' $meter | jq --raw-output -c -M '.') 
+    METER_DATA=$(printf '%s\n' $meter | jq --raw-output -c -M '.')
     echo -e "$METER_DATA" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.d/$METER_NAME
 done
 
@@ -102,8 +113,5 @@ chmod a+x /wmbusmeters/mosquitto_pub.sh
 # Running MQTT discovery
 /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
 
-bashio::log.info "Starting web configuration service."
-python3 /flask/app.py &
-
 bashio::log.info "Running wmbusmeters ..."
-/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH
+/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 

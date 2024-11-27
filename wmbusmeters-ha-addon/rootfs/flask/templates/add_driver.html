@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Driver</title>
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" media="all">
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='ace-min/ace.js') }}"></script>
+  </head>
+  <body>
+    <style>
+      input:required:invalid {
+        border-color: red;
+      }
+    </style>
+    <div class="container">
+      <nav style="background-color: #e3f2fd;">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <img src="{{ url_for('static', filename='wmbusmeters.png') }}" width="40" height="40" class="d-inline-block align-top b-2" alt="">
+          <a href="/" class="nav-link" id="nav-home-tab" role="tab" aria-controls="nav-home" aria-selected="false">Home</a>
+          <a href="/kem" class="nav-link" id="nav-kem-tab" role="tab" aria-controls="nav-kem" aria-selected="false">KEM processing</a>
+          <a href="/drivers" class="nav-link active" id="nav-driver-tab" role="tab" aria-controls="nav-driver" aria-selected="true">Drivers</a>
+        </div>
+      </nav>
+      <form id="edit-form" action="{{ url_for('add_driver', filename=filename) }}" method="POST">
+        <h1 class="mb-3">Add Driver: 
+          <input type="text" id="filename" class="form-control" name="filename" 
+            value="{{ filename }}" 
+            pattern="^[a-zA-Z0-9_-]+\.xmq$" 
+            title="Filename should only contain letters, numbers, underscores, or hyphens, and must end with .xmq" 
+            required>
+        </h1>
+        <input type="hidden" id="prefix" name="prefix" value="$http_x_ingress_path">
+        <div id="editor" style="height: 400px; width: 100%;">{{ content }}</div>
+        <textarea id="content" name="content" style="display:none;"></textarea>
+        <br>
+        <button type="submit" class="btn btn-success mt-2">Save</button>
+        <a href="{{ url_for('drivers') }}" class="btn btn-secondary mt-2">Close</a>
+      </form>
+    </div>
+
+    <script>
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/monokai");
+      editor.session.setMode("ace/mode/json5");
+
+      document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        var filenameInput = document.querySelector('#filename').value;
+        var validFilename = /^[a-zA-Z0-9_-]+\.xmq$/;
+        if (!validFilename.test(filenameInput)) {
+          alert('Invalid filename! The filename must not contain spaces or special characters, and it must end with .xmq');
+          return;
+        }
+
+        fetch('/check_filename', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ filename: filenameInput }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.exists) {
+            alert('A file with the same name already exists!');
+          } else {
+            document.querySelector('#content').value = editor.getValue(); 
+            event.target.submit(); 
+          }
+        })
+        .catch(error => {
+          console.error('Error checking filename:', error);
+          alert('An error occurred while checking the filename.');
+        });
+      });
+    </script>
+  </body>
+</html>
