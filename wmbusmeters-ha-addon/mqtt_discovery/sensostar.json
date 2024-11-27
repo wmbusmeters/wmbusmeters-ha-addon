@@ -167,7 +167,7 @@
             "name": "Status OK",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'OK' in value_json.current_status }}",
+            "value_template": "{{ 'OK' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -188,7 +188,7 @@
             "name": "Status error (Temperature Sensor 1 Cable Break)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_CABLE_BREAK' in value_json.current_status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_CABLE_BREAK' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -209,7 +209,7 @@
             "name": "Status error (Temperature Sensor 1 Short Circuit)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_SHORT_CIRCUIT' in value_json.current_status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_SHORT_CIRCUIT' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -230,7 +230,7 @@
             "name": "Status error (Temperature Sensor 2 Cable Break)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_CABLE_BREAK' in value_json.current_status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_CABLE_BREAK' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -251,7 +251,7 @@
             "name": "Status error (Temperature Sensor 2 Short Circuit)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_SHORT_CIRCUIT' in value_json.current_status }}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_SHORT_CIRCUIT' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -272,7 +272,7 @@
             "name": "Status error (Flow Management System)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_FLOW_MEASUREMENT_SYSTEM_ERROR' in value_json.current_status }}",
+            "value_template": "{{ 'ERROR_FLOW_MEASUREMENT_SYSTEM_ERROR' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -293,7 +293,7 @@
             "name": "Status error (Electronics Defective)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'ERROR_ELECTRONICS_DEFECT' in value_json.current_status }}",
+            "value_template": "{{ 'ERROR_ELECTRONICS_DEFECT' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -313,7 +313,7 @@
             "name": "Status OK (instrument reset)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'OK_INSTRUMENT_RESET' in value_json.current_status }}",
+            "value_template": "{{ 'OK_INSTRUMENT_RESET' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
@@ -334,7 +334,7 @@
             "name": "Status OK (battery low)",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ 'OK_BATTERY_LOW' in value_json.current_status }}",
+            "value_template": "{{ 'OK_BATTERY_LOW' in value_json.status }}",
             "payload_on": "True",
             "payload_off": "False"
         }
