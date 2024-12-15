@@ -1,5 +1,6 @@
 import json, requests, os, re, base64, zipfile, xmltodict
 from flask import Flask, jsonify, render_template, request, redirect, url_for
+from urllib.parse import urlparse
 from waitress import serve
 from threading import Thread
 from xml.dom import minidom
@@ -107,6 +108,15 @@ def decrypt():
         return jsonify({'OK': {'id': meterid, 'key': meterkey}})	
     else:
         return jsonify({'ERROR': 'Unable to extract details from file'})
+
+def get_ingress_path():
+    referer = request.headers.get('Referer')
+    if referer:
+        parsed_url = urlparse(referer)
+        path_parts = parsed_url.path.split('/')
+        if len(path_parts) > 3 and path_parts[2] == 'api' and path_parts[3] == 'hassio_ingress':
+            return path_parts[4]  # Extract ingress path
+    return None
         
 @app.route('/drivers')
 def drivers():
@@ -116,32 +126,40 @@ def drivers():
 @app.route('/edit_driver/<filename>', methods=['GET', 'POST'])
 def edit_driver(filename):
     filepath = os.path.join(DRIVER_DIRECTORY, filename)
+    ingress_path = get_ingress_path()
     if request.method == 'POST':
         content = request.form['content']
         with open(filepath, 'w') as f:
             f.write(content)
+        if ingress_path:
+            return redirect(f"/api/hassio_ingress/{ingress_path}/drivers")
         return redirect(url_for('drivers'))
-
     with open(filepath, 'r') as f:
         content = f.read()
     return render_template('edit_driver.html', filename=filename, content=content)
 
 @app.route('/add_driver', methods=['GET', 'POST'])
 def add_driver():
+    ingress_path = get_ingress_path()
     if request.method == 'POST':
         filename = request.form['filename']
         content = request.form['content']
         filepath = os.path.join(DRIVER_DIRECTORY, filename)
         with open(filepath, 'w') as f:
             f.write(content)
+        if ingress_path:
+            return redirect(f"/api/hassio_ingress/{ingress_path}/drivers")
         return redirect(url_for('drivers'))
     return render_template('add_driver.html', filename='', content='')
 
 @app.route('/delete_driver/<filename>', methods=['POST'])
 def delete_driver(filename):
     filepath = os.path.join(DRIVER_DIRECTORY, filename)
+    ingress_path = get_ingress_path()
     if os.path.exists(filepath):
         os.remove(filepath)
+    if ingress_path:
+        return redirect(f"/api/hassio_ingress/{ingress_path}/drivers")
     return redirect(url_for('drivers'))
     
 @app.route('/check_filename', methods=['POST'])
