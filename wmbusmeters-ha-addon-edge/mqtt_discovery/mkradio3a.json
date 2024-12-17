@@ -36,7 +36,7 @@
             "enabled_by_default": true,
             "device_class": "water",
             "state_class": "total",
-            "name": "current_month",
+            "name": "target",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³",
