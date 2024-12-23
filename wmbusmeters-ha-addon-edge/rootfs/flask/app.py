@@ -1,6 +1,5 @@
 import json, requests, os, re, base64, zipfile, xmltodict
 from flask import Flask, jsonify, render_template, request, redirect, url_for
-from urllib.parse import urlparse
 from waitress import serve
 from threading import Thread
 from xml.dom import minidom
@@ -108,59 +107,61 @@ def decrypt():
         return jsonify({'OK': {'id': meterid, 'key': meterkey}})	
     else:
         return jsonify({'ERROR': 'Unable to extract details from file'})
-
-def extract_ingress_path_from_url():
-    full_url = request.url
-    parsed_url = urlparse(full_url)
-    path_parts = parsed_url.path.split('/')
-    if len(path_parts) > 3 and path_parts[2] == 'api' and path_parts[3] == 'hassio_ingress':
-        return path_parts[4]
-    return None
         
 @app.route('/drivers')
 def drivers():
-    files = os.listdir(DRIVER_DIRECTORY)
-    return render_template('drivers.html', files=files)
+    try:
+        files = os.listdir(DRIVER_DIRECTORY)
+        return render_template('drivers.html', files=files)
+    except Exception as e:
+        print(f"Error listing drivers: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/add_driver', methods=['GET', 'POST'])
 def add_driver():
-    ingress_path = extract_ingress_path_from_url()
     if request.method == 'POST':
         filename = request.form['filename']
         content = request.form['content']
         filepath = os.path.join(DRIVER_DIRECTORY, filename)
-        with open(filepath, 'w') as f:
-            f.write(content)
-        if ingress_path:
-            return redirect(f"/api/hassio_ingress/{ingress_path}/drivers")
-        return redirect(url_for('drivers'))
+        try:
+            with open(filepath, 'w') as f:
+                f.write(content)
+            return jsonify({'status': 'success', 'redirect_url': url_for('drivers')})
+        except Exception as e:
+            print(f"Error adding driver {filename}: {e}")
+            return jsonify({'status': 'error', 'message': str(e)}), 500
     return render_template('add_driver.html', filename='', content='')
 
 @app.route('/edit_driver/<filename>', methods=['GET', 'POST'])
 def edit_driver(filename):
     filepath = os.path.join(DRIVER_DIRECTORY, filename)
-    ingress_path = extract_ingress_path_from_url()
     if request.method == 'POST':
         content = request.form['content']
-        with open(filepath, 'w') as f:
-            f.write(content)
-        if ingress_path:
-            return redirect(f"/api/hassio_ingress/{ingress_path}/drivers")
-        return redirect(url_for('drivers'))
-    with open(filepath, 'r') as f:
-        content = f.read()
+        try:
+            with open(filepath, 'w') as f:
+                f.write(content)
+            return jsonify({'status': 'success', 'redirect_url': url_for('drivers')})
+        except Exception as e:
+            print(f"Error editing driver {filename}: {e}")
+            return jsonify({'status': 'error', 'message': str(e)}), 500
+    try:
+        with open(filepath, 'r') as f:
+            content = f.read()
+    except FileNotFoundError:
+        abort(404)
     return render_template('edit_driver.html', filename=filename, content=content)
 
 @app.route('/delete_driver/<filename>', methods=['POST'])
 def delete_driver(filename):
     filepath = os.path.join(DRIVER_DIRECTORY, filename)
-    ingress_path = extract_ingress_path_from_url()
-    if os.path.exists(filepath):
-        os.remove(filepath)
-    if ingress_path:
-        return redirect(f"/api/hassio_ingress/{ingress_path}/drivers")
-    return redirect(url_for('drivers'))
-    
+    try:
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        return jsonify({'status': 'success', 'redirect_url': url_for('drivers')})
+    except Exception as e:
+        print(f"Error deleting driver {filename}: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/check_filename', methods=['POST'])
 def check_filename():
     data = request.json
@@ -170,8 +171,7 @@ def check_filename():
     file_path = os.path.join(DRIVER_DIRECTORY, filename)
     if os.path.exists(file_path):
         return jsonify({'exists': True})
-    else:
-        return jsonify({'exists': False})
+    return jsonify({'exists': False})
 
 if __name__ == '__main__':
     serve(app, host="127.0.0.1", port=5000)
