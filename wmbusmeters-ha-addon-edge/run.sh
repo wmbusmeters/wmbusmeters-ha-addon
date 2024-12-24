@@ -89,10 +89,15 @@ then
   if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.username"; then MQTT_USER=$(bashio::jq "${CONFIG_PATH}" ".mqtt.username"); fi
   if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.password"; then MQTT_PASSWORD=$(bashio::jq "${CONFIG_PATH}" ".mqtt.password"); fi
 else
-  MQTT_HOST=$(bashio::services mqtt "host")
-  MQTT_PORT=$(bashio::services mqtt "port")
-  MQTT_USER=$(bashio::services mqtt "username")
-  MQTT_PASSWORD=$(bashio::services mqtt "password")
+  if ! bashio::services.available "mqtt"; then
+    bashio::log.error "No internal MQTT service found"
+  else
+    bashio::log.info "MQTT service found, fetching credentials ..."
+    MQTT_HOST=$(bashio::services mqtt "host")
+    MQTT_PORT=$(bashio::services mqtt "port")
+    MQTT_USER=$(bashio::services mqtt "username")
+    MQTT_PASSWORD=$(bashio::services mqtt "password")
+  fi
 fi
 
 bashio::log.info "Broker $MQTT_HOST will be used."
