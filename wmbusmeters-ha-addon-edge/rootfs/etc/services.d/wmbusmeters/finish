@@ -4,10 +4,23 @@
 # s6-overlay docs: https://github.com/just-containers/s6-overlay
 # ==============================================================================
 
-if [[ "$1" -ne 0 ]] && [[ "$1" -ne 256 ]]; then
-  bashio::log.warning "wmbusmeters exited with status $1."
-  sleep 2
-  exit 0
-fi
+PROCESS_NAME="wmbusmeters"
 
+kill_process() {
+    if pgrep "$PROCESS_NAME" > /dev/null; then
+        pkill "$PROCESS_NAME"       
+        sleep 1
+        
+        if pgrep "$PROCESS_NAME" > /dev/null; then
+            pkill -9 "$PROCESS_NAME"
+        fi
+    fi
+}
+
+# Check exit status and take action accordingly
+if [[ "$1" -ne 0 ]] && [[ "$1" -ne 256 ]]; then
+    sleep 1
+    kill_process
+    exit 0
+fi
 exit 0
