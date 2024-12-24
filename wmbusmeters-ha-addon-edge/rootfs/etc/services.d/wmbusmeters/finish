@@ -19,6 +19,7 @@ kill_process() {
 
 # Check exit status and take action accordingly
 if [[ "$1" -ne 0 ]] && [[ "$1" -ne 256 ]]; then
+    bashio::log.warning "wmbusmeters exited with status $1."
     sleep 1
     kill_process
     exit 0
