@@ -1,4 +1,4 @@
-import json, requests, os, re, base64, zipfile, xmltodict
+import json, requests, os, re, base64, zipfile, xmltodict, subprocess
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from waitress import serve
 from threading import Thread
@@ -11,8 +11,6 @@ app = Flask(__name__, static_url_path='')
 
 cfgfile = '/data/options_custom.json'
 DRIVER_DIRECTORY = '/data/drivers'
-RESTART_URL = "http://supervisor/addons/self/restart"
-URL_HEADER = { "Authorization": "Bearer " + os.environ.get('SUPERVISOR_TOKEN'), "content-type": "application/json" }
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -39,7 +37,11 @@ def save_json_to_file():
     return jsonify({'message': 'Config saved and addon restarted successfully.'})
 
 def restart_call():
-    requests.post(RESTART_URL, headers=URL_HEADER)
+    try:
+        subprocess.run(['s6-svc', '-r', '/run/service/wmbusmeters'], check=True)
+        print("wmbusmeters service restarted successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to restart wmbusmeters service: {e}")
 
 @app.route('/get_json')
 def get_json():
