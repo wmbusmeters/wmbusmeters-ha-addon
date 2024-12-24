@@ -9,11 +9,6 @@ PROCESS_NAME="wmbusmeters"
 kill_process() {
     if pgrep "$PROCESS_NAME" > /dev/null; then
         pkill "$PROCESS_NAME"       
-        sleep 1
-        
-        if pgrep "$PROCESS_NAME" > /dev/null; then
-            pkill -9 "$PROCESS_NAME"
-        fi
     fi
 }
 
