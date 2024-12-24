@@ -23,7 +23,7 @@
                 <a href="/drivers" class="nav-link active" id="nav-driver-tab" role="tab" aria-controls="nav-driver" aria-selected="true">Drivers</a>
             </div>
         </nav>
-
+        <form id="edit-form" action="{{ url_for('add_driver', filename=filename) }}" method="POST">
         <h1 class="mb-3">Add Driver: 
             <input type="text" id="filename" class="form-control" name="filename"
                    value="{{ filename }}"
@@ -31,11 +31,12 @@
                    title="Filename should only contain letters, numbers, underscores, or hyphens, and must end with .xmq"
                    required>
         </h1>
-        <div id="editor" style="height: 400px; width: 100%;"></div>
+        <div id="editor" style="height: 400px; width: 100%;">{{ content }}</div>
         <textarea id="content" name="content" style="display:none;"></textarea>
         <br>
         <button type="submit" class="btn btn-success mt-2">Save</button>
         <a href="{{ url_for('drivers') }}" class="btn btn-secondary mt-2">Close</a>
+        </form>
     </div>
 
     <script>
@@ -63,7 +64,7 @@
                     document.querySelector('#content').value = editor.getValue();
                     fetch('{{ url_for("add_driver") }}', {
                         method: 'POST',
-                        body: new FormData(document.querySelector('form')),
+                        body: new FormData(document.querySelector('#edit-form')),
                     })
                     .then(response => response.json())
                     .then(data => {
