@@ -126,6 +126,7 @@ def add_driver():
         try:
             with open(filepath, 'w') as f:
                 f.write(content)
+            Thread(target=restart_call, args=()).start()
             return jsonify({'status': 'success', 'redirect_url': url_for('drivers')})
         except Exception as e:
             print(f"Error adding driver {filename}: {e}")
@@ -140,6 +141,7 @@ def edit_driver(filename):
         try:
             with open(filepath, 'w') as f:
                 f.write(content)
+            Thread(target=restart_call, args=()).start()
             return jsonify({'status': 'success', 'redirect_url': url_for('drivers')})
         except Exception as e:
             print(f"Error editing driver {filename}: {e}")
@@ -157,6 +159,7 @@ def delete_driver(filename):
     try:
         if os.path.exists(filepath):
             os.remove(filepath)
+        Thread(target=restart_call, args=()).start()
         return jsonify({'status': 'success', 'redirect_url': url_for('drivers')})
     except Exception as e:
         print(f"Error deleting driver {filename}: {e}")
