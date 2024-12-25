@@ -90,7 +90,8 @@ then
   if bashio::jq.exists "${CONFIG_PATH}" ".mqtt.password"; then MQTT_PASSWORD=$(bashio::jq "${CONFIG_PATH}" ".mqtt.password"); fi
 else
   if ! bashio::services.available "mqtt"; then
-    bashio::log.error "No internal MQTT service found"
+    bashio::log.warning "No internal MQTT service found or configured"
+    MQTT_HOST="none"
   else
     bashio::log.info "MQTT service found, fetching credentials ..."
     MQTT_HOST=$(bashio::services mqtt "host")
@@ -100,23 +101,28 @@ else
   fi
 fi
 
-bashio::log.info "Broker $MQTT_HOST will be used."
-pub_args=('-h' $MQTT_HOST )
-pub_args_quoted=('-h' \'$MQTT_HOST\' )
-[[ ! -z ${MQTT_PORT+x} ]] && pub_args+=( '-p' $MQTT_PORT ) && pub_args_quoted+=( '-p' \'$MQTT_PORT\' )
-[[ ! -z ${MQTT_USER+x} ]] && pub_args+=( '-u' $MQTT_USER ) && pub_args_quoted+=( '-u' \'$MQTT_USER\' )
-[[ ! -z ${MQTT_PASSWORD+x} ]] && pub_args+=( '-P' $MQTT_PASSWORD ) && pub_args_quoted+=( '-P' \'$MQTT_PASSWORD\' )
+touch /wmbusmeters/mosquitto_pub.sh
 
-cat > /wmbusmeters/mosquitto_pub.sh << EOL
+if [[ "$MQTT_HOST" != "none" ]]; then
+    bashio::log.info "Broker $MQTT_HOST will be used."
+    pub_args=('-h' "$MQTT_HOST")
+    pub_args_quoted=('-h' "'$MQTT_HOST'")
+    [[ ! -z ${MQTT_PORT+x} ]] && pub_args+=( '-p' $MQTT_PORT ) && pub_args_quoted+=( '-p' \'$MQTT_PORT\' )
+    [[ ! -z ${MQTT_USER+x} ]] && pub_args+=( '-u' $MQTT_USER ) && pub_args_quoted+=( '-u' \'$MQTT_USER\' )
+    [[ ! -z ${MQTT_PASSWORD+x} ]] && pub_args+=( '-P' $MQTT_PASSWORD ) && pub_args_quoted+=( '-P' \'$MQTT_PASSWORD\' )
+
+    cat > /wmbusmeters/mosquitto_pub.sh << EOL
 #!/usr/bin/with-contenv bashio
 TOPIC=\$1
 MESSAGE=\$2
 /usr/bin/mosquitto_pub ${pub_args_quoted[@]} -r -t "\$TOPIC" -m "\$MESSAGE"
 EOL
-chmod a+x /wmbusmeters/mosquitto_pub.sh
 
-# Running MQTT discovery
-/mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
+    # Running MQTT discovery
+    /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
+fi
+
+chmod a+x /wmbusmeters/mosquitto_pub.sh
 
 bashio::log.info "Running wmbusmeters ..."
 /wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 
