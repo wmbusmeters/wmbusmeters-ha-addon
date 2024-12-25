@@ -125,5 +125,7 @@ fi
 chmod a+x /wmbusmeters/mosquitto_pub.sh
 
 bashio::log.info "Running wmbusmeters ..."
-pkill wmbusmeters
+if pgrep wmbusmeters > /dev/null; then
+    pkill wmbusmeters
+fi
 /wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 
