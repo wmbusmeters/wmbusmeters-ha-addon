@@ -47,9 +47,7 @@ ENV QEMU_EXECVE=1
 RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx
 
 # Install Flask
-RUN apk add --update py3-pip py3-cryptography
-RUN python3 -m venv ~/pyvenv --system-site-packages
-RUN pip install flask requests waitress xmltodict
+RUN apk add --update py3-pip py3-cryptography py3-flask py3-requests py3-waitress py3-xmltodict
 
 WORKDIR /wmbusmeters
 COPY --from=build /librtlsdr/build/src/librtlsdr.so.* /usr/lib/
