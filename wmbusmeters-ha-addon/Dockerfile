@@ -48,6 +48,7 @@ RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb libxml2 netcat-op
 
 # Install Flask
 RUN apk add --update py3-pip py3-cryptography
+RUN python3 -m venv ~/pyvenv --system-site-packages
 RUN pip install flask requests waitress xmltodict
 
 WORKDIR /wmbusmeters
