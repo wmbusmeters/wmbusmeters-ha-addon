@@ -44,7 +44,7 @@
         "unit_of_measurement":"kWh",
         "state_class":"total_increasing",
         "device_class":"energy",
-        "enabled_by_default":true
+        "enabled_by_default":false
      }
   },
   "total_energy_consumption_tariff_2_kwh":{
@@ -68,7 +68,7 @@
         "unit_of_measurement":"kWh",
         "state_class":"total_increasing",
         "device_class":"energy",
-        "enabled_by_default":true
+        "enabled_by_default":false
      }
   },
   "total_energy_consumption_tariff_3_kwh":{
@@ -92,7 +92,7 @@
         "unit_of_measurement":"kWh",
         "state_class":"total_increasing",
         "device_class":"energy",
-        "enabled_by_default":true
+        "enabled_by_default":false
      }
   },
   "total_energy_production_kwh":{
@@ -140,7 +140,7 @@
         "unit_of_measurement":"kWh",
         "state_class":"total_increasing",
         "device_class":"energy",
-        "enabled_by_default":true
+        "enabled_by_default":false
      }
   },
   "total_energy_production_tariff_2_kwh":{
@@ -164,7 +164,7 @@
         "unit_of_measurement":"kWh",
         "state_class":"total_increasing",
         "device_class":"energy",
-        "enabled_by_default":true
+        "enabled_by_default":false
      }
   },
   "total_energy_production_tariff_3_kwh":{
@@ -188,7 +188,7 @@
         "unit_of_measurement":"kWh",
         "state_class":"total_increasing",
         "device_class":"energy",
-        "enabled_by_default":true
+        "enabled_by_default":false
      }
   },
   "current_power_consumption_kw":{
