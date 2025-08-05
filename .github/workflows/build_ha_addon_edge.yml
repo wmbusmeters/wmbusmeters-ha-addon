@@ -37,7 +37,7 @@ jobs:
         addon: ["wmbusmeters"]
         arch: ["amd64", "armv7", "aarch64"]
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: ha-addon_artifact-${{ github.event.client_payload.ver }}
 
@@ -64,7 +64,7 @@ jobs:
         with:
           token: '${{ secrets.HA_PAT }}'
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: ha-addon_artifact-${{ github.event.client_payload.ver }}
 
