@@ -21,6 +21,13 @@
                 <a href="/" class="nav-link" id="nav-home-tab" role="tab" aria-controls="nav-home" aria-selected="false">Home</a>
                 <a href="/kem" class="nav-link" id="nav-kem-tab" role="tab" aria-controls="nav-kem" aria-selected="false">KEM processing</a>
                 <a href="/drivers" class="nav-link active" id="nav-driver-tab" role="tab" aria-controls="nav-driver" aria-selected="true">Drivers</a>
+                <a href="{{ request.host_url }}hassio/addon/{{ addon_slug }}/logs" class="nav-link" id="nav-logs-link" role="tab" aria-controls="nav-driver" aria-selected="false">Logs</a>
+                <script>
+                  document.getElementById('nav-logs-link').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.top.location.assign(this.href);
+                  });
+                </script>
             </div>
         </nav>
         <h1 class="mb-3">Edit Driver: {{ filename }}</h1>

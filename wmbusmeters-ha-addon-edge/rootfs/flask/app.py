@@ -12,6 +12,24 @@ app = Flask(__name__, static_url_path='')
 cfgfile = '/data/options_custom.json'
 DRIVER_DIRECTORY = '/data/drivers'
 
+SUPERVISOR_URL = os.environ.get("SUPERVISOR", "http://supervisor")
+SUPERVISOR_TOKEN = os.environ["SUPERVISOR_TOKEN"]
+
+def get_addon_slug() -> str:
+    r = requests.get(
+        f"{SUPERVISOR_URL}/addons/self/info",
+        headers={"Authorization": f"Bearer {SUPERVISOR_TOKEN}"},
+        timeout=5,
+    )
+    r.raise_for_status()
+    return r.json()["data"]["slug"]
+
+ADDON_SLUG = get_addon_slug()
+
+@app.context_processor
+def inject_addon_slug():
+    return {"addon_slug": ADDON_SLUG}
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
