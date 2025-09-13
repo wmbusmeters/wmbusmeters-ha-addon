@@ -55,35 +55,41 @@ def get_json():
 @app.route('/decrypt', methods=['POST'])
 def decrypt():
     file = request.files['file']
-    filename = request.files['file'].filename
+    filename = file.filename
     password = request.form['password']
-    
-    kem_file_content = None
 
-    if (zipfile.is_zipfile(file)):
-        with zipfile.ZipFile(file,'r') as zipobj:
-            file_list = zipobj.namelist()
-            for file_name in file_list:
-                if file_name.endswith('.kem') or file_name.endswith('.kem2'):
-                    kem_file_content = zipobj.read(file_name)
-			
-            if (not kem_file_content):
-                return jsonify({"ERROR": "The zip file '%s' does not seem to contain any '.kem' file." % (filename)})
-    else:
-        file.seek(0)
-        kem_file_content = file.read()
+    try:
+        file_bytes = file.read()
+    except Exception as e:
+        return jsonify({"ERROR": f"Failed to read input file '{filename}': {e}"}), 400
+
+    kem_file_content = None
+    try:
+        if zipfile.is_zipfile(BytesIO(file_bytes)):
+            with zipfile.ZipFile(BytesIO(file_bytes), 'r') as zipobj:
+                for name in zipobj.namelist():
+                    if name.lower().endswith(('.kem', '.kem2')):
+                        kem_file_content = zipobj.read(name)
+                        break
+            if not kem_file_content:
+                return jsonify({"ERROR": f"The zip file '{filename}' does not seem to contain any '.kem' file."})
+        else:
+            kem_file_content = file_bytes
+    except Exception as e:
+        return jsonify({"ERROR": f"Error reading '{filename}': {e}"}), 400
 
     try:
         xmldoc = minidom.parseString(kem_file_content)
         encrypedtext = xmldoc.getElementsByTagName('CipherValue')[0].firstChild.nodeValue
         encrypeddata = base64.b64decode(encrypedtext)
-    except:
-        return jsonify({"ERROR": "The file '%s' does not seem to contain valid data - decryption failed." % (filename)})
-
-    data = BytesIO(file.read())
+    except Exception:
+        return jsonify({"ERROR": f"The file '{filename}' does not seem to contain valid data - decryption failed."})
 
     key = bytes(str(password).encode('utf-8'))
-    if (len(key) < 16): key += (16-len(key)) * b'\0'
+    if len(key) < 16:
+        key += (16 - len(key)) * b'\0'
+    elif len(key) > 16:
+        key = key[:16]
 
     backend = default_backend()
     cipher = Cipher(algorithms.AES(key), modes.CBC(key), backend=backend)
@@ -91,24 +97,72 @@ def decrypt():
     decryptedtext = decryptor.update(encrypeddata) + decryptor.finalize()
 
     try:
-        decodedtext = decryptedtext.decode('utf-8')
+        _ = decryptedtext.decode('utf-8')
     except UnicodeDecodeError:
         return jsonify({'ERROR': 'Looks like password is wrong - decryption failed!'})
 
     trimmedText = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\xff]', '', decryptedtext.decode('utf-8'))
-    data_dict = xmltodict.parse(trimmedText)
-    json_data = json.dumps(data_dict)
-    resp = json.loads(json_data)
+    try:
+        resp = xmltodict.parse(trimmedText)
+    except Exception as e:
+        return jsonify({'ERROR': f'Unable to parse decrypted XML: {e}'}), 400
+
+    def as_list(x):
+        return x if isinstance(x, list) else [x]
+
+    def pick_first_key(keys_node):
+        if not isinstance(keys_node, dict):
+            return None
+        k = keys_node.get('Key')
+        if isinstance(k, list):
+            for item in k:
+                t = item.get('@Type') or item.get('Type')
+                v = item.get('Value')
+                if v and (t == 'DEK'):
+                    return v
+            for item in k:
+                if item.get('Value'):
+                    return item['Value']
+            return None
+        if isinstance(k, dict):
+            return k.get('Value')
+        return None
+
+    meters = []
+
     if 'MetersInOrder' in resp:
-        meterid = resp['MetersInOrder']['Meter']['MeterNo']
-        meterkey = resp['MetersInOrder']['Meter']['EncKeys']['DEK']
-        return jsonify({'OK': {'id': meterid, 'key': meterkey}})
+        meters_node = resp['MetersInOrder'].get('Meter', [])
+        for m in as_list(meters_node):
+            meterid = m.get('MeterNo') or m.get('SerialNo')
+            meterkey = None
+            enc = m.get('EncKeys')
+            if isinstance(enc, dict):
+                meterkey = enc.get('DEK') or enc.get('DEKKey') or enc.get('Key')
+            if not meterkey:
+                meterkey = m.get('DEK')
+            if meterid and meterkey:
+                meters.append({'id': meterid, 'key': meterkey})
+
     elif 'Devices' in resp:
-        meterid = resp['Devices']['Device']['DeviceId']['SerialNumber']
-        meterkey = resp['Devices']['Device']['Keys']['Key']['Value']
-        return jsonify({'OK': {'id': meterid, 'key': meterkey}})	
+        devices_node = resp['Devices'].get('Device', [])
+        for d in as_list(devices_node):
+            meterid = None
+            did = d.get('DeviceId')
+            if isinstance(did, dict):
+                meterid = did.get('SerialNumber') or did.get('Id')
+            meterid = meterid or d.get('SerialNumber') or d.get('CustomerDeviceNumber')
+            meterkey = pick_first_key(d.get('Keys')) or d.get('Value')
+            if meterid and meterkey:
+                meters.append({'id': meterid, 'key': meterkey})
     else:
         return jsonify({'ERROR': 'Unable to extract details from file'})
+
+    if not meters:
+        return jsonify({'ERROR': 'No meters found in the decrypted file'})
+
+    if len(meters) == 1:
+        return jsonify({'OK': meters[0]})
+    return jsonify({'OK': meters})
         
 @app.route('/drivers')
 def drivers():

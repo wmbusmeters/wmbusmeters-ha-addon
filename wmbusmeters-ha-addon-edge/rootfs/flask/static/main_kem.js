@@ -1,23 +1,36 @@
 window.addEventListener('load', () => {
 
 function showkemresp(data) {
-  var status = (Object.keys(data)[0]);
-  if (status == "OK") {
-    var meterid = (data.OK.id);
-    var meterkey = (data.OK.key);
-    document.getElementById("kemresp").removeAttribute("hidden");
-    document.getElementById("kemdectext1").removeAttribute("hidden");
-    document.getElementById("kemresp").classList.replace('alert-danger', 'alert-success');
-    document.getElementById("kemdechead").innerHTML = ("Decrypted meter details:");
-    document.getElementById("kemdectext").innerHTML = ("id = " + meterid);
-    document.getElementById("kemdectext1").innerHTML = ("key = " + meterkey);
-  } else if (status == "ERROR") {
-    var kemerrtxt = (data.ERROR);
+  const status = Object.keys(data)[0];
+
+  const showError = (msg) => {
     document.getElementById("kemresp").removeAttribute("hidden");
     document.getElementById("kemdectext1").setAttribute("hidden", "");
     document.getElementById("kemresp").classList.replace('alert-success', 'alert-danger');
-    document.getElementById("kemdechead").innerHTML = ("Error!");
-    document.getElementById("kemdectext").innerHTML = (kemerrtxt);
+    document.getElementById("kemdechead").textContent = "Error!";
+    document.getElementById("kemdectext").textContent = msg;
+  };
+
+  if (status === "OK") {
+    const ok = data.OK;
+    const items = Array.isArray(ok) ? ok : [ok];
+
+    document.getElementById("kemresp").removeAttribute("hidden");
+    document.getElementById("kemresp").classList.replace('alert-danger', 'alert-success');
+    document.getElementById("kemdechead").textContent =
+      items.length === 1 ? "Decrypted meter details:" : `Decrypted meter details (${items.length}):`;
+
+    const body = items
+      .map(m => `id = ${m.id}\n\nkey = ${m.key}`)
+      .join("\n\n");
+
+    const textEl = document.getElementById("kemdectext");
+    textEl.textContent = body; // relies on CSS white-space: pre-line
+    document.getElementById("kemdectext1").setAttribute("hidden", "");
+  } else if (status === "ERROR") {
+    showError(data.ERROR);
+  } else {
+    showError("Unexpected response.");
   }
 }
 
