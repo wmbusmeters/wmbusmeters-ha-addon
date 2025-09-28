@@ -16,6 +16,34 @@ then
     bashio::addon.restart
 fi
 
+if [ "$(bashio::config 'MbusTCPenabled')" = "yes" ]
+then
+    MbusTCPtty=$(bashio::config 'MbusTCPtty')
+
+    bashio::log.info "(wmbusmeters) Checking is MbusTCPtty device already available"
+    sleep 1
+    remaining_attempts=5
+    while (( remaining_attempts-- > 0 ))
+    do
+        if [ -e $MbusTCPtty ]
+        then
+            break
+        else
+            sleep 5
+            bashio::log.info "(wmbusmeters) Retrying. Remaining attempts $remaining_attempts"
+        fi        
+    done
+    if [ ! -e $MbusTCPtty ]
+    then
+        bashio::log.info "(wmbusmeters) MbusTCPtty device not found, exiting"
+        sleep 5
+        exit 1       
+    fi
+
+    bashio::log.info "(wmbusmeters) MbusTCPtty device found"
+    bashio::log.info "(wmbusmeters) Listing tty device: $(ls -l $MbusTCPtty)"
+fi
+
 CONFIG_DATA_PATH=$(bashio::jq "${CONFIG_PATH}" '.data_path')
 CONFIG_CONF=$(bashio::jq "${CONFIG_PATH}" '.conf')
 CONFIG_METERS=$(bashio::jq "${CONFIG_PATH}" '.meters')
