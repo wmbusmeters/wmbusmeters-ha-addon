@@ -1,7 +1,7 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM AS build
 
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 RUN apk add --no-cache alpine-sdk gcc linux-headers libxml2-dev cmake libusb-dev bash samurai libxslt-dev pkgconf jq
 
@@ -44,7 +44,7 @@ RUN make
 
 FROM $BUILD_FROM AS scratch
 ENV QEMU_EXECVE=1
-RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx
+RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx socat
 
 # Install Flask
 RUN apk add --update py3-pip py3-cryptography py3-flask py3-requests py3-waitress py3-xmltodict
@@ -66,6 +66,9 @@ RUN chmod a+x /mqtt_discovery.sh
 COPY run.sh /
 RUN chmod a+x /run.sh
 
+COPY socat.sh /
+RUN chmod a+x /socat.sh
+
 COPY rootfs /
 RUN chmod a+x /etc/services.d/nginx/run
 RUN chmod a+x /etc/services.d/nginx/finish
@@ -74,5 +77,8 @@ RUN chmod a+x /etc/services.d/flask/finish
 RUN chmod a+x /etc/services.d/wmbusmeters/run
 RUN chmod a+x /etc/services.d/wmbusmeters/finish
 RUN chmod a+x /etc/cont-init.d/nginx.sh
+RUN chmod a+x /etc/cont-init.d/checkMbusTCPenabled.sh
+RUN chmod a+x /etc/services.d/socat/run
+RUN chmod a+x /etc/services.d/socat/finish
 
 ENTRYPOINT ["/init"]
