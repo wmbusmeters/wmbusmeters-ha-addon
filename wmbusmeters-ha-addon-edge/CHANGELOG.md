@@ -1,3 +1,5 @@
+## 1.19.0-75 
+- Updated to version [1.19.0-75](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 1.19.0-69 
 - Updated to version [1.19.0-69](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 1.19.0-58 
