@@ -39,7 +39,7 @@ jobs:
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$ver\"\,|g" wmbusmeters-ha-addon-edge/config.json
           sed -i "1s|^|## $ver \n- Updated to version [$ver](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ha-addon_artifact-${{ steps.version.outputs.version }}
           path: ${{ github.workspace }}
