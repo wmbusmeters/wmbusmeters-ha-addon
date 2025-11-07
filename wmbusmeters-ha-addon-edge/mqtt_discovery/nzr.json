@@ -1,0 +1,191 @@
+{
+  "total_energy_consumption_kwh":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"NZR",
+           "model":"Electricity meter NZR (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"total energy consumption",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:transmission-tower-import",
+        "unit_of_measurement":"kWh",
+        "state_class":"total_increasing",
+        "device_class":"energy",
+        "enabled_by_default":true
+     }
+  },
+  "current_power_consumption_kw":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"NZR",
+           "model":"Electricity meter NZR (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"current power consumption",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:counter",
+        "unit_of_measurement":"kW",
+        "state_class":"measurement",
+        "device_class":"power",
+        "enabled_by_default":true
+     }
+  },
+  "current_power_consumption_1_kw":{
+      "component":"sensor",
+      "discovery_payload":{
+         "device":{
+            "identifiers":[
+               "wmbusmeters_{id}"
+            ],
+            "manufacturer":"NZR",
+            "model":"Electricity meter NZR (driver: {driver})",
+            "name":"{name}",
+            "hw_version":"{id}"
+         },
+         "name":"current power consumption 1",
+         "unique_id":"wmbusmeters_{id}_{attribute}",
+         "state_topic":"wmbusmeters/{name}",
+         "value_template":"{{ value_json.{attribute} }}",
+         "json_attributes_topic":"wmbusmeters/{name}",
+         "icon":"mdi:counter",
+         "unit_of_measurement":"kW",
+         "state_class":"measurement",
+         "device_class":"power",
+         "enabled_by_default":true
+      }
+  },
+  "current_power_consumption_2_kw":{
+      "component":"sensor",
+      "discovery_payload":{
+         "device":{
+            "identifiers":[
+               "wmbusmeters_{id}"
+            ],
+            "manufacturer":"NZR",
+            "model":"Electricity meter NZR (driver: {driver})",
+            "name":"{name}",
+            "hw_version":"{id}"
+         },
+         "name":"current power consumption 2",
+         "unique_id":"wmbusmeters_{id}_{attribute}",
+         "state_topic":"wmbusmeters/{name}",
+         "value_template":"{{ value_json.{attribute} }}",
+         "json_attributes_topic":"wmbusmeters/{name}",
+         "icon":"mdi:counter",
+         "unit_of_measurement":"kW",
+         "state_class":"measurement",
+         "device_class":"power",
+         "enabled_by_default":true
+      }
+   },    
+   "current_power_consumption_3_kw":{
+      "component":"sensor",
+      "discovery_payload":{
+         "device":{
+            "identifiers":[
+               "wmbusmeters_{id}"
+            ],
+            "manufacturer":"NZR",
+            "model":"Electricity meter NZR (driver: {driver})",
+            "name":"{name}",
+            "hw_version":"{id}"
+         },
+         "name":"current power consumption 3",
+         "unique_id":"wmbusmeters_{id}_{attribute}",
+         "state_topic":"wmbusmeters/{name}",
+         "value_template":"{{ value_json.{attribute} }}",
+         "json_attributes_topic":"wmbusmeters/{name}",
+         "icon":"mdi:counter",
+         "unit_of_measurement":"kW",
+         "state_class":"measurement",
+         "device_class":"power",
+         "enabled_by_default":true
+      }
+   },    
+  "voltage_at_phase_1_v":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"NZR",
+           "model":"Electricity meter NZR (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"voltage at phase 1",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "unit_of_measurement":"V",
+        "state_class":"measurement",
+        "device_class":"voltage",
+        "enabled_by_default":true
+     }
+  },
+  "voltage_at_phase_2_v":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"NZR",
+           "model":"Electricity meter NZR (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"voltage at phase 2",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "unit_of_measurement":"V",
+        "state_class":"measurement",
+        "device_class":"voltage",
+        "enabled_by_default":true
+     }
+  },
+  "voltage_at_phase_3_v":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"NZR",
+           "model":"Electricity meter NZR (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"voltage at phase 3",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "unit_of_measurement":"V",
+        "state_class":"measurement",
+        "device_class":"voltage",
+        "enabled_by_default":true
+     }
+  }
+}
