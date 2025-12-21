@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         release: [wmbusmeters-ha-addon, wmbusmeters-ha-addon-edge]
-        arch: [amd64, aarch64, armv7]
+        arch: [amd64, aarch64]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6

@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         addon: ["wmbusmeters"]
-        arch: ["amd64", "armv7", "aarch64"]
+        arch: ["amd64", "aarch64"]
     steps:
       - uses: actions/download-artifact@v6
         with:
