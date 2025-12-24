@@ -22,7 +22,7 @@ jobs:
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"${{ github.event.client_payload.ver }}\"\,|g" wmbusmeters-ha-addon-edge/config.json
           sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: ha-addon_artifact-${{ github.event.client_payload.ver }}
           path: ${{ github.workspace }}
