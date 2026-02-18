@@ -3,3 +3,18 @@ configuration:
   reset_config:
     name: Reset add-on configuration
     description: If set to `yes`, add-on configuration will be reset to default.
+  MbusTCPenabled:
+    name: Enable MbusTCP support
+    description: Enables socat service to support Serial Over Lan (MbusTCP).
+  MbusTCPtty:
+    name: MbusTCP tty device path
+    description: tty device path for MbusTCP in socat. Shoulbe like /root/tty.... as no other users present in addon container.
+  MbusTCPttyBaud:
+    name: MbusTCP tty baudrate
+    description: Baudrate for MbusTCP tty device in socat.
+  MbusTCPhost:
+    name: MbusTCP server hostname/IP
+    description: hostname/IP of Serial Over Lan (MbusTCP) server for socat.
+  MbusTCPhostPort:
+    name: MbusTCP server port
+    description: TCP port of Serial Over Lan (MbusTCP) server for socat.
