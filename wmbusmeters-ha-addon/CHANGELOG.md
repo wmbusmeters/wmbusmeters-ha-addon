@@ -1,3 +1,5 @@
+## 2.0.0 
+- Updated to version [2.0.0](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)
 ## 2.0.0-RC1 
 - Updated to version [2.0.0-RC1](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)
 ## 1.20.0 
