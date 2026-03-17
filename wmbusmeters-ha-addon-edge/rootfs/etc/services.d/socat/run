@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start socat service
+# ==============================================================================
+
+bashio::log.info "Starting socat service."
+exec /socat.sh
