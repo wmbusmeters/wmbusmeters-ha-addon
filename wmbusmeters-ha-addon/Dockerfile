@@ -3,7 +3,7 @@ FROM $BUILD_FROM AS build
 
 ENV LANG C.UTF-8
 
-RUN apk add --no-cache alpine-sdk gcc linux-headers libxml2-dev cmake libusb-dev bash samurai libxslt-dev pkgconf jq
+RUN apk add --no-cache alpine-sdk pkgconf gcc linux-headers libxml2-dev cmake libusb-dev bash samurai libxslt-dev pkgconf jq
 
 ADD https://api.github.com/repos/wmbusmeters/wmbusmeters/git/refs/heads/master version.json
 RUN git clone https://github.com/steve-m/librtlsdr.git && \
@@ -23,7 +23,7 @@ RUN cmake -B build -G Ninja \
     cmake --install build
 
 WORKDIR /wmbusmeters
-RUN make
+RUN ./configure && make
 
 #WORKDIR /xmq
 #RUN ./configure && make VERBOSE= && make install
@@ -44,7 +44,7 @@ RUN make
 
 FROM $BUILD_FROM AS scratch
 ENV QEMU_EXECVE=1
-RUN apk add --no-cache mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx
+RUN apk add --no-cache pkgconf mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx
 
 # Install Flask
 RUN apk add --update py3-pip py3-cryptography py3-flask py3-requests py3-waitress py3-xmltodict
