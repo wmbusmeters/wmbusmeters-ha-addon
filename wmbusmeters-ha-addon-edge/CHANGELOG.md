@@ -1,3 +1,5 @@
+## 2.0.0-111 
+- Updated to version [2.0.0-111](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 2.0.0-109 
 - Updated to version [2.0.0-109](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 2.0.0-101 
