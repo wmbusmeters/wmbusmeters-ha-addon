@@ -16,7 +16,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:water"
         }
     },
@@ -37,7 +37,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "m³/h",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:waves-arrow-right"
         }
     },
@@ -60,7 +60,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "kWh",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:home-lightning-bolt-outline"
         }
     },
@@ -82,7 +82,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "kW",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:waves-arrow-right"
         }
     },
@@ -104,7 +104,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "°C",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:thermometer-water"
         }
     },
@@ -126,7 +126,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "°C",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:thermometer-water"
         }
     },
@@ -148,7 +148,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "°C",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:thermometer-chevron-down"
         }
     },
@@ -356,7 +356,7 @@
             "device_class": "timestamp",
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:clock"
         }
     },
@@ -381,7 +381,7 @@
             "state_topic": "wmbusmeters/{name}",
             "unique_id": "wmbusmeters_{id}_{attribute}",
             "unit_of_measurement": "dBm",
-            "value_template": "{{ value_json.{attribute} }}",
+            "value_template": "{{ value_json.{attribute} | default(none) }}",
             "icon": "mdi:signal"
         }
     }
