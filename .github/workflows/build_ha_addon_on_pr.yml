@@ -86,7 +86,7 @@ jobs:
           name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
 
       - name: Push changed files back to repo
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@v10
         with:
           default_author: github_actions
           message: "Auto Push - update ha-addon config and changelog for ${{ needs.prepare.outputs.version }} - [no ci]"
