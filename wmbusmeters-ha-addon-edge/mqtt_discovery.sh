@@ -2,12 +2,14 @@
 
 aryDiscTopic=()
 pub_args=()
-while getopts h:p:u:P:c:w: flag
+AVAILABILITY_TOPIC=""
+while getopts h:p:u:P:c:w:a: flag
 do
     case "${flag}" in
         h|p|u|P) pub_args+=("-${flag}" ${OPTARG});;
         c) CONFIG_PATH=${OPTARG};;
         w) CONFIG_DATA_PATH=${OPTARG};;
+        a) AVAILABILITY_TOPIC=${OPTARG};;
     esac
 done
 
@@ -61,10 +63,15 @@ if [ $CONFIG_MQTTDISCOVERY_ENABLED == "true" ]; then
                         filter=".${attribute}.discovery_payload"
                         payload=$(jq --raw-output -c -M $filter $file)
 
-                        for key in ${!aryKV[@]}; do                                                              
+                        for key in ${!aryKV[@]}; do
                             payload="${payload//\{$key\}/${aryKV[${key}]}}"
-                            #echo ${key} ${aryKV[${key}]}                                                             
+                            #echo ${key} ${aryKV[${key}]}
                         done
+                        if [[ -n "$AVAILABILITY_TOPIC" ]]; then
+                            payload=$(echo "$payload" | jq -c -M \
+                                --arg t "$AVAILABILITY_TOPIC" \
+                                '. + {availability_topic: $t, payload_available: "online", payload_not_available: "offline"}')
+                        fi
                         bashio::log.info "  Add/update topic: $topic"
                         #echo "  Payload: $payload"
                         aryDiscTopic+=($topic)
