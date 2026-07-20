@@ -1,0 +1,7 @@
+#!/usr/bin/env bashio
+# ==============================================================================
+# Restart availability monitor on exit. The script itself publishes "offline"
+# on SIGTERM/SIGINT, and MQTT LWT covers uncleanly-killed connections.
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# ==============================================================================
+exit 0
