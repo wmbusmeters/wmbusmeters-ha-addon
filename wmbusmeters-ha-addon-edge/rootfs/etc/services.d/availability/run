@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start MQTT availability monitor
+# ==============================================================================
+
+bashio::log.info "Starting availability service."
+exec /availability.sh

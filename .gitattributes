@@ -1,0 +1,18 @@
+* text=auto eol=lf
+
+*.sh text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.conf text eol=lf
+
+# s6-overlay service scripts (no extension)
+rootfs/etc/services.d/**/run text eol=lf
+rootfs/etc/services.d/**/finish text eol=lf
+rootfs/etc/cont-init.d/** text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.ico binary
