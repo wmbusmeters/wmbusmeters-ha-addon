@@ -46,7 +46,7 @@
     }
   },
 
-  "total_tariff1_m3": {
+  "total_backwards_m3": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
@@ -62,7 +62,7 @@
       "json_attributes_topic": "wmbusmeters/{name}",
       "state_class": "total",
       "device_class": "water",
-      "name": "total reverse m3",
+      "name": "total backwards m3",
       "state_topic": "wmbusmeters/{name}",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "unit_of_measurement": "m³",
@@ -108,7 +108,7 @@
       "json_attributes_topic": "wmbusmeters/{name}",
       "state_class": "total_increasing",
       "device_class": "water",
-      "name": "last month total",
+      "name": "target m3",
       "state_topic": "wmbusmeters/{name}",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "unit_of_measurement": "m³",
@@ -130,7 +130,7 @@
         "hw_version": "{id}"
       },
       "enabled_by_default": true,
-      "name": "last month measure date",
+      "name": "target date",
       "state_topic": "wmbusmeters/{name}",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "value_template": "{{ value_json.{attribute} }}",
@@ -151,7 +151,7 @@
         "hw_version": "{id}"
       },
       "enabled_by_default": true,
-      "name": "info status",
+      "name": "status",
       "state_topic": "wmbusmeters/{name}",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "value_template": "{{ value_json.{attribute} }}",
@@ -173,7 +173,7 @@
       },
       "enabled_by_default": true,
       "entity_category": "diagnostic",
-      "name": "battery life",
+      "name": "battery y",
       "state_topic": "wmbusmeters/{name}",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "unit_of_measurement": "years",
@@ -218,7 +218,7 @@
       },
       "enabled_by_default": false,
       "entity_category": "diagnostic",
-      "name": "receiver",
+      "name": "device",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "state_topic": "wmbusmeters/{name}",
       "value_template": "{{ value_json.{attribute} }}",
@@ -242,7 +242,7 @@
       "entity_category": "diagnostic",
       "device_class": "signal_strength",
       "state_class": "measurement",
-      "name": "RSSI",
+      "name": "rssi dbm",
       "state_topic": "wmbusmeters/{name}",
       "unique_id": "wmbusmeters_{id}_{attribute}",
       "unit_of_measurement": "dBm",
