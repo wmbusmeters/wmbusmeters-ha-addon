@@ -1,3 +1,23 @@
+## 3.0.0-35 
+- Updated to version [3.0.0-35](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-33 
+- Updated to version [3.0.0-33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-29 
+- Updated to version [3.0.0-29](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-26 
+- Updated to version [3.0.0-26](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-24 
+- Updated to version [3.0.0-24](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-23 
+- Updated to version [3.0.0-23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-21 
+- Updated to version [3.0.0-21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-10 
+- Updated to version [3.0.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-9 
+- Updated to version [3.0.0-9](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-8 
+- Updated to version [3.0.0-8](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.0.0-7 
 - Updated to version [3.0.0-7](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.0.0-4 

@@ -82,7 +82,8 @@
       "json_attributes_topic": "wmbusmeters/{name}",
       "icon": "mdi:gauge",
       "unit_of_measurement": "m³/h",
-      "device_class": "water",
+      "device_class": "volume_flow_rate",
+      "state_class": "measurement",
       "enabled_by_default": true
     }
   }
