@@ -1,5 +1,13 @@
 ## 3.0.1
 - Add MQTT availability so Home Assistant flags meter entities as unavailable when the wmbus device is lost. State is published to `wmbusmeters/bridge/state` (`online`/`offline`) and referenced by every auto-discovery entity; driven by wmbusmeters log output (`No wmbus device detected` → offline, `Started config` → online), MQTT Last Will, and the service exit hook.
+## 3.0.0-53 
+- Updated to version [3.0.0-53](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-52 
+- Updated to version [3.0.0-52](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-48 
+- Updated to version [3.0.0-48](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-35-1 
+- Updated to version [3.0.0-35-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
 ## 3.0.0-35 
 - Updated to version [3.0.0-35](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.0.0-33 
