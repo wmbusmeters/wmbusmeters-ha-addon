@@ -8,15 +8,31 @@ PROCESS_NAME="wmbusmeters"
 
 kill_process() {
     if pgrep "$PROCESS_NAME" > /dev/null; then
-        pkill "$PROCESS_NAME"       
+        pkill "$PROCESS_NAME"
     fi
 }
 
-# Check exit status and take action accordingly
+publish_offline() {
+    # wmbusmeters exiting means the device-reader is no longer running, so
+    # entities must be marked unavailable regardless of exit code. Best-effort.
+    local env_file="/var/run/wmbusmeters/availability.env"
+    [[ -f "$env_file" ]] || return 0
+    # shellcheck disable=SC1090
+    source "$env_file"
+    [[ -z "$MQTT_HOST" || "$MQTT_HOST" == "none" ]] && return 0
+    local args=('-h' "$MQTT_HOST")
+    [[ -n "$MQTT_PORT" ]] && args+=('-p' "$MQTT_PORT")
+    [[ -n "$MQTT_USER" ]] && args+=('-u' "$MQTT_USER")
+    [[ -n "$MQTT_PASSWORD" ]] && args+=('-P' "$MQTT_PASSWORD")
+    /usr/bin/mosquitto_pub "${args[@]}" -r -q 1 \
+        -t "$AVAILABILITY_TOPIC" -m "offline" 2>/dev/null || true
+}
+
+publish_offline
+
 if [[ "$1" -ne 0 ]] && [[ "$1" -ne 256 ]]; then
     bashio::log.warning "wmbusmeters exited with status $1."
     sleep 1
     kill_process
-    exit 0
 fi
 exit 0

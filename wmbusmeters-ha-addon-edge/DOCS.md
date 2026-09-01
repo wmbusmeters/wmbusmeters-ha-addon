@@ -55,6 +55,11 @@ See [project README for more information][docs]
 
 By default it is not enabled and leverages the _Moquitto broker_ addon details provided by supervisor. However, you can specify the custom mqtt broker connection details here.
 
+#### MQTT availability
+
+The addon publishes a retained availability state to `wmbusmeters/bridge/state` (`online` / `offline`). All entities created via MQTT auto-discovery reference this topic, so if the rtlwmbus device is unreachable (for example after a host reboot when the USB device is not re-attached) entities will appear as unavailable in Home Assistant rather than silently keeping their last value.
+
+State transitions are driven by wmbusmeters' own log output: `No wmbus device detected` (printed only when **all** configured listeners are down — so multi-dongle setups stay `online` while at least one device is alive) publishes `offline`; `Started config` publishes `online`. The wmbusmeters service `finish` hook also publishes `offline` on exit, and MQTT Last Will publishes `offline` if the addon dies uncleanly or loses its broker connection.
 
 ## Home Assistant integration
 
@@ -65,6 +70,9 @@ mqtt:
   sensor:
     - state_topic: "wmbusmeters/MainWater"
       json_attributes_topic: "wmbusmeters/MainWater"
+      availability_topic: "wmbusmeters/bridge/state"
+      payload_available: "online"
+      payload_not_available: "offline"
       unit_of_measurement: m³
       value_template: "{{ value_json.total_m3 }}"
       name: Water usage
@@ -73,10 +81,11 @@ mqtt:
       device_class: water
 ```
 
-_Please note: 
+_Please note:
 
 - `MainWater` is the water meter name used in `meters` configuration._
 - `device_class` is necessary to be adapt on your meters type (water, gas, etc.) [see here](https://developers.home-assistant.io/docs/core/entity/sensor/#available-device-classes)
+- The `availability_topic` lines are optional but recommended — they mirror what MQTT auto-discovery configures automatically, so your manual sensor will go `unavailable` when the rtlwmbus device is unreachable.
 
 ## Caveat
 

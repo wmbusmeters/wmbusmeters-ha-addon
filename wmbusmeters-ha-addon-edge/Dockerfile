@@ -63,6 +63,10 @@ ADD mqtt_discovery/ /mqtt_discovery/
 COPY mqtt_discovery.sh /
 RUN chmod a+x /mqtt_discovery.sh
 
+COPY availability.sh /
+COPY availability_filter.sh /
+RUN chmod a+x /availability.sh /availability_filter.sh
+
 COPY run.sh /
 RUN chmod a+x /run.sh
 
@@ -73,6 +77,8 @@ RUN chmod a+x /etc/services.d/flask/run
 RUN chmod a+x /etc/services.d/flask/finish
 RUN chmod a+x /etc/services.d/wmbusmeters/run
 RUN chmod a+x /etc/services.d/wmbusmeters/finish
+RUN chmod a+x /etc/services.d/availability/run
+RUN chmod a+x /etc/services.d/availability/finish
 RUN chmod a+x /etc/cont-init.d/nginx.sh
 
 ENTRYPOINT ["/init"]

@@ -3,6 +3,10 @@
 CONFIG_PATH=/data/options_custom.json
 RESET_CONF=$(bashio::config 'reset_config')
 
+AVAILABILITY_TOPIC="wmbusmeters/bridge/state"
+AVAILABILITY_ENV="/var/run/wmbusmeters/availability.env"
+mkdir -p "$(dirname "$AVAILABILITY_ENV")"
+
 if [ ! -f ${CONFIG_PATH} ]
 then
     echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
@@ -118,8 +122,26 @@ MESSAGE=\$2
 /usr/bin/mosquitto_pub ${pub_args_quoted[@]} -r -t "\$TOPIC" -m "\$MESSAGE"
 EOL
 
+    cat > "$AVAILABILITY_ENV" << EOL
+MQTT_HOST='${MQTT_HOST}'
+MQTT_PORT='${MQTT_PORT:-}'
+MQTT_USER='${MQTT_USER:-}'
+MQTT_PASSWORD='${MQTT_PASSWORD:-}'
+AVAILABILITY_TOPIC='${AVAILABILITY_TOPIC}'
+EOL
+
+    # Mark entities unavailable until wmbusmeters logs that the device is up.
+    /usr/bin/mosquitto_pub ${pub_args[@]} -r -q 1 \
+        -t "${AVAILABILITY_TOPIC}" -m "offline" || true
+
     # Running MQTT discovery
-    /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
+    /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH \
+        -a "${AVAILABILITY_TOPIC}" || true
+else
+    cat > "$AVAILABILITY_ENV" << EOL
+MQTT_HOST='none'
+AVAILABILITY_TOPIC='${AVAILABILITY_TOPIC}'
+EOL
 fi
 
 chmod a+x /wmbusmeters/mosquitto_pub.sh
@@ -128,4 +150,7 @@ bashio::log.info "Running wmbusmeters ..."
 if pgrep wmbusmeters > /dev/null; then
     pkill wmbusmeters
 fi
-/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 
+# Pipe through the availability filter so device-lost / device-found log
+# lines are translated into MQTT availability state.
+set -o pipefail
+/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 2>&1 | /availability_filter.sh
