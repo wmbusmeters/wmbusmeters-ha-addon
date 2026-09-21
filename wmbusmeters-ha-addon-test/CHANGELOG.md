@@ -1,0 +1,764 @@
+## 3.0.0-130 
+- Updated to version [3.0.0-130](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-126 
+- Updated to version [3.0.0-126](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-110 
+- Updated to version [3.0.0-110](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-106 
+- Updated to version [3.0.0-106](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-104 
+- Updated to version [3.0.0-104](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-101 
+- Updated to version [3.0.0-101](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-97 
+- Updated to version [3.0.0-97](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-95 
+- Updated to version [3.0.0-95](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-87 
+- Updated to version [3.0.0-87](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-85 
+- Updated to version [3.0.0-85](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-83 
+- Updated to version [3.0.0-83](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-82 
+- Updated to version [3.0.0-82](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-71 
+- Updated to version [3.0.0-71](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-64 
+- Updated to version [3.0.0-64](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-54 
+- Updated to version [3.0.0-54](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-53 
+- Updated to version [3.0.0-53](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-52 
+- Updated to version [3.0.0-52](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-48 
+- Updated to version [3.0.0-48](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-35-1 
+- Updated to version [3.0.0-35-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0-35 
+- Updated to version [3.0.0-35](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-33 
+- Updated to version [3.0.0-33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-29 
+- Updated to version [3.0.0-29](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-26 
+- Updated to version [3.0.0-26](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-24 
+- Updated to version [3.0.0-24](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-23 
+- Updated to version [3.0.0-23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-21 
+- Updated to version [3.0.0-21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-10 
+- Updated to version [3.0.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-9 
+- Updated to version [3.0.0-9](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-8 
+- Updated to version [3.0.0-8](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-7 
+- Updated to version [3.0.0-7](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-4 
+- Updated to version [3.0.0-4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-3 
+- Updated to version [3.0.0-3](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-1 
+- Updated to version [3.0.0-1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-549 
+- Updated to version [2.0.0-549](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-546 
+- Updated to version [2.0.0-546](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-544 
+- Updated to version [2.0.0-544](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-543 
+- Updated to version [2.0.0-543](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-541 
+- Updated to version [2.0.0-541](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-539 
+- Updated to version [2.0.0-539](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-533 
+- Updated to version [2.0.0-533](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-521 
+- Updated to version [2.0.0-521](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-520 
+- Updated to version [2.0.0-520](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-519 
+- Updated to version [2.0.0-519](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-518 
+- Updated to version [2.0.0-518](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-516 
+- Updated to version [2.0.0-516](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-515 
+- Updated to version [2.0.0-515](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-513 
+- Updated to version [2.0.0-513](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-498-1 
+- Updated to version [2.0.0-498-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 2.0.0-498 
+- Updated to version [2.0.0-498](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-495 
+- Updated to version [2.0.0-495](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-493 
+- Updated to version [2.0.0-493](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-492 
+- Updated to version [2.0.0-492](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-490 
+- Updated to version [2.0.0-490](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-483 
+- Updated to version [2.0.0-483](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-476 
+- Updated to version [2.0.0-476](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-474 
+- Updated to version [2.0.0-474](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-465 
+- Updated to version [2.0.0-465](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-463 
+- Updated to version [2.0.0-463](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-444 
+- Updated to version [2.0.0-444](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-435 
+- Updated to version [2.0.0-435](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-382 
+- Updated to version [2.0.0-382](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-379 
+- Updated to version [2.0.0-379](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-378 
+- Updated to version [2.0.0-378](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-376 
+- Updated to version [2.0.0-376](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-372 
+- Updated to version [2.0.0-372](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-368 
+- Updated to version [2.0.0-368](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-362 
+- Updated to version [2.0.0-362](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-360 
+- Updated to version [2.0.0-360](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-357 
+- Updated to version [2.0.0-357](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-348 
+- Updated to version [2.0.0-348](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-347 
+- Updated to version [2.0.0-347](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-340 
+- Updated to version [2.0.0-340](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-335 
+- Updated to version [2.0.0-335](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-330 
+- Updated to version [2.0.0-330](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-316 
+- Updated to version [2.0.0-316](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-302 
+- Updated to version [2.0.0-302](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-294 
+- Updated to version [2.0.0-294](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-288 
+- Updated to version [2.0.0-288](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-283 
+- Updated to version [2.0.0-283](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-280 
+- Updated to version [2.0.0-280](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-279 
+- Updated to version [2.0.0-279](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-276 
+- Updated to version [2.0.0-276](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-274 
+- Updated to version [2.0.0-274](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-272 
+- Updated to version [2.0.0-272](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-269 
+- Updated to version [2.0.0-269](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-265 
+- Updated to version [2.0.0-265](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-261 
+- Updated to version [2.0.0-261](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-259 
+- Updated to version [2.0.0-259](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-257 
+- Updated to version [2.0.0-257](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-255 
+- Updated to version [2.0.0-255](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-245 
+- Updated to version [2.0.0-245](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-236 
+- Updated to version [2.0.0-236](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-234 
+- Updated to version [2.0.0-234](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-231 
+- Updated to version [2.0.0-231](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-228 
+- Updated to version [2.0.0-228](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-224 
+- Updated to version [2.0.0-224](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-197 
+- Updated to version [2.0.0-197](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-171 
+- Updated to version [2.0.0-171](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-142 
+- Updated to version [2.0.0-142](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-137 
+- Updated to version [2.0.0-137](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-135 
+- Updated to version [2.0.0-135](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-134 
+- Updated to version [2.0.0-134](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-132 
+- Updated to version [2.0.0-132](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-120 
+- Updated to version [2.0.0-120](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-117 
+- Updated to version [2.0.0-117](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-114 
+- Updated to version [2.0.0-114](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-111 
+- Updated to version [2.0.0-111](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-109 
+- Updated to version [2.0.0-109](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-101 
+- Updated to version [2.0.0-101](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-95 
+- Updated to version [2.0.0-95](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-86-1 
+- Updated to version [2.0.0-86-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 2.0.0-86 
+- Updated to version [2.0.0-86](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-76 
+- Updated to version [2.0.0-76](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-64 
+- Updated to version [2.0.0-64](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-59 
+- Updated to version [2.0.0-59](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-58 
+- Updated to version [2.0.0-58](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-53 
+- Updated to version [2.0.0-53](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-48 
+- Updated to version [2.0.0-48](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-40 
+- Updated to version [2.0.0-40](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-39 
+- Updated to version [2.0.0-39](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-34 
+- Updated to version [2.0.0-34](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-32 
+- Updated to version [2.0.0-32](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-28 
+- Updated to version [2.0.0-28](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-26 
+- Updated to version [2.0.0-26](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-14 
+- Updated to version [2.0.0-14](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-10 
+- Updated to version [2.0.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-4 
+- Updated to version [2.0.0-4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0 
+- Updated to version [2.0.0](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 2.0.0-RC1 
+- Updated to version [2.0.0-RC1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-52 
+- Updated to version [1.20.0-52](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-47 
+- Updated to version [1.20.0-47](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-46 
+- Updated to version [1.20.0-46](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-41-1 
+- Updated to version [1.20.0-41-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.20.0-41 
+- Updated to version [1.20.0-41](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-40 
+- Updated to version [1.20.0-40](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-37 
+- Updated to version [1.20.0-37](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-36 
+- Updated to version [1.20.0-36](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-35 
+- Updated to version [1.20.0-35](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-33 
+- Updated to version [1.20.0-33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-22 
+- Updated to version [1.20.0-22](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-21 
+- Updated to version [1.20.0-21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-20 
+- Updated to version [1.20.0-20](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-19 
+- Updated to version [1.20.0-19](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-16 
+- Updated to version [1.20.0-16](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-12 
+- Updated to version [1.20.0-12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-10 
+- Updated to version [1.20.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-8 
+- Updated to version [1.20.0-8](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-3 
+- Updated to version [1.20.0-3](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0-1 
+- Updated to version [1.20.0-1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.20.0 
+- Updated to version [1.20.0](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-165 
+- Updated to version [1.19.0-165](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-164 
+- Updated to version [1.19.0-164](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-151 
+- Updated to version [1.19.0-151](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-81-2 
+- Updated to version [1.19.0-81-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.19.0-81-1 
+- Updated to version [1.19.0-81-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.19.0-81 
+- Updated to version [1.19.0-81](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-78 
+- Updated to version [1.19.0-78](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-77 
+- Updated to version [1.19.0-77](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-75 
+- Updated to version [1.19.0-75](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-69 
+- Updated to version [1.19.0-69](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-58 
+- Updated to version [1.19.0-58](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-56 
+- Updated to version [1.19.0-56](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-52 
+- Updated to version [1.19.0-52](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-49 
+- Updated to version [1.19.0-49](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-38-2 
+- Updated to version [1.19.0-38-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.19.0-38-1 
+- Updated to version [1.19.0-38-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.19.0-38 
+- Updated to version [1.19.0-38](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-36 
+- Updated to version [1.19.0-36](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-10-1 
+- Updated to version [1.19.0-10-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.19.0-10 
+- Updated to version [1.19.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.19.0-5 
+- Updated to version [1.19.0-5](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-34-2 
+- Updated to version [1.18.0-34-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-34-1 
+- Updated to version [1.18.0-34-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-34 
+- Updated to version [1.18.0-34](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-33 
+- Updated to version [1.18.0-33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-26-1 
+- Updated to version [1.18.0-26-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-26 
+- Updated to version [1.18.0-26](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-25 
+- Updated to version [1.18.0-25](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-23 
+- Updated to version [1.18.0-23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-17 
+- Updated to version [1.18.0-17](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-16-9 
+- Updated to version [1.18.0-16-9](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-8 
+- Updated to version [1.18.0-16-8](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-7 
+- Updated to version [1.18.0-16-7](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-6 
+- Updated to version [1.18.0-16-6](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-5 
+- Updated to version [1.18.0-16-5](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-4 
+- Updated to version [1.18.0-16-4](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-3 
+- Updated to version [1.18.0-16-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-2 
+- Updated to version [1.18.0-16-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16-1 
+- Updated to version [1.18.0-16-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-16 
+- Updated to version [1.18.0-16](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-15 
+- Updated to version [1.18.0-15](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-12-1 
+- Updated to version [1.18.0-12-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-12 
+- Updated to version [1.18.0-12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-3-3 
+- Updated to version [1.18.0-3-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-3-2 
+- Updated to version [1.18.0-3-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-3-1 
+- Updated to version [1.18.0-3-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.18.0-3 
+- Updated to version [1.18.0-3](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.18.0-2 
+- Updated to version [1.18.0-2](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-71 
+- Updated to version [1.17.1-71](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-68-1 
+- Updated to version [1.17.1-68-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-68 
+- Updated to version [1.17.1-68](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-67 
+- Updated to version [1.17.1-67](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-65 
+- Updated to version [1.17.1-65](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-62 
+- Updated to version [1.17.1-62](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-61 
+- Updated to version [1.17.1-61](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-29-11 
+- Updated to version [1.17.1-29-11](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-10 
+- Updated to version [1.17.1-29-10](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-9 
+- Updated to version [1.17.1-29-9](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-8 
+- Updated to version [1.17.1-29-8](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-7 
+- Updated to version [1.17.1-29-7](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-6 
+- Updated to version [1.17.1-29-6](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-5 
+- Updated to version [1.17.1-29-5](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-4 
+- Updated to version [1.17.1-29-4](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-3 
+- Updated to version [1.17.1-29-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-2 
+- Updated to version [1.17.1-29-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29-1 
+- Updated to version [1.17.1-29-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-29 
+- Updated to version [1.17.1-29](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-27-2 
+- Updated to version [1.17.1-27-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-27-1 
+- Updated to version [1.17.1-27-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-27 
+- Updated to version [1.17.1-27](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-24 
+- Updated to version [1.17.1-24](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-23 
+- Updated to version [1.17.1-23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1-1-2 
+- Updated to version [1.17.1-1-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-1-1 
+- Updated to version [1.17.1-1-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.17.1-1 
+- Updated to version [1.17.1-1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.17.1 
+- Updated to version [1.17.1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-112 
+- Updated to version [1.16.1-112](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-111 
+- Updated to version [1.16.1-111](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-108 
+- Updated to version [1.16.1-108](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-101-1 
+- Updated to version [1.16.1-101-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.16.1-101 
+- Updated to version [1.16.1-101](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-96 
+- Updated to version [1.16.1-96](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-84 
+- Updated to version [1.16.1-84](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-83 
+- Updated to version [1.16.1-83](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-82 
+- Updated to version [1.16.1-82](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-79 
+- Updated to version [1.16.1-79](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-61-1 
+- Updated to version [1.16.1-61-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.16.1-61 
+- Updated to version [1.16.1-61](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-58 
+- Updated to version [1.16.1-58](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-54 
+- Updated to version [1.16.1-54](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-52 
+- Updated to version [1.16.1-52](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-49 
+- Updated to version [1.16.1-49](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-46 
+- Updated to version [1.16.1-46](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-40-1 
+- Updated to version [1.16.1-40-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.16.1-40 
+- Updated to version [1.16.1-40](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-39 
+- Updated to version [1.16.1-39](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-38 
+- Updated to version [1.16.1-38](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-36 
+- Updated to version [1.16.1-36](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-33 
+- Updated to version [1.16.1-33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-29 
+- Updated to version [1.16.1-29](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-27 
+- Updated to version [1.16.1-27](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-26 
+- Updated to version [1.16.1-26](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-24 
+- Updated to version [1.16.1-24](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-23 
+- Updated to version [1.16.1-23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-22 
+- Updated to version [1.16.1-22](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-19 
+- Updated to version [1.16.1-19](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-18 
+- Updated to version [1.16.1-18](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-16 
+- Updated to version [1.16.1-16](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-14 
+- Updated to version [1.16.1-14](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-12-1 
+- Updated to version [1.16.1-12-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.16.1-12 
+- Updated to version [1.16.1-12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-10 
+- Updated to version [1.16.1-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-9 
+- Updated to version [1.16.1-9](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-6 
+- Updated to version [1.16.1-6](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-4 
+- Updated to version [1.16.1-4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.16.1-2 
+- Updated to version [1.16.1-2](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.15.0-4 
+- Updated to version [1.15.0-4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.15.0-1 
+- Updated to version [1.15.0-1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.15.0-RC2 
+- Updated to version [1.15.0-RC2](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.15.0-RC2 
+- Updated to version [1.15.0-RC2](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-128 
+- Updated to version [1.14.0-128](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-126-2 
+- Updated to version [1.14.0-126-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-126-1 
+- Updated to version [1.14.0-126-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-126 
+- Updated to version [1.14.0-126](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-122 
+- Updated to version [1.14.0-122](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-121 
+- Updated to version [1.14.0-121](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-120 
+- Updated to version [1.14.0-120](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-118 
+- Updated to version [1.14.0-118](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-115 
+- Updated to version [1.14.0-115](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-107 
+- Updated to version [1.14.0-107](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-106 
+- Updated to version [1.14.0-106](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-101-1 
+- Updated to version [1.14.0-101-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-101 
+- Updated to version [1.14.0-101](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-100 
+- Updated to version [1.14.0-100](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-98 
+- Updated to version [1.14.0-98](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-96 
+- Updated to version [1.14.0-96](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-94 
+- Updated to version [1.14.0-94](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-78 
+- Updated to version [1.14.0-78](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-77 
+- Updated to version [1.14.0-77](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-71-2 
+- Updated to version [1.14.0-71-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-71-1 
+- Updated to version [1.14.0-71-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-71 
+- Updated to version [1.14.0-71](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-69 
+- Updated to version [1.14.0-69](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-53 
+- Updated to version [1.14.0-53](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-52 
+- Updated to version [1.14.0-52](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-50 
+- Updated to version [1.14.0-50](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-48 
+- Updated to version [1.14.0-48](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-47 
+- Updated to version [1.14.0-47](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-44 
+- Updated to version [1.14.0-44](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-43-1 
+- Updated to version [1.14.0-43-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-43 
+- Updated to version [1.14.0-43](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-42 
+- Updated to version [1.14.0-42](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-40-2 
+- Updated to version [1.14.0-40-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-40-1 
+- Updated to version [1.14.0-40-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-40 
+- Updated to version [1.14.0-40](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-31-6 
+- Updated to version [1.14.0-31-6](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-31-5 
+- Updated to version [1.14.0-31-5](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-31-4 
+- Updated to version [1.14.0-31-4](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-31-3 
+- Updated to version [1.14.0-31-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-31-2 
+- Updated to version [1.14.0-31-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-31-1 
+- Updated to version [1.14.0-31-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-31 
+- Updated to version [1.14.0-31](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-21-2 
+- Updated to version [1.14.0-21-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-21-1 
+- Updated to version [1.14.0-21-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-21 
+- Updated to version [1.14.0-21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-13-1 
+- Updated to version [1.14.0-13-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-13 
+- Updated to version [1.14.0-13](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-12 
+- Updated to version [1.14.0-12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-11 
+- Updated to version [1.14.0-11](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-10 
+- Updated to version [1.14.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-9 
+- Updated to version [1.14.0-9](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-5-5 
+- Updated to version [1.14.0-5-5](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-5-4 
+- Updated to version [1.14.0-5-4](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-5-3 
+- Updated to version [1.14.0-5-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-5-2 
+- Updated to version [1.14.0-5-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-5-1 
+- Updated to version [1.14.0-5-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.14.0-5 
+- Updated to version [1.14.0-5](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.14.0-1 
+- Updated to version [1.14.0-1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-45 
+- Updated to version [1.13.1-45](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-43 
+- Updated to version [1.13.1-43](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-35-1 
+- Updated to version [1.13.1-35-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.13.1-35 
+- Updated to version [1.13.1-35](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-34 
+- Updated to version [1.13.1-34](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-32 
+- Updated to version [1.13.1-32](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-31-2 
+- Updated to version [1.13.1-31-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.13.1-31-1 
+- Updated to version [1.13.1-31-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.13.1-31 
+- Updated to version [1.13.1-31](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-27 
+- Updated to version [1.13.1-27](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-23 
+- Updated to version [1.13.1-23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-20-2 
+- Updated to version [1.13.1-20-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.13.1-20-1 
+- Updated to version [1.13.1-20-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.13.1-20 
+- Updated to version [1.13.1-20](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-19 
+- Updated to version [1.13.1-19](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-14 
+- Updated to version [1.13.1-14](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-7 
+- Updated to version [1.13.1-7](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-6 
+- Updated to version [1.13.1-6](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-5 
+- Updated to version [1.13.1-5](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.1-4 
+- Updated to version [1.13.1-4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.13.0-RC1-1 
+- Updated to version [1.13.0-RC1-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.13.0-RC1 
+- Updated to version [1.13.0-RC1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-37 
+- Updated to version [1.12.0-37](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-33 
+- Updated to version [1.12.0-33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-32 
+- Updated to version [1.12.0-32](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-31-2 
+- Updated to version [1.12.0-31-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-31-1 
+- Updated to version [1.12.0-31-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-31 
+- Updated to version [1.12.0-31](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-28 
+- Updated to version [1.12.0-28](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-27 
+- Updated to version [1.12.0-27](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-21 
+- Updated to version [1.12.0-21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-16-7 
+- Updated to version [1.12.0-16-7](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16-6 
+- Updated to version [1.12.0-16-6](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16-5 
+- Updated to version [1.12.0-16-5](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16-4 
+- Updated to version [1.12.0-16-4](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16-3 
+- Updated to version [1.12.0-16-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16-2 
+- Updated to version [1.12.0-16-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16-1 
+- Updated to version [1.12.0-16-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-16 
+- Updated to version [1.12.0-16](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-13-1 
+- Updated to version [1.12.0-13-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-13 
+- Updated to version [1.12.0-13](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-12 
+- Updated to version [1.12.0-12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-10 
+- Updated to version [1.12.0-10](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-5-2 
+- Updated to version [1.12.0-5-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-5-1 
+- Updated to version [1.12.0-5-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.12.0-5 
+- Updated to version [1.12.0-5](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.12.0-3 
+- Updated to version [1.12.0-3](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.11.0-150 
+- Updated to version [1.11.0-150](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.11.0-148-1 
+- Updated to version [1.11.0-148-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.11.0-148 
+- Updated to version [1.11.0-148](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 1.11.0-5-7 
+- Updated to version [1.11.0-5-7](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.11.0-5-6 
+- Updated to version [1.11.0-5-6](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 1.11.0-5-5 
+- **Breaking change** - configuration is moved from built in config management to Ingress WUI. After upgrade enable "Show in sidebar" and go to sidebar for configuration.
+- Updated to version [1.11.0-5-5](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+##

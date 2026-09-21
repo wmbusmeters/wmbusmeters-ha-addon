@@ -1,0 +1,36 @@
+{
+    "name": "[test] Wmbusmeters (W-MBus to MQTT)",
+    "version": "3.0.0-130",
+    "slug": "wmbusmeters-ha-addon-test",
+    "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
+    "arch": ["aarch64", "amd64"],
+    "url": "https://github.com/wmbusmeters/wmbusmeters-ha-addon",
+    "image": "wmbusmeters/wmbusmeters-ha-addon-test-{arch}",
+    "panel_icon": "mdi:home-automation",
+    "init" : false,
+    "ingress": true,
+    "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0", "/dev/ttyACM0" ],
+    "usb": true,
+    "uart": true,
+    "ports": {
+      "9011/udp": null,
+      "9022/tcp": null
+    },
+    "ports_description": {
+      "9011/udp": "Netcat udp-listen port",
+      "9022/tcp": "Netcat tcp-listen port"
+    },
+    "services": [
+      "mqtt:need"
+    ],
+    "map": [
+      "share:rw",
+      "config:rw"
+    ],
+    "options": {
+      "reset_config": "no"
+    },
+    "schema": {
+      "reset_config": "list(no|yes)"
+    }
+}

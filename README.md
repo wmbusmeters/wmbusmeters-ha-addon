@@ -8,6 +8,8 @@ Edge - that will contain the latest changes from both wmbusmeters and add-on cha
 
 Stable - will contain wmbusmeters stable release combined with add-on changes on that time. 
 
+Test - that contains the same content as the edge channel but is built and published as a separate add-on (wmbusmeters-ha-addon-test), currently identical to edge.
+
 # Upgrade from older add-on versions
 
 1. Manualy backup existing configs and uninstall wmbusmeters addon
