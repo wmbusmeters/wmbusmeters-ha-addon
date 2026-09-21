@@ -1,0 +1,226 @@
+/*
+ Copyright (C) 2025-2026 Fredrik Öhrström (gpl-3.0-or-later)
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+xsl:stylesheet(version                 = 1.0
+               xml:space               = preserve
+               exclude-result-prefixes = this
+               xmlns:xsl               = http://www.w3.org/1999/XSL/Transform
+               xmlns:this              = urn:this)
+{
+    xsl:param(name = drv)
+    xsl:variable(name   = drvx
+                 select = 'document($drv)')
+    xsl:variable(name = meter_id
+                 select = /telegram/id)
+    xsl:variable(name = meter_name
+                 select = /telegram/name)
+    this:tohrunit {
+        entry(key = pct) = %
+        entry(key = m3) = m³
+        entry(key = m3h) = m³/h
+        entry(key = c) = °C
+        entry(key = dbm) = dBm
+        entry(key = h) = h
+        entry(key = hca) = hca
+        entry(key = kw) = kW
+        entry(key = kwh) = kWh
+        entry(key = v) = V
+        entry(key = y) = years
+    }
+    this:tostateclass {
+        entry(key = Instant) = measurement
+        entry(key = Net) = total
+        entry(key = Increasing) = total_increasing
+    }
+    this:todeviceclass {
+    // battery
+    // gas
+    // problem
+    // signal_strength
+    // smoke
+    // water
+        entry(key = Volume) = volume
+        entry(key = Flow) = volume_flow_rate
+        entry(key = Temperature) = temperature
+        entry(key = TemperatureDifference) = temperature_delta
+        entry(key = Energy) = energy
+        entry(key = Power) = power
+        entry(key = Reactive_Power) = power
+        entry(key = Apparent_Power) = power
+        entry(key = Voltage) = voltage
+        entry(key = Time) = duration
+        entry(key = Reactive_Energy) = energy
+        entry(key = Apparent_Energy) = energy
+        entry(key = PonitInTime) = timestamp
+        entry(key = RelativeHumidity) = humidity
+
+        /*
+    X(Length,M)               \
+    X(Mass,KG)                \
+    X(Amperage,Ampere)        \
+    X(AmountOfSubstance,MOL)  \
+    X(LuminousIntensity,CD)   \
+    \
+    X(Frequency,HZ)           \
+    X(Pressure,BAR)           \
+    \
+    X(PointInTime,DateTimeLT) \
+    \
+    X(RelativeHumidity,RH)    \
+    X(HCA,HCA)                \
+    X(Text,TXT)               \
+    X(Angle,DEGREE)           \
+    X(Dimensionless,COUNTER)  \
+    */
+    }
+    xsl:template(match = /)
+    {
+        _ {
+            xsl:variable(name   = manufacturer
+                         select = $drvx/driver/manufacturer)
+            xsl:variable(name   = mvt
+                         select = telegram/mvt)
+            xsl:variable(name   = metertype
+                         select = $drvx/driver/meter_type)
+            xsl:for-each(select = telegram/details/*)
+            {
+                xsl:variable(name   = field_name
+                             select = 'name()')
+                xsl:variable(name   = unit
+                             select = ./unit)
+                xsl:variable(name   = change
+                             select = ./change)
+                xsl:variable(name   = quantity
+                             select = ./quantity)
+                xsl:variable(name   = base
+                             select = "substring-before($field_name, concat('_', $unit))")
+                xsl:variable(name   = hrunit
+                             select = "document('')/*/this:tohrunit/entry[@key = $unit]")
+                xsl:variable(name   = stateclass
+                             select = "document('')/*/this:tostateclass/entry[@key=$change]")
+                xsl:variable(name   = deviceclass
+                             select = "document('')/*/this:todeviceclass/entry[@key=$quantity]")
+                xsl:variable(name = fixdeviceclass) {
+                    xsl:choose {
+                        xsl:when(test = "$metertype = 'WaterMeter' and $deviceclass = 'volume'") {
+                            xsl:text = water
+                        }
+                        xsl:when(test = "$metertype = 'GasMeter' and $deviceclass = 'volume'") {
+                            xsl:text = gas
+                        }
+                        xsl:otherwise {
+                            xsl:value-of(select = $deviceclass)
+                        }
+                    }
+                }
+                xsl:element(name = '{$field_name}')
+                {
+                    component = sensor
+                    discovery_payload {
+                        device {
+                            identifiers(A)
+                            {
+                                _ = 'wmbusmeters_{id}'
+                            }
+                            manufacturer {
+                                xsl:value-of(select = $manufacturer)
+                            }
+                            model {
+                                xsl:value-of(select = $mvt)
+                            }
+                            name       = '{name}'
+                            hw_version = '{id}'
+                        }
+                        name {
+                            xsl:value-of(select = 'translate($base, "_", " ")')
+                        }
+                        unique_id             = 'wmbusmeters_{id}_{attribute}'
+                        state_topic           = 'wmbusmeters/{name}'
+                        value_template        = '{{ value_json.{attribute} }}'
+                        json_attributes_topic = 'wmbusmeters/{name}'
+                        icon                  = mdi:gauge
+                        unit_of_measurement {
+                            xsl:value-of(select = $hrunit)
+                        }
+                        state_class  {
+                            xsl:value-of(select = $stateclass)
+                        }
+                        device_class  {
+                            xsl:value-of(select = $fixdeviceclass)
+                        }
+                        enabled_by_default = true
+                    }
+                }
+            }
+            // We are done with the dynamic fields, now fix the static fields.
+            timestamp {
+                component = sensor
+                discovery_payload {
+                    device {
+                        identifiers(A)
+                        {
+                            _ = 'wmbusmeters_{id}'
+                        }
+                        manufacturer {
+                            xsl:value-of(select = $manufacturer)
+                        }
+                        model {
+                            xsl:value-of(select = $mvt)
+                        }
+                        name         = '{name}'
+                        hw_version   = '{id}'
+                    }
+                    entity_category    = diagnostic
+                    name               = timestamp
+                    unique_id          = 'wmbusmeters_{id}_{attribute}'
+                    state_topic        = 'wmbusmeters/{name}'
+                    value_template     = '{{ value_json.{attribute} }}'
+                    icon               = mdi:calendar-clock
+                    enabled_by_default = false
+                }
+            }
+            rssi_dbm {
+                component = sensor
+                discovery_payload {
+                    device {
+                        identifiers(A)
+                        {
+                            _ = 'wmbusmeters_{id}'
+                        }
+                        manufacturer {
+                            xsl:value-of(select = $manufacturer)
+                        }
+                        model {
+                            xsl:value-of(select = $mvt)
+                        }
+                        name         = '{name}'
+                        hw_version   = '{id}'
+                    }
+                    entity_category     = diagnostic
+                    name                = rssi
+                    unique_id           = 'wmbusmeters_{id}_{attribute}'
+                    state_topic         = 'wmbusmeters/{name}'
+                    value_template      = '{{ value_json.{attribute} }}'
+                    icon                = mdi:signal
+                    unit_of_measurement = dBm
+                    state_class         = measurement
+                    device_class        = signal_strength
+                    enabled_by_default  = false
+                }
+            }
+        }
+    }
+}
