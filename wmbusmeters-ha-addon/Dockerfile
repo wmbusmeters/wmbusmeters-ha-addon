@@ -1,17 +1,32 @@
 ARG BUILD_FROM
-FROM $BUILD_FROM AS build
+FROM ${BUILD_FROM} AS build
 
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
-RUN apk add --no-cache alpine-sdk pkgconf gcc linux-headers libxml2-dev cmake libusb-dev bash samurai libxslt-dev pkgconf jq
+RUN apk add --no-cache \
+    alpine-sdk \
+    pkgconf \
+    gcc \
+    linux-headers \
+    libxml2-dev \
+    cmake \
+    libusb-dev \
+    bash \
+    samurai \
+    libxslt-dev \
+    jq
 
-ADD https://api.github.com/repos/wmbusmeters/wmbusmeters/git/refs/heads/master version.json
-RUN git clone https://github.com/steve-m/librtlsdr.git && \
-    git clone https://github.com/wmbusmeters/wmbusmeters.git && \
-    git clone https://github.com/libxmq/xmq.git && \
-    git clone https://github.com/wmbusmeters/rtl-wmbus.git && \
-    git clone https://github.com/merbanan/rtl_433.git && \
-    git clone https://github.com/ED6E0F17/rtl_reset.git
+# Clone upstream repositories.
+# Removed:
+# ADD https://api.github.com/repos/wmbusmeters/wmbusmeters/git/refs/heads/master version.json
+# This was only being used to invalidate Docker's cache and is now failing
+# because GitHub returns HTTP 403 to the unauthenticated BuildKit request.
+RUN git clone --depth 1 https://github.com/steve-m/librtlsdr.git && \
+    git clone --depth 1 https://github.com/wmbusmeters/wmbusmeters.git && \
+    git clone --depth 1 https://github.com/libxmq/xmq.git && \
+    git clone --depth 1 https://github.com/wmbusmeters/rtl-wmbus.git && \
+    git clone --depth 1 https://github.com/merbanan/rtl_433.git && \
+    git clone --depth 1 https://github.com/ED6E0F17/rtl_reset.git
 
 WORKDIR /librtlsdr
 RUN cmake -B build -G Ninja \
@@ -42,14 +57,30 @@ RUN cmake -B build -G Ninja \
 WORKDIR /rtl_reset
 RUN make
 
-FROM $BUILD_FROM AS scratch
+
+FROM ${BUILD_FROM} AS runtime
+
 ENV QEMU_EXECVE=1
 RUN apk add --no-cache pkgconf mosquitto-clients libstdc++ curl libusb libxml2 netcat-openbsd nginx
 
-# Install Flask
-RUN apk add --update py3-pip py3-cryptography py3-flask py3-requests py3-waitress py3-xmltodict
+RUN apk add --no-cache \
+    pkgconf \
+    mosquitto-clients \
+    libstdc++ \
+    curl \
+    libusb \
+    libxml2 \
+    netcat-openbsd \
+    nginx \
+    py3-pip \
+    py3-cryptography \
+    py3-flask \
+    py3-requests \
+    py3-waitress \
+    py3-xmltodict
 
 WORKDIR /wmbusmeters
+
 COPY --from=build /librtlsdr/build/src/librtlsdr.so.* /usr/lib/
 COPY --from=build /librtlsdr/rtl-sdr.rules /usr/lib/udev/rules.d/rtl-sdr.rules
 COPY --from=build /librtlsdr/build/src/rtl_* /usr/bin/
@@ -59,7 +90,7 @@ COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
 
-ADD mqtt_discovery/ /mqtt_discovery/
+COPY mqtt_discovery/ /mqtt_discovery/
 COPY mqtt_discovery.sh /
 RUN chmod a+x /mqtt_discovery.sh
 
@@ -67,12 +98,14 @@ COPY run.sh /
 RUN chmod a+x /run.sh
 
 COPY rootfs /
-RUN chmod a+x /etc/services.d/nginx/run
-RUN chmod a+x /etc/services.d/nginx/finish
-RUN chmod a+x /etc/services.d/flask/run
-RUN chmod a+x /etc/services.d/flask/finish
-RUN chmod a+x /etc/services.d/wmbusmeters/run
-RUN chmod a+x /etc/services.d/wmbusmeters/finish
-RUN chmod a+x /etc/cont-init.d/nginx.sh
+
+RUN chmod a+x \
+    /etc/services.d/nginx/run \
+    /etc/services.d/nginx/finish \
+    /etc/services.d/flask/run \
+    /etc/services.d/flask/finish \
+    /etc/services.d/wmbusmeters/run \
+    /etc/services.d/wmbusmeters/finish \
+    /etc/cont-init.d/nginx.sh
 
 ENTRYPOINT ["/init"]
