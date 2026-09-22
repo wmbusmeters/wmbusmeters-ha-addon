@@ -1,0 +1,644 @@
+// Copyright (C) 2017-2026 Fredrik Öhrström (gpl-3.0-or-later)
+driver {
+    name           = kamwater
+    aliases        = multical21,flowiq2200
+    meter_type     = WaterMeter
+    default_fields = name,id,status,total_m3,target_m3,timestamp
+    manufacturer   = Kamstrup
+    detect {
+        // multical21
+        mvt = KAM,1b,06
+        // multical21
+        mvt = KAM,1b,16
+        // flowiq2200
+        mvt = KAW,3a,16
+        // flowiq2200
+        mvt = KAW,3c,16
+        // flowiq2200
+        mvt = KAM,1d,16
+        // KWM2230 / 3230, warm
+        mvt = KAW,42,06
+        // KWM2230 / 3230, cold
+        mvt = KAW,42,16
+    }
+    compact_frame_formats {
+        difvif = 02FF2004134413615B6167
+        difvif = 02FF20041392013BA1015B8101E7FF0F
+        difvif = 04FF234413523B06FF1B426C61675167023B04138101E7FF0F
+        difvif = 02FF2004134413426C523B615B616751678101E7FF0F06FF1B
+        // Unknown if KamHeat or KamWater
+        difvif = 02FF2004134413A1015B8101E7FF0F
+        difvif = 02FF2004134413615B5167
+        difvif = 02FF2004134413
+        difvif = 02FF200413523B
+        // Kamstrup KWM2231
+        difvif = 04FF2304134413426C023B92013BA2013B06FF1BA1015B91015BA10167
+    }
+    library {
+        use = total_m3
+        use = target_m3
+        use = target_date
+    }
+    fields {
+        field {
+            name       = status
+            quantity   = Text
+            info       = 'Status and error flags.'
+            attributes = STATUS,INCLUDE_TPL_STATUS
+            match {
+                difvifkey = 04FF23
+            }
+            lookup {
+                name            = ERROR_FLAGS
+                map_type        = BitToString
+                mask_bits       = 0xffffffff
+                default_message = OK
+                map {
+                    name = DRY
+                    bit  = 0
+                    test = Set
+                }
+                map {
+                    name = REVERSE
+                    bit  = 1
+                    test = Set
+                }
+                map {
+                    name = LEAK
+                    bit  = 2
+                    test = Set
+                }
+                map {
+                    name = BURST
+                    bit  = 3
+                    test = Set
+                }
+                map {
+                    name = TAMPER
+                    bit  = 4
+                    test = Set
+                }
+                map {
+                    name = LOW_BATTERY
+                    bit  = 5
+                    test = Set
+                }
+                map {
+                    name = LOW_ABIENT_TEMPERATURE
+                    bit  = 6
+                    test = Set
+                }
+                map {
+                    name = FLOW_ABOVE_Q4
+                    bit  = 7
+                    test = Set
+                }
+                // bit 8 is unused
+                map {
+                    name = NO_CONSUMPTION
+                    bit  = 9
+                    test = Set
+                }
+                // bit 10 is unused
+            }
+        }
+        field {
+            name       = status16
+            quantity   = Text
+            info       = 'Status and error flags.'
+            attributes = INJECT_INTO_STATUS,HIDE
+            match {
+                difvifkey = 02FF20
+            }
+            lookup {
+                name            = ERROR_FLAGS
+                map_type        = BitToString
+                mask_bits       = 0x000f
+                default_message = OK
+                map {
+                    name = DRY
+                    bit  = 0
+                    test = Set
+                }
+                map {
+                    name = REVERSE
+                    bit  = 1
+                    test = Set
+                }
+                map {
+                    name = LEAK
+                    bit  = 2
+                    test = Set
+                }
+                map {
+                    name = BURST
+                    bit  = 3
+                    test = Set
+                }
+            }
+        }
+        field {
+            name       = current_status
+            quantity   = Text
+            info       = 'Status of meter. This field will go away use status instead.'
+            attributes = DEPRECATED
+            match {
+                difvifkey = 02FF20
+            }
+            lookup {
+                name      = ERROR_FLAGS
+                map_type  = BitToString
+                mask_bits = 0x000f
+                map {
+                    name = DRY
+                    bit  = 0
+                    test = Set
+                }
+                map {
+                    name = REVERSE
+                    bit  = 1
+                    test = Set
+                }
+                map {
+                    name = LEAK
+                    bit  = 2
+                    test = Set
+                }
+                map {
+                    name = BURST
+                    bit  = 3
+                    test = Set
+                }
+            }
+        }
+        field {
+            name     = flow
+            quantity = Flow
+            info     = 'The current flow of water through the meter.'
+            match {
+                measurement_type = Instantaneous
+                vif_range        = VolumeFlow
+            }
+        }
+        field {
+            name     = min_flow_last_month
+            quantity = Flow
+            info     = 'The minimum flow recorded during the last month.'
+            match {
+                measurement_type = Minimum
+                vif_range        = VolumeFlow
+                storage_nr       = 1
+            }
+        }
+        field {
+            name     = min_flow_last_day
+            quantity = Flow
+            info     = 'The minimum flow recorded during the last day.'
+            match {
+                measurement_type = Minimum
+                vif_range        = VolumeFlow
+                storage_nr       = 2
+            }
+        }
+        // there's no `min_flow_last_year` in the docs
+        field {
+            name     = max_flow_last_month
+            quantity = Flow
+            info     = 'The maximum flow recorded during the last month.'
+            match {
+                measurement_type = Maximum
+                vif_range        = VolumeFlow
+                storage_nr       = 1
+            }
+        }
+        field {
+            name     = max_flow_last_day
+            quantity = Flow
+            info     = 'The maximum flow recorded during the last day.'
+            match {
+                measurement_type = Maximum
+                vif_range        = VolumeFlow
+                storage_nr       = 2
+            }
+        }
+        field {
+            name     = max_flow_last_year
+            quantity = Flow
+            info     = 'The maximum flow recorded during the last year.'
+            match {
+                measurement_type = Maximum
+                vif_range        = VolumeFlow
+                storage_nr       = 3
+            }
+        }
+        field {
+            name     = min_flow_temperature_last_month
+            quantity = Temperature
+            info     = 'The lowest water temperature during the last month.'
+            match {
+                measurement_type = Minimum
+                vif_range        = FlowTemperature
+                storage_nr       = 1
+            }
+        }
+        field {
+            name     = min_flow_temperature_last_day
+            quantity = Temperature
+            info     = 'The lowest water temperature during the last day.'
+            match {
+                measurement_type = Minimum
+                vif_range        = FlowTemperature
+                storage_nr       = 2
+            }
+        }
+        field {
+            name     = min_flow_temperature_last_year
+            quantity = Temperature
+            info     = 'The lowest water temperature during the last year.'
+            match {
+                measurement_type = Minimum
+                vif_range        = FlowTemperature
+                storage_nr       = 3
+            }
+        }
+        field {
+            name     = min_external_temperature_last_month
+            quantity = Temperature
+            info     = 'The lowest external temperature outside of the meter during the last month.'
+            match {
+                measurement_type = Minimum
+                vif_range        = ExternalTemperature
+                storage_nr       = 1
+            }
+        }
+        field {
+            name     = min_external_temperature_last_day
+            quantity = Temperature
+            info     = 'The lowest external temperature outside of the meter during the last day.'
+            match {
+                measurement_type = Minimum
+                vif_range        = ExternalTemperature
+                storage_nr       = 2
+            }
+        }
+        field {
+            name     = min_external_temperature_last_year
+            quantity = Temperature
+            info     = 'The lowest external temperature outside of the meter during the last year.'
+            match {
+                measurement_type = Minimum
+                vif_range        = ExternalTemperature
+                storage_nr       = 3
+            }
+        }
+        field {
+            name     = max_flow_temperature_last_month
+            quantity = Temperature
+            info     = 'The maximum water temperature during the last month.'
+            match {
+                measurement_type = Maximum
+                vif_range        = FlowTemperature
+                storage_nr       = 1
+            }
+        }
+        field {
+            // Kamstrup docs don't show this field explicitly, but hey, the values are supposed to be examples,
+            // and the test suite actually checks for it explicitly
+            name     = max_flow_temperature_last_day
+            quantity = Temperature
+            info     = 'The maximum water temperature during the last day.'
+            match {
+                measurement_type = Maximum
+                vif_range        = FlowTemperature
+                storage_nr       = 2
+            }
+        }
+        field {
+            name     = max_flow_temperature_last_year
+            quantity = Temperature
+            info     = 'The maximum water temperature during the last year.'
+            match {
+                measurement_type = Maximum
+                vif_range        = FlowTemperature
+                storage_nr       = 3
+            }
+        }
+        field {
+            name     = max_external_temperature_last_month
+            quantity = Temperature
+            info     = 'The maximum temperature recorded during previous month.'
+            match {
+                measurement_type = Maximum
+                vif_range        = ExternalTemperature
+                storage_nr       = 1
+            }
+        }
+        field {
+            // Kamstrup docs don't show this field explicitly, but hey, the values are supposed to be examples, so let's include it
+            name     = max_external_temperature_last_day
+            quantity = Temperature
+            info     = 'The maximum temperature recorded during previous day.'
+            match {
+                measurement_type = Maximum
+                vif_range        = ExternalTemperature
+                storage_nr       = 2
+            }
+        }
+        field {
+            name     = max_external_temperature_last_year
+            quantity = Temperature
+            info     = 'The maximum temperature recorded during previous year.'
+            match {
+                measurement_type = Maximum
+                vif_range        = ExternalTemperature
+                storage_nr       = 3
+            }
+        }
+        field {
+            name     = time_dry
+            quantity = Text
+            info     = 'Amount of time the meter has been dry.'
+            match {
+                difvifkey = 02FF20
+            }
+            lookup {
+                name      = DRY
+                map_type  = IndexToString
+                mask_bits = 0x0070
+                map {
+                    name  = ''
+                    value = 0x0000
+                    test  = Set
+                }
+                map {
+                    name  = '1-8 hours'
+                    value = 0x0010
+                    test  = Set
+                }
+                map {
+                    name  = '9-24 hours'
+                    value = 0x0020
+                    test  = Set
+                }
+                map {
+                    name  = '2-3 days'
+                    value = 0x0030
+                    test  = Set
+                }
+                map {
+                    name  = '4-7 days'
+                    value = 0x0040
+                    test  = Set
+                }
+                map {
+                    name  = '8-14 days'
+                    value = 0x0050
+                    test  = Set
+                }
+                map {
+                    name  = '15-21 days'
+                    value = 0x0060
+                    test  = Set
+                }
+                map {
+                    name  = '22-31 days'
+                    value = 0x0070
+                    test  = Set
+                }
+            }
+        }
+        field {
+            name     = time_reversed
+            quantity = Text
+            info     = 'Amount of time the meter has been reversed.'
+            match {
+                difvifkey = 02FF20
+            }
+            lookup {
+                name      = REVERSED
+                map_type  = IndexToString
+                mask_bits = 0x0380
+                map {
+                    name  = ''
+                    value = 0x0000
+                    test  = Set
+                }
+                map {
+                    name  = '1-8 hours'
+                    value = 0x0080
+                    test  = Set
+                }
+                map {
+                    name  = '9-24 hours'
+                    value = 0x0100
+                    test  = Set
+                }
+                map {
+                    name  = '2-3 days'
+                    value = 0x0180
+                    test  = Set
+                }
+                map {
+                    name  = '4-7 days'
+                    value = 0x0200
+                    test  = Set
+                }
+                map {
+                    name  = '8-14 days'
+                    value = 0x0280
+                    test  = Set
+                }
+                map {
+                    name  = '15-21 days'
+                    value = 0x0300
+                    test  = Set
+                }
+                map {
+                    name  = '22-31 days'
+                    value = 0x0380
+                    test  = Set
+                }
+            }
+        }
+        field {
+            name     = time_leaking
+            quantity = Text
+            info     = 'Amount of time the meter has been leaking.'
+            match {
+                difvifkey = 02FF20
+            }
+            lookup {
+                name      = LEAKING
+                map_type  = IndexToString
+                mask_bits = 0x1c00
+                map {
+                    name  = ''
+                    value = 0x0000
+                    test  = Set
+                }
+                map {
+                    name  = '1-8 hours'
+                    value = 0x0400
+                    test  = Set
+                }
+                map {
+                    name  = '9-24 hours'
+                    value = 0x0800
+                    test  = Set
+                }
+                map {
+                    name  = '2-3 days'
+                    value = 0x0c00
+                    test  = Set
+                }
+                map {
+                    name  = '4-7 days'
+                    value = 0x1000
+                    test  = Set
+                }
+                map {
+                    name  = '8-14 days'
+                    value = 0x1400
+                    test  = Set
+                }
+                map {
+                    name  = '15-21 days'
+                    value = 0x1800
+                    test  = Set
+                }
+                map {
+                    name  = '22-31 days'
+                    value = 0x1c00
+                    test  = Set
+                }
+            }
+        }
+        field {
+            name     = time_bursting
+            quantity = Text
+            info     = 'Amount of time the meter has been bursting.'
+            match {
+                difvifkey = 02FF20
+            }
+            lookup {
+                name      = BURSTING
+                map_type  = IndexToString
+                mask_bits = 0xe000
+                map {
+                    name  = ''
+                    value = 0x0000
+                    test  = Set
+                }
+                map {
+                    name  = '1-8 hours'
+                    value = 0x2000
+                    test  = Set
+                }
+                map {
+                    name  = '9-24 hours'
+                    value = 0x4000
+                    test  = Set
+                }
+                map {
+                    name  = '2-3 days'
+                    value = 0x6000
+                    test  = Set
+                }
+                map {
+                    name  = '4-7 days'
+                    value = 0x8000
+                    test  = Set
+                }
+                map {
+                    name  = '8-14 days'
+                    value = 0xa000
+                    test  = Set
+                }
+                map {
+                    name  = '15-21 days'
+                    value = 0xc000
+                    test  = Set
+                }
+                map {
+                    name  = '22-31 days'
+                    value = 0xe000
+                    test  = Set
+                }
+            }
+        }
+        field {
+            /* The internal structure of this field is not known, it's likely not "just a number", so
+               let's treat it as a magic blob, do not encode it as a number, and don't indicate any units. */
+            name     = accoustic_noise
+            quantity = Text
+            info     = 'Acoustic noise'
+            match {
+                difvifkey = 06FF1B
+            }
+        }
+    }
+    tests {
+        test {
+            args     = 'MyTapWater multical21 76348799 NOKEY'
+            telegram = 2A442D2C998734761B168D2091D37CAC21576C78_02FF207100041308190000441308190000615B7F616713
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"MyTapWater","id":"76348799","min_external_temperature_last_month_c":19,"min_flow_temperature_last_month_c":127,"target_m3":6.408,"total_m3":6.408,"current_status":"DRY","status":"DRY","time_bursting":"","time_dry":"22-31 days","time_leaking":"","time_reversed":"","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'MyTapWater;76348799;DRY;6.408;6.408;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'MyTapWater multical21 76348799 NOKEY'
+            telegram = 23442D2C998734761B168D2087D19EAD217F1779EDA86AB6_710008190000081900007F13
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"MyTapWater","id":"76348799","min_external_temperature_last_month_c":19,"min_flow_temperature_last_month_c":127,"target_m3":6.408,"total_m3":6.408,"current_status":"DRY","status":"DRY","time_bursting":"","time_dry":"22-31 days","time_leaking":"","time_reversed":"","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'MyTapWater;76348799;DRY;6.408;6.408;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'Vadden multical21 44556677 NOKEY'
+            telegram = 2D442D2C776655441B168D2083B48D3A20_46887802FF20000004132F4E000092013B3D01A1015B028101E7FF0F03
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"Vadden","id":"44556677","max_flow_last_day_m3h":0.317,"min_flow_temperature_last_day_c":2,"total_m3":20.015,"current_status":"","status":"OK","time_bursting":"","time_dry":"","time_leaking":"","time_reversed":"","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'Vadden;44556677;OK;20.015;null;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'Vadden multical21 44556677 NOKEY'
+            telegram = 21442D2C776655441B168D2079CC8C3A20_F4307912C40DFF00002F4E00003D010203
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"Vadden","id":"44556677","max_flow_last_day_m3h":0.317,"min_flow_temperature_last_day_c":2,"total_m3":20.015,"current_status":"","status":"OK","time_bursting":"","time_dry":"","time_leaking":"","time_reversed":"","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'Vadden;44556677;OK;20.015;null;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'VATTEN flowiq2200 52525252 NOKEY'
+            telegram = 4D44372C525252523A168D203894DF7920F93278_04FF23000000000413AEAC0000441364A80000426C812A023B000092013BEF01A2013B000006FF1B067000097000A1015B0C91015B14A1016713
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"VATTEN","id":"52525252","flow_m3h":0,"max_flow_last_day_m3h":0.495,"max_flow_temperature_last_day_c":20,"min_external_temperature_last_day_c":19,"min_flow_last_day_m3h":0,"min_flow_temperature_last_day_c":12,"target_m3":43.108,"target_date":"2020-10-01","total_m3":44.206,"accoustic_noise":"067000097000","status":"OK","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'VATTEN;52525252;OK;44.206;43.108;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'Votten flowiq2200 23813076 NOKEY'
+            telegram = 4744372C763081233C168D2056D1ED11205A3C78_04FF2300080000441300000000523B000006FF1B08900008F0FF426CC12B61670A51671B023B000004131F0F00008101E7FF0F13
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"Votten","id":"23813076","flow_m3h":0,"max_external_temperature_last_month_c":27,"target_m3":0,"max_flow_last_month_m3h": 0,"target_date":"2022-11-01","total_m3":3.871,"accoustic_noise":"08900008F0FF","min_external_temperature_last_month_c":10,"status":"ERROR_FLAGS_800","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'Votten;23813076;ERROR_FLAGS_800;3.871;0;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'Votten flowiq2200 23813076 NOKEY'
+            telegram = 3244372C763081233C168D2057D2ED11205a817905095480_0008000000000000000008900008F0FFC12B0A1B23001F0F000013
+            json     = '{"_":"telegram","media":"cold water","driver":"kamwater","name":"Votten","id":"23813076","min_external_temperature_last_month_c":10,"flow_m3h":0.035,"max_external_temperature_last_month_c":27,"max_flow_last_month_m3h": 0,"target_m3":0,"target_date":"2022-11-01","total_m3":3.871,"accoustic_noise":"08900008F0FF","status":"ERROR_FLAGS_800","timestamp":"1111-11-11T11:11:11Z"}'
+            fields   = 'Votten;23813076;ERROR_FLAGS_800;3.871;0;1111-11-11 11:11.11'
+        }
+        test {
+            args     = 'MoreWater kamwater 54084283 NOKEY'
+            telegram = 2f44372c834208543c168d209e926f9820903279d4364649000062ed000034c9000041373303110f1716077000077000
+            json     = '{"_": "telegram","current_status": "","accoustic_noise": "077000077000","min_flow_temperature_last_month_c": 17,"id": "54084283","max_flow_last_month_m3h": 0.819,"max_external_temperature_last_month_c": 23,"media": "cold water","driver": "kamwater","min_external_temperature_last_month_c": 15,"name": "MoreWater","status": "OK","target_date": "2026-07-01","target_m3": 51.508,"time_bursting": "","time_dry": "","time_leaking": "","time_reversed": "","timestamp": "1111-11-11T11:11:11Z","total_m3": 60.77}'
+            fields   = 'MoreWater;54084283;OK;60.77;51.508;1111-11-11 11:11.11'
+        }
+        test {
+            comment  = 'Security mode 10 (OMS security profile D), AES-CCM with message counter. Radio corrupted telegram, the aes-ccm tag does not verify, the data is decoded anyway and marked FAILED_DECODE.'
+            args     = 'MoreDWater kamwater 53820306 BF902DD6DFADAFE83E4AE6832B5FA14C'
+            telegram = 4544372c060382533c16_8c20307a3010ff2a1001dc2e0d00cf1a85672e138d6c0af61338403fdeb528ab264e2c61e41b06073550aa296ae9815c8a7a9868ec6c624cfbbcecb3
+            json     = '{"_":"telegram","accoustic_noise":"FFFFFFFFFFFF","driver":"kamwater","id":"53820306","media":"cold water","name":"MoreDWater","status":"TEMPORARY_ERROR FAILED_DECODE","target_m3":0,"timestamp":"1111-11-11T11:11:11Z","total_m3":0}'
+            fields   = 'MoreDWater;53820306;TEMPORARY_ERROR FAILED_DECODE;0;0;1111-11-11 11:11.11'
+        }
+        test {
+            comment  = 'Security mode 10 (OMS security profile D), AES-CCM with message counter, valid tag.'
+            args     = 'MoreDWater kamwater 53820306 BF902DD6DFADAFE83E4AE6832B5FA14C'
+            telegram = 4544372c060382533c16_8c20307a3010ff2a10018c570e006da7632471f42b0a3ceccd461353573ed02b87118bc5ffe982f7f00a0274543bc51938f8b9c8bb8928114d60788a
+            json     = '{"_":"telegram","accoustic_noise":"FFFFFFFFFFFF","driver":"kamwater","id":"53820306","media":"cold water","name":"MoreDWater","status":"TEMPORARY_ERROR","target_m3":0,"timestamp":"1111-11-11T11:11:11Z","total_m3":0}'
+            fields   = 'MoreDWater;53820306;TEMPORARY_ERROR;0;0;1111-11-11 11:11.11'
+        }
+    }
+}
