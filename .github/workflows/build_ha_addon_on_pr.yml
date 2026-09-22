@@ -25,11 +25,13 @@ jobs:
       - name: Update README and set version in config.json
         id: version
         run: |
-          if [[ $(cat wmbusmeters-ha-addon-edge/config.json | grep version | awk -F \- '{print NF-1}') == 1 ]]; then
-            v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
+          v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
+          if [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            # dotted scheme (3.0.0.N, issue #2076): bump the build number
+            ver="${v%.*}.$((${v##*.} + 1))"
+          elif [[ $(cat wmbusmeters-ha-addon-edge/config.json | grep version | awk -F \- '{print NF-1}') == 1 ]]; then
             ver="${v}-1"
           else
-            v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
             fp=${v%-*}
             lc=${v##*-}
             nlc=$((++lc))
