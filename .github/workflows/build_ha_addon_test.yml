@@ -2,7 +2,7 @@ name: Build HA addon test
 
 on:
   repository_dispatch:
-  types: [build_ha_edge]
+  types: [build_ha_test]
 
 concurrency:
   group: ha-addon-build-test
