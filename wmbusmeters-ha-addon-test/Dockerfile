@@ -89,10 +89,6 @@ COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
 
-COPY mqtt_discovery/ /mqtt_discovery/
-COPY mqtt_discovery.sh /
-RUN chmod a+x /mqtt_discovery.sh
-
 # first-telegram discovery hook, invoked by wmbusmeters' meter_shell config
 COPY send_meter_discovery.sh /usr/bin/send_meter_discovery.sh
 # the transform is used to convert telegram_with_details + driver to discovery json.
