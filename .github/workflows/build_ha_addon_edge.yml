@@ -11,6 +11,8 @@ concurrency:
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -18,9 +20,17 @@ jobs:
           token: '${{ secrets.HA_PAT }}'
 
       - name: Update README and set version in config.json
+        id: version
+        env:
+          RAW_VER: ${{ github.event.client_payload.ver }}
         run: |
-          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"${{ github.event.client_payload.ver }}\"\,|g" wmbusmeters-ha-addon-edge/config.json
-          sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
+          # AwesomeVersion cannot order versions like "3.0.0-135" (issue #2076, numeric
+          # prerelease identifiers); normalize to dotted "3.0.0.135", which orders
+          # correctly and is greater than any installed "3.0.0-N" or "3.0.0-N-k".
+          VER="$(echo "$RAW_VER" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)$/\1.\2/')"
+          echo "version=$VER" >> $GITHUB_OUTPUT
+          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$VER\"\,|g" wmbusmeters-ha-addon-edge/config.json
+          sed -i "1s|^|## $VER \n- Updated to version [$VER](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
 
       - uses: actions/upload-artifact@v7
         with:
@@ -53,7 +63,7 @@ jobs:
           args: |
             --${{ matrix.arch }} \
             --target wmbusmeters-ha-addon-edge \
-            --version ${{ github.event.client_payload.ver }}
+            --version ${{ needs.prepare.outputs.version }}
 
   update-repo:
     needs: [prepare, build]
