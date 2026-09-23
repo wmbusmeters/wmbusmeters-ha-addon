@@ -25,7 +25,7 @@
     ],
     "map": [
       "share:rw",
-      "config:rw"
+      "homeassistant_config:rw"
     ],
     "options": {
       "reset_config": "no"
