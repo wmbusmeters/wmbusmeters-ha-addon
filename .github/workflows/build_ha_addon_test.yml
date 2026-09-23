@@ -84,6 +84,7 @@ jobs:
         run: |
           mkdir -p wmbusmeters-ha-addon-test
           rsync -a --delete artifact/wmbusmeters-ha-addon-test/ wmbusmeters-ha-addon-test/
+          rm -rf artifact
 
       - name: Push changed files back to repo
         uses: EndBug/add-and-commit@v11
