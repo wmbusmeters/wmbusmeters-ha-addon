@@ -33,6 +33,13 @@ https://github.com/wmbusmeters/wmbusmeters-ha-addon
 ```
 Please refer to the wmbusmeters [documentation](https://github.com/wmbusmeters/wmbusmeters/blob/master/README.md) and add-on [documentation](https://github.com/wmbusmeters/wmbusmeters-ha-addon/blob/main/wmbusmeters-ha-addon-edge/DOCS.md) for detailed information on how to install and configure the Add-on.
 
+## Documentation
+
+Architecture decisions are recorded in
+[docs/adr/](docs/adr/0001-architecture-decision-records.md) and
+mermaid views of the add-on plumbing live in
+[docs/architecture/](docs/architecture/README.md).
+
 ## Issues
 Issues are being tracked centrally, so if you find any issues with the add-on, please check the [central issue tracker](https://github.com/wmbusmeters/wmbusmeters/issues) for similar issues and open new if needed. 
 
