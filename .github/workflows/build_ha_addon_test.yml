@@ -29,8 +29,8 @@ jobs:
           # correctly and is greater than any installed "3.0.0-N" or "3.0.0-N-k".
           VER="$(echo "$RAW_VER" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)$/\1.\2/')"
           echo "version=$VER" >> $GITHUB_OUTPUT
-          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$VER\"\,|g" wmbusmeters-ha-addon-edge/config.json
-          sed -i "1s|^|## $VER \n- Updated to version [$VER](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
+          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$VER\"\,|g" wmbusmeters-ha-addon-test/config.json
+          sed -i "1s|^|## $VER \n- Updated to version [$VER](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-test/CHANGELOG.md
 
       - uses: actions/upload-artifact@v7
         with:
@@ -64,3 +64,29 @@ jobs:
             --${{ matrix.arch }} \
             --target wmbusmeters-ha-addon-test \
             --version ${{ needs.prepare.outputs.version }}
+
+  update-repo:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out test store repository
+        uses: actions/checkout@v7
+        with:
+          repository: 'wmbusmeters/wmbusmeters-ha-addon-test'
+          token: '${{ secrets.HA_PAT }}'
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          path: artifact
+
+      - name: Update test add-on files in the store repository
+        run: |
+          mkdir -p wmbusmeters-ha-addon-test
+          rsync -a --delete artifact/wmbusmeters-ha-addon-test/ wmbusmeters-ha-addon-test/
+
+      - name: Push changed files back to repo
+        uses: EndBug/add-and-commit@v11
+        with:
+          default_author: github_actions
+          message: "Auto Push - update ha-addon-test config and changelog for ${{ github.event.client_payload.ver }} - [no ci]"
