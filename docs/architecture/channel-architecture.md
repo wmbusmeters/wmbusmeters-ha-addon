@@ -14,7 +14,7 @@ flowchart TD
     S --> STABLE["wmbusmeters-ha-addon/"]
     EDGE -- "auto-push - [no ci]" --> REPO["this repository<br/>HA store repository"]
     STABLE -- "auto-push - [no ci]" --> REPO
-    TEST -- "update-repo job<br/>rsync + commit" --> STORE["wmbusmeters/wmbusmeters-ha-addon-test<br/>store repository (public)"]
+    TEST -- "auto-push - [no ci]" --> REPO
     EDGE --> DH["Docker Hub<br/>image per channel + arch"]
     TEST --> DH
     STABLE --> DH
@@ -24,6 +24,5 @@ flowchart TD
     HAR -.-> S
 ```
 
-The supervisor clones the store repositories anonymously, which is why
-`wmbusmeters/wmbusmeters-ha-addon-test` must stay public
-(wmbusmeters#2092).
+The supervisor clones the store repository anonymously; for all three
+channels that repository is this one (decision 0002).

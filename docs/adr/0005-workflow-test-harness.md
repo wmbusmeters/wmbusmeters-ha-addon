@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed (PR #92)
+Accepted (PR #92)
 
 ## Context
 
@@ -14,12 +14,12 @@ hand in wmbusmeters#2092.
 
 ## Decision
 
-`tests/test_workflows.py` extracts the real version/sed/rsync run
+`tests/test_workflows.py` extracts the real version/sed run
 blocks from the build workflows, substitutes the dispatch payload
 expression with an environment variable, and executes them against
 sandboxed copies of the three add-on directories. It validates the
-version normalization and increments, the store rsync (including
-removal of the unpacked artifact directory before committing), the
+version normalization and increments, the update-repo jobs (edge and
+test commit their channel's files to this repository, PR #94), the
 config/CHANGELOG consistency and the workflow wiring. A `Tests`
 workflow runs the harness on every push to and pull request against
 `main`.
@@ -31,11 +31,16 @@ workflow runs the harness on every push to and pull request against
 - The harness parses the workflow yaml with PyYAML, so workflow changes
   can require harness updates (the unquoted `on:` key arrives as
   boolean True and is handled explicitly).
+- Checks on `uses:` steps, not only on run blocks, catch a wrong
+  publish target: PR #92's checkout of a store repository that does
+  not exist failed only in production (run 35847836048).
 
 ## Evidence
 
-- PR #92: `tests/test_workflows.py`, `.github/workflows/tests.yml`,
-  and the `rm -rf artifact` fix in the store `update-repo` job.
+- PR #92: `tests/test_workflows.py` and `.github/workflows/tests.yml`.
+- PR #94: pins the test `update-repo` checkout to this repository
+  after the store repository reference failed with `Not Found`
+  (run 35847836048).
 - Negative probe: reintroducing the edge-path regression makes the
   harness fail with five checks.
 
