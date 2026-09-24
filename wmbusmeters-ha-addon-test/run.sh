@@ -5,19 +5,19 @@ RESET_CONF=$(bashio::config 'reset_config')
 
 if [ ! -f ${CONFIG_PATH} ]
 then
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "meter_shell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
 fi
 
-# Ensure meter_shell (first-telegram MQTT discovery) exists for pre-existing configs
-if [ -z "$(jq -r '.conf.meter_shell // empty' ${CONFIG_PATH} 2>/dev/null)" ]; then
-    bashio::log.info "Adding meter_shell to configuration ..."
+# Ensure metershell (first-telegram MQTT discovery) exists for pre-existing configs
+if [ -z "$(jq -r '.conf.metershell // empty' ${CONFIG_PATH} 2>/dev/null)" ]; then
+    bashio::log.info "Adding metershell to configuration ..."
     tmp_cfg=$(mktemp)
-    jq '.conf.meter_shell = "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
+    jq 'del(.conf.meter_shell) | .conf.metershell = "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
 fi
 
 # MQTT discovery is now sent on demand. When the FIRST telegram from a
 # meter arrives then this happens:
-# wmbusmeters executes the "meter_shell" config setting which
+# wmbusmeters executes the "metershell" config setting which
 # is send_meter_discovery.sh "$METER_JSON" "$METER_DRIVER"
 # which takes as arguments:
 #   the firs telegram with telegram details added
@@ -27,7 +27,7 @@ fi
 if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "meter_shell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
     bashio::addon.option "reset_config" "no"
     bashio::addon.restart
 fi
