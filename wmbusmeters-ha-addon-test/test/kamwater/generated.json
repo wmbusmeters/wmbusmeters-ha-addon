@@ -129,7 +129,7 @@
         "serial_number": "{id}"
       },
       "device_class": "signal_strength",
-      "enabled_by_default": false,
+      "enabled_by_default": true,
       "entity_category": "diagnostic",
       "icon": "mdi:signal",
       "name": "rssi",
@@ -223,7 +223,7 @@
         "serial_number": 23813076
       },
       "device_class": "timestamp",
-      "enabled_by_default": false,
+      "enabled_by_default": true,
       "entity_category": "diagnostic",
       "icon": "mdi:calendar-clock",
       "name": "timestamp",

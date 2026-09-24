@@ -350,7 +350,7 @@ xsl:stylesheet(version                 = 1.0
                     value_template     = '{{ value_json.{attribute} }}'
                     icon               = mdi:calendar-clock
                     device_class       = timestamp
-                    enabled_by_default = false
+                    enabled_by_default = true
                 }
             }
             rssi_dbm {
@@ -384,7 +384,7 @@ xsl:stylesheet(version                 = 1.0
                     unit_of_measurement = dBm
                     state_class         = measurement
                     device_class        = signal_strength
-                    enabled_by_default  = false
+                    enabled_by_default  = true
                 }
             }
         }
