@@ -70,6 +70,7 @@ RUN apk add --no-cache \
     curl \
     libusb \
     libxml2 \
+    libxslt \
     netcat-openbsd \
     nginx \
     py3-pip \
@@ -89,7 +90,10 @@ COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
 
-# first-telegram discovery hook, invoked by wmbusmeters' meter_shell config
+# send_meter_discovery.sh renders the discovery json with an xmq transform.
+COPY --from=build /usr/local/bin/xmq /usr/local/bin/xmq
+
+# first-telegram discovery hook, invoked by wmbusmeters' metershell config
 COPY send_meter_discovery.sh /usr/bin/send_meter_discovery.sh
 # the transform is used to convert telegram_with_details + driver to discovery json.
 COPY to-ha-discovery.xslq /usr/bin/to-ha-discovery.xslq

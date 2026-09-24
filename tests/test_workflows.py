@@ -398,6 +398,56 @@ def test_ci_runs_the_harness(tmp):
     check(found, "a workflow runs tests/test_workflows.py")
 
 
+def test_test_discovery_hook(tmp):
+    """The test add-on generates discovery on the first telegram via the
+    metershell hook. wmbusmeters only accepts the key "metershell"
+    (src/config.cc), and the hook needs the xmq binary plus libxslt in
+    the runtime image to render the discovery json (wmbusmeters#2092)."""
+    run_text = (ROOT / TEST / "run.sh").read_text()
+    check(
+        run_text.count("meter_shell") == 1 and "del(.conf.meter_shell)" in run_text,
+        f"{TEST}/run.sh only references meter_shell in the stale-key cleanup",
+    )
+    check(
+        run_text.count('"metershell": "send_meter_discovery.sh') == 2,
+        f"{TEST}/run.sh default config sets metershell twice (first run + reset)",
+    )
+    check(
+        ".conf.metershell" in run_text and run_text.count(".conf.meter_shell") == 1,
+        f"{TEST}/run.sh backfill reads and writes the metershell key",
+    )
+    default_cfgs = re.findall(r"^    echo '(\{.*\})' \| jq \. > \$\{CONFIG_PATH\}$", run_text, re.M)
+    check(len(default_cfgs) == 2, f"{TEST}/run.sh has two default config literals (got {len(default_cfgs)})")
+    for raw in default_cfgs:
+        cfg = json.loads(raw)
+        hook = cfg.get("conf", {}).get("metershell", "")
+        check(
+            hook == 'send_meter_discovery.sh "$METER_JSON" "$METER_DRIVER"',
+            f"{TEST}/run.sh default metershell passes METER_JSON and METER_DRIVER (got {hook!r})",
+        )
+        check("meter_shell" not in cfg.get("conf", {}), f"{TEST}/run.sh default config has no meter_shell key")
+    hook = (ROOT / TEST / "send_meter_discovery.sh").read_text()
+    check("meter_shell" not in hook, f"{TEST}/send_meter_discovery.sh documents the metershell key")
+    check(
+        "transform" in hook and "to-ha-discovery.xslq" in hook,
+        f"{TEST}/send_meter_discovery.sh renders discovery via the xmq transform",
+    )
+    dockerfile = (ROOT / TEST / "Dockerfile").read_text()
+    runtime = dockerfile.split("AS runtime", 1)[1]
+    check(
+        re.search(r"COPY --from=build \S*bin/xmq /usr/local/bin/xmq", runtime) is not None,
+        f"{TEST}/Dockerfile copies the xmq binary into the runtime image",
+    )
+    check(
+        re.search(r"^    libxslt( \\)?$", runtime, re.M) is not None,
+        f"{TEST}/Dockerfile installs libxslt in the runtime image",
+    )
+    check(
+        "COPY send_meter_discovery.sh" in runtime and "COPY to-ha-discovery.xslq" in runtime,
+        f"{TEST}/Dockerfile ships the hook and its transform",
+    )
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -411,6 +461,7 @@ def main():
         test_dockerhub_matrix,
         test_lint_path,
         test_ci_runs_the_harness,
+        test_test_discovery_hook,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:
