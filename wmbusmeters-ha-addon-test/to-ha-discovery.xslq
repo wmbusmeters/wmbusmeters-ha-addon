@@ -276,6 +276,7 @@ xsl:stylesheet(version                 = 1.0
                                 payload_on = ON
                                 payload_off = OFF
                                 device_class = problem
+                                entity_category = diagnostic
                                 json_attributes_template = '{{ {"status": value_json.{attribute} if value_json.{attribute} is defined else this.attributes.get("status")} | tojson }}'
                             }
                             xsl:when(test = "$kind = 'number'") {
@@ -350,7 +351,7 @@ xsl:stylesheet(version                 = 1.0
                     value_template     = '{{ value_json.{attribute} }}'
                     icon               = mdi:calendar-clock
                     device_class       = timestamp
-                    enabled_by_default = true
+                    enabled_by_default = false
                 }
             }
             rssi_dbm {
@@ -384,7 +385,7 @@ xsl:stylesheet(version                 = 1.0
                     unit_of_measurement = dBm
                     state_class         = measurement
                     device_class        = signal_strength
-                    enabled_by_default  = true
+                    enabled_by_default  = false
                 }
             }
         }

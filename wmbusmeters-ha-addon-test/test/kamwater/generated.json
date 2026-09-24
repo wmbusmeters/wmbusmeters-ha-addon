@@ -129,7 +129,7 @@
         "serial_number": "{id}"
       },
       "device_class": "signal_strength",
-      "enabled_by_default": true,
+      "enabled_by_default": false,
       "entity_category": "diagnostic",
       "icon": "mdi:signal",
       "name": "rssi",
@@ -154,6 +154,7 @@
       },
       "device_class": "problem",
       "enabled_by_default": true,
+      "entity_category": "diagnostic",
       "json_attributes_template": "{{ {\"status\": value_json.{attribute} if value_json.{attribute} is defined else this.attributes.get(\"status\")} | tojson }}",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "status",
@@ -223,7 +224,7 @@
         "serial_number": 23813076
       },
       "device_class": "timestamp",
-      "enabled_by_default": true,
+      "enabled_by_default": false,
       "entity_category": "diagnostic",
       "icon": "mdi:calendar-clock",
       "name": "timestamp",
