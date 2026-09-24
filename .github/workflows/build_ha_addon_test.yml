@@ -83,3 +83,4 @@ jobs:
         with:
           default_author: github_actions
           message: "Auto Push - update ha-addon config and changelog for ${{ github.event.client_payload.ver }} - [no ci]"
+          pull: '--rebase --autostash'
