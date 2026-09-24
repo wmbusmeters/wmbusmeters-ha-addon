@@ -5,7 +5,7 @@ RESET_CONF=$(bashio::config 'reset_config')
 
 if [ ! -f ${CONFIG_PATH} ]
 then
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
 fi
 
 # Ensure metershell (first-telegram MQTT discovery) exists for pre-existing configs
@@ -27,12 +27,53 @@ fi
 if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
     bashio::addon.option "reset_config" "no"
     bashio::addon.restart
 fi
 
 CONFIG_DATA_PATH=$(bashio::jq "${CONFIG_PATH}" '.data_path')
+
+# f21a2e3a replaced the config mapping with homeassistant_config, which mounts
+# the HA configuration at /homeassistant instead of /config. A data_path under
+# /config now points at an empty ephemeral directory, so migrate it to
+# /homeassistant - the same host directory as before. Check the mount, back up
+# the configuration, rescue files that still exist at the old location and log
+# every step.
+# BEGIN data_path migration
+config_dir_mounted() {
+    grep -q " /homeassistant " /proc/mounts
+}
+
+case "${CONFIG_DATA_PATH}" in
+    /config/*)
+        OLD_DATA_PATH="${CONFIG_DATA_PATH}"
+        NEW_DATA_PATH="/homeassistant${CONFIG_DATA_PATH#/config}"
+        if config_dir_mounted; then
+            mkdir -p "${NEW_DATA_PATH}"
+            if [ -d "${OLD_DATA_PATH}" ] && [ -n "$(ls -A "${OLD_DATA_PATH}" 2>/dev/null)" ]; then
+                if cp -a -n "${OLD_DATA_PATH}/." "${NEW_DATA_PATH}/"; then
+                    bashio::log.info "Copied files that still existed at ${OLD_DATA_PATH} to ${NEW_DATA_PATH} ..."
+                else
+                    bashio::log.warning "Could not copy all files from ${OLD_DATA_PATH} to ${NEW_DATA_PATH} ..."
+                fi
+            fi
+            cp -p ${CONFIG_PATH} ${CONFIG_PATH}.bak
+            tmp_cfg=$(mktemp)
+            if jq --arg p "${NEW_DATA_PATH}" '.data_path = $p' ${CONFIG_PATH} > ${tmp_cfg}; then
+                mv ${tmp_cfg} ${CONFIG_PATH}
+                CONFIG_DATA_PATH="${NEW_DATA_PATH}"
+                bashio::log.info "Migrated data_path from ${OLD_DATA_PATH} to ${NEW_DATA_PATH} (the same host directory as before the homeassistant_config mapping). Backup: ${CONFIG_PATH}.bak"
+            else
+                rm -f ${tmp_cfg}
+                bashio::log.warning "Could not rewrite data_path in ${CONFIG_PATH}, keeping ${OLD_DATA_PATH} ..."
+            fi
+        else
+            bashio::log.warning "data_path ${OLD_DATA_PATH} refers to the pre-homeassistant_config mapping, but /homeassistant is not mounted - keeping ${OLD_DATA_PATH}. Files there are lost when the add-on is updated. Set the config location to ${NEW_DATA_PATH} instead."
+        fi
+        ;;
+esac
+# END data_path migration
 CONFIG_CONF=$(bashio::jq "${CONFIG_PATH}" '.conf')
 CONFIG_METERS=$(bashio::jq "${CONFIG_PATH}" '.meters')
 
