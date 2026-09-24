@@ -1,3 +1,5 @@
+## 3.0.0.145 
+- Updated to version [3.0.0.145](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
 ## 3.0.0.144 
 - Updated to version [3.0.0.144](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.0.0.143 
