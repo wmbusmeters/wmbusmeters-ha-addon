@@ -2,12 +2,13 @@
 # Copyright (C) 2026 bartman081523 (gpl-3.0-or-later)
 """Test harness for this repository's HA add-on plumbing.
 
-Runs the real version/sed/rsync shell blocks extracted from the build
+Runs the real version/sed shell blocks extracted from the build
 workflows against sandboxed copies of the add-on directories, so a wrong
 sed path or broken version logic fails here instead of in an auto-push
 (the edge-path regression in build_ha_addon_test.yml, fixed in PR #92,
-would have been caught by this file). Also validates the add-on
-config.json/CHANGELOG.md consistency and the workflow wiring.
+would have been caught by this file). Also validates that the test
+update-repo job commits to this repository (like edge) and validates the
+add-on config.json/CHANGELOG.md consistency and the workflow wiring.
 """
 
 import json
@@ -272,31 +273,46 @@ def test_test_version_step(tmp):
     )
 
 
-def test_test_store_rsync(tmp):
+def test_test_update_repo(tmp):
     wf = load_workflow("build_ha_addon_test.yml")
-    step = get_step(wf, "update-repo", name_contains="Update test add-on files")
-    if not check(step is not None, "test workflow has the store rsync step"):
+    edge = load_workflow("build_ha_addon_edge.yml")
+    job = wf["jobs"].get("update-repo")
+    edge_job = edge["jobs"].get("update-repo")
+    if not check(
+        job is not None and edge_job is not None,
+        "test and edge workflows both have an update-repo job",
+    ):
         return
-    store = Path(tmp) / "store"
-    store.mkdir()
-    shutil.copytree(ROOT / TEST, store / TEST)
-    (store / TEST / "stale_file.txt").write_text("stale\n")
-    artifact = store / "artifact" / TEST
-    shutil.copytree(ROOT / TEST, artifact)
-    seed_version(artifact, "9.9.9.9")
-    (artifact / "new_file.txt").write_text("new\n")
-    proc, _ = run_shell(step["run"], store)
-    check(proc.returncode == 0, f"store rsync step exits 0 ({proc.stderr.strip()[:200]})")
+    steps_of = lambda j: j.get("steps", [])
+    checkout = next((s for s in steps_of(job) if str(s.get("uses", "")).startswith("actions/checkout")), None)
+    edge_checkout = next((s for s in steps_of(edge_job) if str(s.get("uses", "")).startswith("actions/checkout")), None)
+    if not check(checkout is not None and edge_checkout is not None, "update-repo has a checkout step"):
+        return
     check(
-        config_version(store, TEST) == "9.9.9.9",
-        "rsync mirrors the artifact config into the store copy",
+        "repository" not in (checkout.get("with") or {}),
+        "test update-repo checks out this repository (no separate store repo, PR #92 regression)",
     )
-    check((store / TEST / "new_file.txt").exists(), "rsync copies new files into the store copy")
     check(
-        not (store / TEST / "stale_file.txt").exists(),
-        "rsync --delete removes stale store files",
+        (checkout.get("with") or {}) == (edge_checkout.get("with") or {}),
+        "test update-repo checkout options match the edge workflow",
     )
-    check(not (store / "artifact").exists(), "the artifact dir is removed before the commit")
+    download = next((s for s in steps_of(job) if str(s.get("uses", "")).startswith("actions/download-artifact")), None)
+    check(
+        download is not None and "path" not in (download.get("with") or {}),
+        "test update-repo unpacks the artifact at the workspace root (like edge)",
+    )
+    check(
+        not any("rsync" in s.get("run", "") for s in steps_of(job)),
+        "test update-repo has no rsync step",
+    )
+    commit = next((s for s in steps_of(job) if str(s.get("uses", "")).startswith("EndBug/add-and-commit")), None)
+    edge_commit = next((s for s in steps_of(edge_job) if str(s.get("uses", "")).startswith("EndBug/add-and-commit")), None)
+    check(
+        commit is not None
+        and edge_commit is not None
+        and (commit.get("with") or {}).get("message") == (edge_commit.get("with") or {}).get("message"),
+        "test auto-push message matches the edge auto-push message",
+    )
 
 
 def test_on_pr_increment(tmp):
@@ -389,7 +405,7 @@ def main():
         test_edge_version_step,
         test_edge_version_step_exact_tag_passthrough,
         test_test_version_step,
-        test_test_store_rsync,
+        test_test_update_repo,
         test_on_pr_increment,
         test_stable_version_step,
         test_dockerhub_matrix,
