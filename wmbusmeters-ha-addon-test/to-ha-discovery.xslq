@@ -27,64 +27,86 @@ xsl:stylesheet(version                 = 1.0
                  select = /telegram/id)
     xsl:variable(name = meter_name
                  select = /telegram/name)
+    /* wmbusmeters unit suffix -> unit string accepted by HA.
+       Only units listed here are treated as physical units,
+       all other suffixes (counter, nr, factor...) are left unit-less. */
     this:tohrunit {
         entry(key = pct) = %
         entry(key = m3) = m³
+        entry(key = l) = L
         entry(key = m3h) = m³/h
+        entry(key = lh) = L/h
         entry(key = c) = °C
+        entry(key = f) = °F
+        entry(key = k) = K
         entry(key = dbm) = dBm
+        entry(key = s) = s
+        entry(key = min) = min
         entry(key = h) = h
-        entry(key = hca) = hca
-        entry(key = kw) = kW
-        entry(key = kwh) = kWh
-        entry(key = v) = V
+        entry(key = d) = d
         entry(key = y) = years
+        entry(key = hca) = hca
+        entry(key = w) = W
+        entry(key = kw) = kW
+        entry(key = wh) = Wh
+        entry(key = kwh) = kWh
+        entry(key = mj) = MJ
+        entry(key = gj) = GJ
+        entry(key = gcal) = Gcal
+        entry(key = kvarh) = kvarh
+        entry(key = kvar) = kvar
+        entry(key = kva) = kVA
+        entry(key = v) = V
+        entry(key = a) = A
+        entry(key = hz) = Hz
+        entry(key = bar) = bar
+        entry(key = pa) = Pa
+        entry(key = rh) = %
     }
     this:tostateclass {
         entry(key = Instant) = measurement
         entry(key = Net) = total
         entry(key = Increasing) = total_increasing
     }
+    /* wmbusmeters unit suffix -> HA device class. Keyed on the unit (not the quantity)
+       so that the device class is only set when HA accepts the unit for it. */
     this:todeviceclass {
-    // battery
-    // gas
-    // problem
-    // signal_strength
-    // smoke
-    // water
-        entry(key = Volume) = volume
-        entry(key = Flow) = volume_flow_rate
-        entry(key = Temperature) = temperature
-        entry(key = TemperatureDifference) = temperature_delta
-        entry(key = Energy) = energy
-        entry(key = Power) = power
-        entry(key = Reactive_Power) = power
-        entry(key = Apparent_Power) = power
-        entry(key = Voltage) = voltage
-        entry(key = Time) = duration
-        entry(key = Reactive_Energy) = energy
-        entry(key = Apparent_Energy) = energy
-        entry(key = PonitInTime) = timestamp
-        entry(key = RelativeHumidity) = humidity
-
-        /*
-    X(Length,M)               \
-    X(Mass,KG)                \
-    X(Amperage,Ampere)        \
-    X(AmountOfSubstance,MOL)  \
-    X(LuminousIntensity,CD)   \
-    \
-    X(Frequency,HZ)           \
-    X(Pressure,BAR)           \
-    \
-    X(PointInTime,DateTimeLT) \
-    \
-    X(RelativeHumidity,RH)    \
-    X(HCA,HCA)                \
-    X(Text,TXT)               \
-    X(Angle,DEGREE)           \
-    X(Dimensionless,COUNTER)  \
-    */
+        entry(key = m3) = volume
+        entry(key = l) = volume
+        entry(key = m3h) = volume_flow_rate
+        entry(key = lh) = volume_flow_rate
+        entry(key = c) = temperature
+        entry(key = f) = temperature
+        entry(key = k) = temperature
+        entry(key = dbm) = signal_strength
+        entry(key = s) = duration
+        entry(key = min) = duration
+        entry(key = h) = duration
+        entry(key = d) = duration
+        entry(key = w) = power
+        entry(key = kw) = power
+        entry(key = wh) = energy
+        entry(key = kwh) = energy
+        entry(key = mj) = energy
+        entry(key = gj) = energy
+        entry(key = gcal) = energy
+        entry(key = kvarh) = reactive_energy
+        entry(key = kvar) = reactive_power
+        entry(key = kva) = apparent_power
+        entry(key = v) = voltage
+        entry(key = a) = current
+        entry(key = hz) = frequency
+        entry(key = bar) = pressure
+        entry(key = pa) = pressure
+        entry(key = rh) = humidity
+    }
+    /* HA rejects state_class measurement for these device classes. */
+    this:totalonly {
+        entry(key = volume) = total
+        entry(key = water) = total
+        entry(key = gas) = total
+        entry(key = energy) = total
+        entry(key = reactive_energy) = total
     }
     xsl:template(match = /)
     {
@@ -118,26 +140,99 @@ xsl:stylesheet(version                 = 1.0
                              select = "substring-before($field_name, concat('_', $unit))")
                 xsl:variable(name   = hrunit
                              select = "document('')/*/this:tohrunit/entry[@key = $unit]")
-                xsl:variable(name   = stateclass
-                             select = "document('')/*/this:tostateclass/entry[@key=$change]")
-                xsl:variable(name   = deviceclass
-                             select = "document('')/*/this:todeviceclass/entry[@key=$quantity]")
-                xsl:variable(name = fixdeviceclass) {
+                xsl:variable(name   = unitclass
+                             select = "document('')/*/this:todeviceclass/entry[@key = $unit]")
+                /* text: status strings etc, datetime/date: points in time, number: everything else. */
+                xsl:variable(name = kind) {
                     xsl:choose {
-                        xsl:when(test = "$metertype = 'WaterMeter' and $deviceclass = 'volume'") {
-                            xsl:text = water
+                        xsl:when(test = "$quantity = 'Text'") {
+                            xsl:text = text
                         }
-                        xsl:when(test = "$metertype = 'GasMeter' and $deviceclass = 'volume'") {
-                            xsl:text = gas
+                        xsl:when(test = "$quantity = 'PointInTime' and $unit = 'datetime'") {
+                            xsl:text = datetime
+                        }
+                        xsl:when(test = "$quantity = 'PointInTime' and $unit = 'date'") {
+                            xsl:text = date
+                        }
+                        xsl:when(test = "$quantity = 'PointInTime'") {
+                            xsl:text = text
                         }
                         xsl:otherwise {
-                            xsl:value-of(select = $deviceclass)
+                            xsl:text = number
                         }
                     }
                 }
+                xsl:variable(name = deviceclass) {
+                    xsl:choose {
+                        xsl:when(test = "$kind = 'datetime'") {
+                            xsl:text = timestamp
+                        }
+                        xsl:when(test = "$kind = 'date'") {
+                            xsl:text = date
+                        }
+                        xsl:when(test = "$kind != 'number'") {
+                        }
+                        xsl:when(test = "$metertype = 'WaterMeter' and $unitclass = 'volume'") {
+                            xsl:text = water
+                        }
+                        xsl:when(test = "$metertype = 'GasMeter' and $unitclass = 'volume'") {
+                            xsl:text = gas
+                        }
+                        xsl:otherwise {
+                            xsl:value-of(select = $unitclass)
+                        }
+                    }
+                }
+                xsl:variable(name = stateclass) {
+                    xsl:variable(name   = sc
+                                 select = "document('')/*/this:tostateclass/entry[@key = $change]")
+                    xsl:variable(name   = totalonly
+                                 select = "document('')/*/this:totalonly/entry[@key = $deviceclass]")
+                    /* Most drivers do not set change yet, then it defaults to Instant.
+                       Counters are recognized by name/unit until the drivers are updated. */
+                    xsl:choose {
+                        xsl:when(test = "$kind != 'number'") {
+                        }
+                        xsl:when(test = "$sc = 'measurement' and $totalonly != '' and starts-with($field_name, 'total')") {
+                            xsl:text = total_increasing
+                        }
+                        xsl:when(test = "$sc = 'measurement' and $totalonly != ''") {
+                            xsl:value-of(select = $totalonly)
+                        }
+                        xsl:when(test = "$sc = 'measurement' and $unit = 'hca'") {
+                            xsl:text = total_increasing
+                        }
+                        xsl:otherwise {
+                            xsl:value-of(select = $sc)
+                        }
+                    }
+                }
+                /* Strip the unit suffix from the name only for real units,
+                   otherwise historic_m3 and historic_datetime would both be named "historic". */
+                xsl:variable(name = display_name) {
+                    xsl:choose {
+                        xsl:when(test = "$hrunit != '' and $base != ''") {
+                            xsl:value-of(select = 'translate($base, "_", " ")')
+                        }
+                        xsl:otherwise {
+                            xsl:value-of(select = 'translate($field_name, "_", " ")')
+                        }
+                    }
+                }
+                /* The status text becomes a problem binary sensor: off while the status is OK,
+                   on otherwise, with the status text kept as an attribute. */
+                xsl:variable(name   = problem
+                             select = "$field_name = 'status' or $field_name = 'current_status'")
                 xsl:element(name = '{$field_name}')
                 {
-                    component = sensor
+                    xsl:choose {
+                        xsl:when(test = $problem) {
+                            component = binary_sensor
+                        }
+                        xsl:otherwise {
+                            component = sensor
+                        }
+                    }
                     discovery_payload {
                         device {
                             identifiers(A)
@@ -156,12 +251,12 @@ xsl:stylesheet(version                 = 1.0
                             name {
                                 xsl:value-of(select = $meter_name)
                             }
-                            hw_version {
+                            serial_number {
                                 xsl:value-of(select = $meter_id)
                             }
                         }
                         name {
-                            xsl:value-of(select = 'translate($base, "_", " ")')
+                            xsl:value-of(select = $display_name)
                         }
                         unique_id {
                             'wmbusmeters_'
@@ -173,20 +268,47 @@ xsl:stylesheet(version                 = 1.0
                             'wmbusmeters/'
                             xsl:value-of(select = $meter_name)
                         }
-                        value_template        = '{{ value_json.{attribute} }}'
+                        /* Telegrams that do not carry the field keep the previous state:
+                           numbers ignore an empty result, the others fall back to this.state. */
+                        xsl:choose {
+                            xsl:when(test = $problem) {
+                                value_template = '{% if value_json.{attribute} is defined %}{{ "OFF" if value_json.{attribute} in ["OK", ""] else "ON" }}{% endif %}'
+                                payload_on = ON
+                                payload_off = OFF
+                                device_class = problem
+                                json_attributes_template = '{{ {"status": value_json.{attribute} if value_json.{attribute} is defined else this.attributes.get("status")} | tojson }}'
+                            }
+                            xsl:when(test = "$kind = 'number'") {
+                                value_template = '{{ value_json.{attribute} if value_json.{attribute} is defined else "" }}'
+                            }
+                            xsl:when(test = "$kind = 'datetime'") {
+                                value_template = '{{ (value_json.{attribute} | as_datetime | as_local).isoformat() if value_json.{attribute} is defined else this.state }}'
+                            }
+                            xsl:otherwise {
+                                value_template = '{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}'
+                            }
+                        }
                         json_attributes_topic {
                             'wmbusmeters/'
                             xsl:value-of(select = $meter_name)
                         }
-                        icon                  = mdi:gauge
-                        unit_of_measurement {
-                            xsl:value-of(select = $hrunit)
+                        xsl:if(test = "not($problem)") {
+                            icon = mdi:gauge
                         }
-                        state_class  {
-                            xsl:value-of(select = $stateclass)
+                        xsl:if(test = "$kind = 'number' and $hrunit != ''") {
+                            unit_of_measurement {
+                                xsl:value-of(select = $hrunit)
+                            }
                         }
-                        device_class  {
-                            xsl:value-of(select = $fixdeviceclass)
+                        xsl:if(test = "$stateclass != ''") {
+                            state_class {
+                                xsl:value-of(select = $stateclass)
+                            }
+                        }
+                        xsl:if(test = "$deviceclass != ''") {
+                            device_class {
+                                xsl:value-of(select = $deviceclass)
+                            }
                         }
                         enabled_by_default = true
                     }
@@ -213,7 +335,7 @@ xsl:stylesheet(version                 = 1.0
                         name {
                             xsl:value-of(select = $meter_name)
                         }
-                        hw_version {
+                        serial_number {
                             xsl:value-of(select = $meter_id)
                         }
                     }
@@ -227,6 +349,7 @@ xsl:stylesheet(version                 = 1.0
                     state_topic        = 'wmbusmeters/{name}'
                     value_template     = '{{ value_json.{attribute} }}'
                     icon               = mdi:calendar-clock
+                    device_class       = timestamp
                     enabled_by_default = false
                 }
             }
@@ -250,7 +373,7 @@ xsl:stylesheet(version                 = 1.0
                         name {
                             xsl:value-of(select = $meter_name)
                         }
-                        hw_version   = '{id}'
+                        serial_number = '{id}'
                     }
                     entity_category     = diagnostic
                     name                = rssi
