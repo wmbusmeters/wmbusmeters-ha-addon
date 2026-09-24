@@ -448,6 +448,129 @@ def test_test_discovery_hook(tmp):
     )
 
 
+def test_data_path_migration(tmp):
+    """f21a2e3a mapped homeassistant_config instead of config, which moves the
+    HA config dir mount from /config to /homeassistant. A data_path under
+    /config then points at an empty ephemeral directory, so run.sh must
+    default to /homeassistant/wmbusmeters and migrate an existing
+    /config/* data_path on start: check the mount, back up
+    options_custom.json, rescue files at the old location, log each step."""
+    for addon in ADDONS:
+        run_text = (ROOT / addon / "run.sh").read_text()
+        if not check(
+            run_text.count("# BEGIN data_path migration") == 1
+            and run_text.count("# END data_path migration") == 1,
+            f"{addon}/run.sh marks the data_path migration block",
+        ):
+            continue
+        check(
+            "/config/wmbusmeters" not in run_text,
+            f"{addon}/run.sh no longer defaults data_path to /config/wmbusmeters",
+        )
+        defaults = [
+            json.loads(m)
+            for m in re.findall(
+                r"^    echo '(\{.*\})' \| jq \. > \$\{CONFIG_PATH\}$", run_text, re.M
+            )
+        ]
+        check(len(defaults) >= 1, f"{addon}/run.sh default config literals parse")
+        for cfg in defaults:
+            check(
+                cfg.get("data_path") == "/homeassistant/wmbusmeters",
+                f"{addon}/run.sh defaults data_path to /homeassistant/wmbusmeters",
+            )
+        block = run_text.split("# BEGIN data_path migration", 1)[1].split(
+            "# END data_path migration", 1
+        )[0]
+        # Redirect the in-container paths into the sandbox.
+        sim_block = (
+            block.replace("/homeassistant", "$SIM_ROOT/homeassistant")
+            .replace("/config", "$SIM_ROOT/config")
+        )
+        cases = [
+            ("old default", "/config/wmbusmeters", "/homeassistant/wmbusmeters", True),
+            ("custom path", "/config/mycustom", "/homeassistant/mycustom", True),
+            ("other path", "/data/custom", "/data/custom", True),
+            ("not mounted", "/config/wmbusmeters", "/config/wmbusmeters", False),
+        ]
+        for label, old, expected, mounted in cases:
+            ws = Path(tmp) / f"mig_{addon}_{label.replace(' ', '_')}"
+            ws.mkdir(parents=True)
+            # The sandbox redirects the in-container paths, so the initial
+            # data_path value and the expectation follow the same rewrite.
+            sim_old = old.replace("/config", str(ws / "config"))
+            sim_expected = expected.replace("/config", str(ws / "config")).replace(
+                "/homeassistant", str(ws / "homeassistant")
+            )
+            (ws / "options_custom.json").write_text(
+                json.dumps({"data_path": sim_old, "conf": {}, "meters": [], "mqtt": {}})
+            )
+            if old.startswith("/config"):
+                old_dir = ws / "config" / old[len("/config/") :].strip("/")
+                old_dir.mkdir(parents=True)
+                (old_dir / "custom_discovery.json").write_text('{"kept": true}')
+                new_dir = ws / "homeassistant" / old[len("/config/") :].strip("/")
+                if expected != old:
+                    new_dir.mkdir(parents=True)
+                    (new_dir / "existing.json").write_text("newer\n")
+            sim = (
+                "grep() { if [ \"$3\" = \"/proc/mounts\" ]; then [ -n \"$HA_MOUNTED\" ]; return; fi; command grep \"$@\"; }\n"
+                'bashio::log.info() { echo "INFO: $*"; }\n'
+                'bashio::log.warning() { echo "WARNING: $*"; }\n'
+                f"SIM_ROOT={ws}\nHA_MOUNTED={'1' if mounted else ''}\nCONFIG_PATH={ws}/options_custom.json\n"
+                f"CONFIG_DATA_PATH='{sim_old}'\n"
+                f"{sim_block}\n"
+                'echo "RESULT_DATA_PATH=$CONFIG_DATA_PATH"\n'
+            )
+            proc = subprocess.run(
+                ["bash", "-c", sim], capture_output=True, text=True, timeout=30
+            )
+            check(
+                proc.returncode == 0,
+                f"{addon} migration sim '{label}' exits 0 ({proc.stderr.strip()[:200]})",
+            )
+            opts = json.loads((ws / "options_custom.json").read_text())
+            check(
+                opts.get("data_path") == sim_expected,
+                f"{addon} sim '{label}': data_path becomes {sim_expected} (got {opts.get('data_path')!r})",
+            )
+            check(
+                f"RESULT_DATA_PATH={sim_expected}" in proc.stdout,
+                f"{addon} sim '{label}': CONFIG_DATA_PATH variable follows",
+            )
+            if expected != old:
+                check(
+                    (ws / "options_custom.json.bak").exists()
+                    and sim_old in (ws / "options_custom.json.bak").read_text(),
+                    f"{addon} sim '{label}': backup of the original options exists",
+                )
+                check(
+                    (ws / "homeassistant" / old[len("/config/") :].strip("/") / "custom_discovery.json").exists(),
+                    f"{addon} sim '{label}': files at the old location are rescued",
+                )
+                check(
+                    (ws / "homeassistant" / old[len("/config/") :].strip("/") / "existing.json").read_text()
+                    == "newer\n",
+                    f"{addon} sim '{label}': rescue copy does not overwrite existing files",
+                )
+                check(
+                    "Migrated data_path" in proc.stdout,
+                    f"{addon} sim '{label}': migration is logged",
+                )
+            else:
+                check(
+                    not (ws / "options_custom.json.bak").exists(),
+                    f"{addon} sim '{label}': no backup written without a migration",
+                )
+                if old.startswith("/config"):
+                    # Only a /config/* path that cannot be migrated falls back
+                    # with a warning; an unrelated path is untouched silently.
+                    check(
+                        "WARNING" in proc.stdout,
+                        f"{addon} sim '{label}': fallback is logged as a warning",
+                    )
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -462,6 +585,7 @@ def main():
         test_lint_path,
         test_ci_runs_the_harness,
         test_test_discovery_hook,
+        test_data_path_migration,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:
