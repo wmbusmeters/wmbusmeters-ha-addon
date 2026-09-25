@@ -3,37 +3,34 @@
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
-      "device_class": {},
       "enabled_by_default": true,
       "icon": "mdi:gauge",
       "json_attributes_topic": "wmbusmeters/MM",
-      "name": "accoustic",
-      "state_class": {},
+      "name": "accoustic noise",
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_accoustic_noise",
-      "unit_of_measurement": {},
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
     }
   },
   "flow_m3h": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
       "device_class": "volume_flow_rate",
       "enabled_by_default": true,
@@ -44,20 +41,20 @@
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_flow_m3h",
       "unit_of_measurement": "m³/h",
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
     }
   },
   "max_external_temperature_last_month_c": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
       "device_class": "temperature",
       "enabled_by_default": true,
@@ -68,20 +65,20 @@
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_max_external_temperature_last_month_c",
       "unit_of_measurement": "°C",
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
     }
   },
   "max_flow_last_month_m3h": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
       "device_class": "volume_flow_rate",
       "enabled_by_default": true,
@@ -92,20 +89,20 @@
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_max_flow_last_month_m3h",
       "unit_of_measurement": "m³/h",
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
     }
   },
   "min_external_temperature_last_month_c": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
       "device_class": "temperature",
       "enabled_by_default": true,
@@ -116,20 +113,20 @@
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_min_external_temperature_last_month_c",
       "unit_of_measurement": "°C",
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
     }
   },
   "rssi_dbm": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": "{id}",
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": "{id}"
       },
       "device_class": "signal_strength",
       "enabled_by_default": false,
@@ -144,89 +141,89 @@
     }
   },
   "status": {
-    "component": "sensor",
+    "component": "binary_sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
-      "device_class": {},
+      "device_class": "problem",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"status\": value_json.{attribute} if value_json.{attribute} is defined else this.attributes.get(\"status\")} | tojson }}",
       "json_attributes_topic": "wmbusmeters/MM",
-      "name": {},
-      "state_class": {},
+      "name": "status",
+      "payload_off": "OFF",
+      "payload_on": "ON",
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_status",
-      "unit_of_measurement": {},
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{% if value_json.{attribute} is defined %}{{ \"OFF\" if value_json.{attribute} in [\"OK\", \"\"] else \"ON\" }}{% endif %}"
     }
   },
   "target_date": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
-      "device_class": {},
+      "device_class": "date",
       "enabled_by_default": true,
       "icon": "mdi:gauge",
       "json_attributes_topic": "wmbusmeters/MM",
-      "name": "target",
-      "state_class": "measurement",
+      "name": "target date",
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_target_date",
-      "unit_of_measurement": {},
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
     }
   },
   "target_m3": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
       "device_class": "water",
       "enabled_by_default": true,
       "icon": "mdi:gauge",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "target",
-      "state_class": "measurement",
+      "state_class": "total",
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_target_m3",
       "unit_of_measurement": "m³",
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
     }
   },
   "timestamp": {
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
+      "device_class": "timestamp",
       "enabled_by_default": false,
       "entity_category": "diagnostic",
       "icon": "mdi:calendar-clock",
@@ -240,13 +237,13 @@
     "component": "sensor",
     "discovery_payload": {
       "device": {
-        "hw_version": 23813076,
         "identifiers": [
           "wmbusmeters_23813076"
         ],
         "manufacturer": "Kamstrup",
         "model": "KAW,3c,16",
-        "name": "MM"
+        "name": "MM",
+        "serial_number": 23813076
       },
       "device_class": "water",
       "enabled_by_default": true,
@@ -257,7 +254,7 @@
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_total_m3",
       "unit_of_measurement": "m³",
-      "value_template": "{{ value_json.{attribute} }}"
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
     }
   }
 }
