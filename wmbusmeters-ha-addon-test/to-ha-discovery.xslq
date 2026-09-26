@@ -114,7 +114,7 @@ xsl:stylesheet(version                 = 1.0
             xsl:variable(name   = manufacturer
                          select = $drvx/driver/manufacturer)
             xsl:variable(name   = mvt
-                         select = telegram/mvt)
+                         select = telegram/details/mvt)
             xsl:variable(name   = driver
                          select = telegram/driver)
             xsl:variable(name   = metertype
@@ -126,7 +126,7 @@ xsl:stylesheet(version                 = 1.0
                info
                change
             */
-            xsl:for-each(select = telegram/details/*)
+            xsl:for-each(select = telegram/details/fields/*)
             {
                 xsl:variable(name   = field_name
                              select = 'name()')
