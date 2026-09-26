@@ -12,7 +12,7 @@
         "serial_number": 23813076
       },
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:list-status",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "accoustic noise",
       "state_topic": "wmbusmeters/MM",
@@ -34,7 +34,7 @@
       },
       "device_class": "volume_flow_rate",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:waves-arrow-right",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "flow",
       "state_class": "measurement",
@@ -58,7 +58,7 @@
       },
       "device_class": "temperature",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:home-thermometer",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "max external temperature last month",
       "state_class": "measurement",
@@ -82,7 +82,7 @@
       },
       "device_class": "volume_flow_rate",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:waves-arrow-right",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "max flow last month",
       "state_class": "measurement",
@@ -106,7 +106,7 @@
       },
       "device_class": "temperature",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:home-thermometer",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "min external temperature last month",
       "state_class": "measurement",
@@ -179,7 +179,7 @@
       },
       "device_class": "date",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:calendar",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "target date",
       "state_topic": "wmbusmeters/MM",
@@ -201,14 +201,140 @@
       },
       "device_class": "water",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:water",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "target",
-      "state_class": "total",
+      "state_class": "total_increasing",
       "state_topic": "wmbusmeters/MM",
       "unique_id": "wmbusmeters_23813076_target_m3",
       "unit_of_measurement": "m³",
       "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
+    }
+  },
+  "time_bursting": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "time bursting",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_time_bursting",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "time_dry": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "time dry",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_time_dry",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "time_flow_above_q4": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "time flow above q4",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_time_flow_above_q4",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "time_leaking": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "time leaking",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_time_leaking",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "time_low_ambient_temperature": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "time low ambient temperature",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_time_low_ambient_temperature",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "time_reversed": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "time reversed",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_time_reversed",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
     }
   },
   "timestamp": {
@@ -247,7 +373,7 @@
       },
       "device_class": "water",
       "enabled_by_default": true,
-      "icon": "mdi:gauge",
+      "icon": "mdi:water",
       "json_attributes_topic": "wmbusmeters/MM",
       "name": "total",
       "state_class": "total_increasing",

@@ -119,6 +119,10 @@ xsl:stylesheet(version                 = 1.0
                          select = telegram/driver)
             xsl:variable(name   = metertype
                          select = $drvx/driver/meter_type)
+            xsl:variable(name   = media
+                         select = telegram/media)
+            xsl:variable(name   = heatmeter
+                         select = "$metertype = 'HeatMeter' or $metertype = 'HeatCoolingMeter'")
             /* Now iterate over all details. This list all possible fields
                in the telegram and provide their:
                quantity
@@ -142,6 +146,16 @@ xsl:stylesheet(version                 = 1.0
                              select = "document('')/*/this:tohrunit/entry[@key = $unit]")
                 xsl:variable(name   = unitclass
                              select = "document('')/*/this:todeviceclass/entry[@key = $unit]")
+                /* The driver marks a field that will go away with e.g.
+                   deprecated_by = 'status, update before 2026-12-12'.
+                   Such a field stays visible during the grace period, with a warning icon
+                   and the replacement and the date in its name. */
+                xsl:variable(name   = deprecated_by
+                             select = "normalize-space($drvx/driver/fields/field[name = $field_name or concat(name, '_', $unit) = $field_name]/deprecated_by)")
+                xsl:variable(name   = replacement
+                             select = "translate(substring-before(concat($deprecated_by, ' '), ' '), ',', '')")
+                xsl:variable(name   = deadline
+                             select = "substring($deprecated_by, string-length($deprecated_by) - 9)")
                 /* text: status strings etc, datetime/date: points in time, number: everything else. */
                 xsl:variable(name = kind) {
                     xsl:choose {
@@ -219,6 +233,98 @@ xsl:stylesheet(version                 = 1.0
                         }
                     }
                 }
+                /* Icon by medium (meter type and media) and by what the field measures. */
+                xsl:variable(name = icon) {
+                    xsl:choose {
+                        xsl:when(test = "$kind = 'datetime'") {
+                            xsl:text = mdi:calendar-clock
+                        }
+                        xsl:when(test = "$kind = 'date'") {
+                            xsl:text = mdi:calendar
+                        }
+                        xsl:when(test = "$kind = 'text'") {
+                            xsl:text = mdi:list-status
+                        }
+                        xsl:when(test = "($unit = 'm3' or $unit = 'l') and $metertype = 'GasMeter'") {
+                            xsl:text = mdi:meter-gas
+                        }
+                        xsl:when(test = "($unit = 'm3' or $unit = 'l') and (contains($media, 'warm') or contains($media, 'hot'))") {
+                            xsl:text = mdi:water-thermometer
+                        }
+                        xsl:when(test = "($unit = 'm3' or $unit = 'l') and $heatmeter") {
+                            xsl:text = mdi:water-outline
+                        }
+                        xsl:when(test = "$unit = 'm3' or $unit = 'l'") {
+                            xsl:text = mdi:water
+                        }
+                        xsl:when(test = "$unit = 'm3h' or $unit = 'lh'") {
+                            xsl:text = mdi:waves-arrow-right
+                        }
+                        xsl:when(test = "$unitclass = 'temperature' and (contains($field_name, 'difference') or contains($field_name, 'delta'))") {
+                            xsl:text = mdi:thermometer-chevron-down
+                        }
+                        xsl:when(test = "$unitclass = 'temperature' and (contains($field_name, 'external') or contains($field_name, 'ambient') or contains($field_name, 'room'))") {
+                            xsl:text = mdi:home-thermometer
+                        }
+                        xsl:when(test = "$unitclass = 'temperature' and (contains($field_name, 'flow') or contains($field_name, 'return') or contains($field_name, 'forward') or contains($field_name, 'supply') or $metertype = 'WaterMeter')") {
+                            xsl:text = mdi:thermometer-water
+                        }
+                        xsl:when(test = "$unitclass = 'temperature'") {
+                            xsl:text = mdi:thermometer
+                        }
+                        xsl:when(test = "$unitclass = 'energy' and contains($field_name, 'cooling')") {
+                            xsl:text = mdi:snowflake
+                        }
+                        xsl:when(test = "$unitclass = 'energy' and $heatmeter") {
+                            xsl:text = mdi:radiator
+                        }
+                        xsl:when(test = "$unitclass = 'energy' and $metertype = 'ElectricityMeter' and (contains($field_name, 'production') or contains($field_name, 'backward') or contains($field_name, 'export'))") {
+                            xsl:text = mdi:transmission-tower-export
+                        }
+                        xsl:when(test = "$unitclass = 'energy' and $metertype = 'ElectricityMeter'") {
+                            xsl:text = mdi:transmission-tower-import
+                        }
+                        xsl:when(test = "$unitclass = 'energy' or $unitclass = 'reactive_energy'") {
+                            xsl:text = mdi:lightning-bolt
+                        }
+                        xsl:when(test = "$unitclass = 'power' and $heatmeter") {
+                            xsl:text = mdi:fire
+                        }
+                        xsl:when(test = "$unitclass = 'power' or $unitclass = 'reactive_power' or $unitclass = 'apparent_power'") {
+                            xsl:text = mdi:flash
+                        }
+                        xsl:when(test = "$unit = 'hca'") {
+                            xsl:text = mdi:radiator
+                        }
+                        xsl:when(test = "$unitclass = 'duration'") {
+                            xsl:text = mdi:timer-outline
+                        }
+                        xsl:when(test = "$unit = 'y' and contains($field_name, 'battery')") {
+                            xsl:text = mdi:battery-clock
+                        }
+                        xsl:when(test = "$unit = 'v' and contains($field_name, 'battery')") {
+                            xsl:text = mdi:battery
+                        }
+                        xsl:when(test = "$unitclass = 'voltage' or $unitclass = 'frequency'") {
+                            xsl:text = mdi:sine-wave
+                        }
+                        xsl:when(test = "$unitclass = 'current'") {
+                            xsl:text = mdi:current-ac
+                        }
+                        xsl:when(test = "$unitclass = 'humidity'") {
+                            xsl:text = mdi:water-percent
+                        }
+                        xsl:when(test = "$unitclass = 'signal_strength'") {
+                            xsl:text = mdi:signal
+                        }
+                        xsl:when(test = "$hrunit = ''") {
+                            xsl:text = mdi:counter
+                        }
+                        xsl:otherwise {
+                            xsl:text = mdi:gauge
+                        }
+                    }
+                }
                 /* The status text becomes a problem binary sensor: off while the status is OK,
                    on otherwise, with the status text kept as an attribute. */
                 xsl:variable(name   = problem
@@ -257,6 +363,13 @@ xsl:stylesheet(version                 = 1.0
                         }
                         name {
                             xsl:value-of(select = $display_name)
+                            xsl:if(test = "$deprecated_by != ''") {
+                                ' (deprecated, use '
+                                xsl:value-of(select = $replacement)
+                                ' before '
+                                xsl:value-of(select = $deadline)
+                                ')'
+                            }
                         }
                         unique_id {
                             'wmbusmeters_'
@@ -293,8 +406,15 @@ xsl:stylesheet(version                 = 1.0
                             'wmbusmeters/'
                             xsl:value-of(select = $meter_name)
                         }
-                        xsl:if(test = "not($problem)") {
-                            icon = mdi:gauge
+                        xsl:choose {
+                            xsl:when(test = "$deprecated_by != ''") {
+                                icon = mdi:alert-outline
+                            }
+                            xsl:when(test = "not($problem)") {
+                                icon {
+                                    xsl:value-of(select = $icon)
+                                }
+                            }
                         }
                         xsl:if(test = "$kind = 'number' and $hrunit != ''") {
                             unit_of_measurement {
