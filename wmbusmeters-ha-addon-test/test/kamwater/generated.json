@@ -165,6 +165,27 @@
       "value_template": "{% if value_json.{attribute} is defined %}{{ \"OFF\" if value_json.{attribute} in [\"OK\", \"\"] else \"ON\" }}{% endif %}"
     }
   },
+  "status_text": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "enabled_by_default": true,
+      "entity_category": "diagnostic",
+      "icon": "mdi:list-status",
+      "name": "status text",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_text",
+      "value_template": "{{ value_json.status if value_json.status is defined else this.state }}"
+    }
+  },
   "target_date": {
     "component": "sensor",
     "discovery_payload": {
