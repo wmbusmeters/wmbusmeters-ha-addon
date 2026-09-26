@@ -1,6 +1,6 @@
 {
     "name": "[test] Wmbusmeters (W-MBus to MQTT)",
-    "version": "3.0.0.174",
+    "version": "3.0.0.175",
     "slug": "wmbusmeters-ha-addon-test",
     "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
     "arch": ["aarch64", "amd64"],
