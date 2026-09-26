@@ -1,6 +1,6 @@
 
 prep_kamwater_telegram:
-	wmbusmeters --format=json --telegramdetails=first 3244372C763081233C168D2057D2ED11205a817905095480_0008000000000000000008900008F0FFC12B0A1B23001F0F000013 MM kamwater ANYID NOKEY > kamwater/telegram.json
+	wmbusmeters --format=json --addtelegramdetails=first 3244372C763081233C168D2057D2ED11205a817905095480_0008000000000000000008900008F0FFC12B0A1B23001F0F000013 MM kamwater ANYID NOKEY > kamwater/telegram.json
 
 gen_kamwater_discovery:
 	./test.sh kamwater/telegram.json kamwater/kamwater.xmq kamwater/generated.json

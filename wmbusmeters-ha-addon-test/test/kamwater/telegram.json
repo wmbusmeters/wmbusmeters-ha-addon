@@ -1,1 +1,102 @@
-{"_":"telegram","media":"cold water","driver":"kamwater","name":"MM","id":"23813076","details":{"flow_m3h":{"quantity":"Flow","unit":"m3h","change":"Instant","info":"The current flow of water through the meter."},"max_external_temperature_last_month_c":{"quantity":"Temperature","unit":"c","change":"Instant","info":"The maximum temperature recorded during previous month."},"max_flow_last_month_m3h":{"quantity":"Flow","unit":"m3h","change":"Instant","info":"The maximum flow recorded during the last month."},"min_external_temperature_last_month_c":{"quantity":"Temperature","unit":"c","change":"Instant","info":"The lowest external temperature outside of the meter during the last month."},"target_m3":{"quantity":"Volume","unit":"m3","change":"Instant","info":"The {water} volume recorded at the last billing date."},"target_date":{"quantity":"PointInTime","unit":"date","change":"Instant","info":"The target date. Usually the end of the previous billing period."},"total_m3":{"quantity":"Volume","unit":"m3","change":"Increasing","info":"The total {media} volume recorded."},"accoustic_noise":{"quantity":"Text","info":"Acoustic noise"},"status":{"quantity":"Text","info":"Status and error flags."}},"mvt":"KAW,3c,16","flow_m3h":0.035,"max_external_temperature_last_month_c":27,"max_flow_last_month_m3h":0,"min_external_temperature_last_month_c":10,"target_m3":0,"target_date":"2022-11-01","total_m3":3.871,"accoustic_noise":"08900008F0FF","status":"ERROR_FLAGS_800","timestamp":"2026-09-21T19:30:14Z"}
+{
+  "_": "telegram",
+  "media": "cold water",
+  "driver": "kamwater",
+  "name": "MM",
+  "id": "23813076",
+  "details": {
+    "fields": {
+      "flow_m3h": {
+        "quantity": "Flow",
+        "unit": "m3h",
+        "change": "Instant",
+        "info": "The current flow of water through the meter."
+      },
+      "max_external_temperature_last_month_c": {
+        "quantity": "Temperature",
+        "unit": "c",
+        "change": "Instant",
+        "info": "The maximum temperature recorded during previous month."
+      },
+      "max_flow_last_month_m3h": {
+        "quantity": "Flow",
+        "unit": "m3h",
+        "change": "Instant",
+        "info": "The maximum flow recorded during the last month."
+      },
+      "min_external_temperature_last_month_c": {
+        "quantity": "Temperature",
+        "unit": "c",
+        "change": "Instant",
+        "info": "The lowest external temperature outside of the meter during the last month."
+      },
+      "target_m3": {
+        "quantity": "Volume",
+        "unit": "m3",
+        "change": "Increasing",
+        "info": "The {water} volume recorded at the last billing date."
+      },
+      "target_date": {
+        "quantity": "PointInTime",
+        "unit": "date",
+        "change": "Instant",
+        "info": "The target date. Usually the end of the previous billing period."
+      },
+      "total_m3": {
+        "quantity": "Volume",
+        "unit": "m3",
+        "change": "Increasing",
+        "info": "The total {media} volume recorded."
+      },
+      "accoustic_noise": {
+        "quantity": "Text",
+        "info": "Acoustic noise"
+      },
+      "status": {
+        "quantity": "Text",
+        "info": "Status and error flags."
+      },
+      "time_bursting": {
+        "quantity": "Text",
+        "info": "Amount of time the meter has been bursting."
+      },
+      "time_dry": {
+        "quantity": "Text",
+        "info": "Amount of time the meter has been dry."
+      },
+      "time_flow_above_q4": {
+        "quantity": "Text",
+        "info": "Amount of time the flow was above the Q_4 threshold."
+      },
+      "time_leaking": {
+        "quantity": "Text",
+        "info": "Amount of time the meter has been leaking."
+      },
+      "time_low_ambient_temperature": {
+        "quantity": "Text",
+        "info": "Amount of time the ambient temperature was too low."
+      },
+      "time_reversed": {
+        "quantity": "Text",
+        "info": "Amount of time the meter has been reversed."
+      }
+    },
+    "mvt": "KAW,3c,16"
+  },
+  "flow_m3h": 0.035,
+  "max_external_temperature_last_month_c": 27,
+  "max_flow_last_month_m3h": 0,
+  "min_external_temperature_last_month_c": 10,
+  "target_m3": 0,
+  "target_date": "2022-11-01",
+  "total_m3": 3.871,
+  "accoustic_noise": "08900008F0FF",
+  "status": "OK",
+  "time_bursting": "",
+  "time_dry": "1-8 hours",
+  "time_flow_above_q4": "",
+  "time_leaking": "",
+  "time_low_ambient_temperature": "",
+  "time_reversed": "",
+  "timestamp": "2026-09-26T17:42:16Z"
+}
