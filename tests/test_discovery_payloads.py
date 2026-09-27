@@ -92,7 +92,8 @@ def check_entity(name, entity):
         problems.append("date-like entity without device_class "
                         "(the 'PonitInTime' typo class of #2092)")
 
-    if name in ("status", "current_status") or name.startswith("status_"):
+    # <field>_text is the plain text companion of a status problem sensor.
+    if (name in ("status", "current_status") or name.startswith("status_")) and not name.endswith("_text"):
         if component != "binary_sensor":
             problems.append(f"text status published as {component}; "
                             f"expected binary_sensor with a device_class")

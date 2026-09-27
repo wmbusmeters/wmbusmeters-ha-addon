@@ -434,6 +434,63 @@ xsl:stylesheet(version                 = 1.0
                         enabled_by_default = true
                     }
                 }
+                /* HA keeps only on/off in the history of the problem sensor, the status text
+                   (e.g. MINIMUM_FLOW) is lost. So the status text gets its own sensor too,
+                   shown on the device page and kept in the history. Not for deprecated fields. */
+                xsl:if(test = "$problem and $deprecated_by = ''") {
+                    xsl:element(name = '{$field_name}_text')
+                    {
+                        component = sensor
+                        discovery_payload {
+                            device {
+                                identifiers(A)
+                                {
+                                    _ {
+                                        'wmbusmeters_'
+                                        xsl:value-of(select = $meter_id)
+                                    }
+                                }
+                                manufacturer {
+                                    xsl:value-of(select = $manufacturer)
+                                }
+                                model {
+                                    xsl:value-of(select = $mvt)
+                                }
+                                name {
+                                    xsl:value-of(select = $meter_name)
+                                }
+                                serial_number {
+                                    xsl:value-of(select = $meter_id)
+                                }
+                            }
+                            name {
+                                xsl:value-of(select = $display_name)
+                                ' text'
+                            }
+                            unique_id {
+                                'wmbusmeters_'
+                                xsl:value-of(select = $meter_id)
+                                '_'
+                                xsl:value-of(select = $field_name)
+                                '_text'
+                            }
+                            state_topic {
+                                'wmbusmeters/'
+                                xsl:value-of(select = $meter_name)
+                            }
+                            value_template {
+                                '{{ value_json.'
+                                xsl:value-of(select = $field_name)
+                                ' if value_json.'
+                                xsl:value-of(select = $field_name)
+                                ' is defined else this.state }}'
+                            }
+                            entity_category    = diagnostic
+                            icon               = mdi:list-status
+                            enabled_by_default = true
+                        }
+                    }
+                }
             }
             // We are done with the dynamic fields, now fix the static fields.
             timestamp {
