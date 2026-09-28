@@ -6,15 +6,15 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
         "name":"total energy consumption",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
-        "value_template":"{{ value_json.{attribute} or (value_json.total_energy_consumption_tariff_1_kwh + value_json.total_energy_consumption_tariff_2_kwh + value_json.total_energy_consumption_tariff_3_kwh) }}",
+        "value_template":"{{ value_json.{attribute} or ((value_json.total_energy_consumption_tariff_1_kwh | default(0)) + (value_json.total_energy_consumption_tariff_2_kwh | default(0)) + (value_json.total_energy_consumption_tariff_3_kwh | default(0)) + (value_json.total_energy_consumption_tariff_4_kwh | default(0))) }}",
         "json_attributes_topic":"wmbusmeters/{name}",
         "icon":"mdi:transmission-tower-import",
         "unit_of_measurement":"kWh",
@@ -30,8 +30,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -54,8 +54,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -78,12 +78,36 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
         "name":"total energy consumption for tariff 3",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:transmission-tower-import",
+        "unit_of_measurement":"kWh",
+        "state_class":"total_increasing",
+        "device_class":"energy",
+        "enabled_by_default":false
+     }
+  },
+  "total_energy_consumption_tariff_4_kwh":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"total energy consumption for tariff 4",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -102,15 +126,15 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
         "name":"total energy production",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
-        "value_template":"{{ value_json.{attribute} or (value_json.total_energy_production_tariff_1_kwh + value_json.total_energy_production_tariff_2_kwh + value_json.total_energy_production_tariff_3_kwh) }}",
+        "value_template":"{{ value_json.{attribute} or ((value_json.total_energy_production_tariff_1_kwh | default(0)) + (value_json.total_energy_production_tariff_2_kwh | default(0)) + (value_json.total_energy_production_tariff_3_kwh | default(0)) + (value_json.total_energy_production_tariff_4_kwh | default(0))) }}",
         "json_attributes_topic":"wmbusmeters/{name}",
         "icon":"mdi:transmission-tower-export",
         "unit_of_measurement":"kWh",
@@ -126,8 +150,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -150,8 +174,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -174,12 +198,36 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
         "name":"total energy production for tariff 3",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:transmission-tower-export",
+        "unit_of_measurement":"kWh",
+        "state_class":"total_increasing",
+        "device_class":"energy",
+        "enabled_by_default":false
+     }
+  },
+  "total_energy_production_tariff_4_kwh":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"total energy production for tariff 4",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
@@ -198,8 +246,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -222,8 +270,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -239,6 +287,126 @@
         "enabled_by_default":true
      }
   },
+  "max_power_consumption_kw":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"max power consumption",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:flash-alert",
+        "unit_of_measurement":"kW",
+        "state_class":"measurement",
+        "device_class":"power",
+        "enabled_by_default":false
+     }
+  },
+  "reactive_power_inductive_kvar":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"reactive power (inductive)",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:sine-wave",
+        "unit_of_measurement":"kvar",
+        "state_class":"measurement",
+        "device_class":"reactive_power",
+        "enabled_by_default":false
+     }
+  },
+  "reactive_power_capacitive_kvar":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"reactive power (capacitive)",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:sine-wave",
+        "unit_of_measurement":"kvar",
+        "state_class":"measurement",
+        "device_class":"reactive_power",
+        "enabled_by_default":false
+     }
+  },
+  "total_reactive_energy_inductive_kvarh":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"total reactive energy (inductive)",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:sine-wave",
+        "unit_of_measurement":"kvarh",
+        "state_class":"total_increasing",
+        "device_class":"reactive_energy",
+        "enabled_by_default":false
+     }
+  },
+  "total_reactive_energy_capacitive_kvarh":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "name":"total reactive energy (capacitive)",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:sine-wave",
+        "unit_of_measurement":"kvarh",
+        "state_class":"total_increasing",
+        "device_class":"reactive_energy",
+        "enabled_by_default":false
+     }
+  },
   "voltage_at_phase_1_v":{
      "component":"sensor",
      "discovery_payload":{
@@ -246,8 +414,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -269,8 +437,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -292,8 +460,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -308,6 +476,31 @@
         "enabled_by_default":false
      }
   },
+  "power_upper_limit_kw":{
+     "component":"sensor",
+     "discovery_payload":{
+        "device":{
+           "identifiers":[
+              "wmbusmeters_{id}"
+           ],
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
+           "name":"{name}",
+           "hw_version":"{id}"
+        },
+        "entity_category":"diagnostic",
+        "name":"power upper limit",
+        "unique_id":"wmbusmeters_{id}_{attribute}",
+        "state_topic":"wmbusmeters/{name}",
+        "value_template":"{{ value_json.{attribute} }}",
+        "json_attributes_topic":"wmbusmeters/{name}",
+        "icon":"mdi:gauge",
+        "unit_of_measurement":"kW",
+        "state_class":"measurement",
+        "device_class":"power",
+        "enabled_by_default":false
+     }
+  },
   "timestamp":{
      "component":"sensor",
      "discovery_payload":{
@@ -315,8 +508,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
@@ -330,25 +523,24 @@
         "enabled_by_default":false
      }
   },
-  "device_date_time":{
+  "device_datetime":{
      "component":"sensor",
      "discovery_payload":{
         "device":{
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Electricity meter Apator EMU family (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
         "entity_category":"diagnostic",
-        "name":"Device date and time",
+        "name":"device date and time",
         "unique_id":"wmbusmeters_{id}_{attribute}",
         "state_topic":"wmbusmeters/{name}",
         "value_template":"{{ value_json.{attribute} }}",
         "icon":"mdi:calendar-clock",
-        "device_class":"timestamp",
         "enabled_by_default":false
      }
   },
@@ -359,8 +551,8 @@
            "identifiers":[
               "wmbusmeters_{id}"
            ],
-           "manufacturer":"APATOR",
-           "model":"Water meter AT-WMBUS-16-2 (driver: {driver})",
+           "manufacturer":"APATOR / ELGAMA ELEKTRONIKA",
+           "model":"Electricity meter Apator EMU family / Elgama Gama 350 (driver: {driver})",
            "name":"{name}",
            "hw_version":"{id}"
         },
