@@ -273,6 +273,39 @@ def test_test_version_step(tmp):
     )
 
 
+def test_test_breaking_notice(tmp):
+    """A pending BREAKING.md is applied once by the test version step: changelog entry,
+    breaking_versions in config.json and NOTICE.md for the run.sh notification."""
+    wf = load_workflow("build_ha_addon_test.yml")
+    run_text = get_step(wf, "prepare", step_id="version")["run"]
+    ws = sandbox(tmp, "test_breaking")
+    notice = "Entity names changed, see the changelog."
+    (ws / TEST / "BREAKING.md").write_text(notice + "\n")
+    proc, _ = run_shell(run_text, ws, raw_ver="3.0.0-140")
+    check(proc.returncode == 0, f"breaking version step exits 0 ({proc.stderr.strip()[:200]})")
+    cfg = json.loads((ws / TEST / "config.json").read_text())
+    check(cfg.get("version") == "3.0.0.140", "breaking build keeps the version")
+    check(cfg.get("breaking_versions") == ["3.0.0.140"], f"breaking_versions gets the version (got {cfg.get('breaking_versions')!r})")
+    lines = (ws / TEST / "CHANGELOG.md").read_text().splitlines()
+    check(lines[0].startswith("## 3.0.0.140"), "CHANGELOG head is still the new version")
+    check("- **Breaking change:**" in lines[1:4] and f"  {notice}" in lines[1:5], "CHANGELOG entry carries the breaking change text")
+    check(not (ws / TEST / "BREAKING.md").exists(), "BREAKING.md is consumed")
+    check((ws / TEST / "NOTICE.md").read_text().splitlines() == ["3.0.0.140", notice], "NOTICE.md has the version and the text")
+
+    # The next build without BREAKING.md: version update still works, nothing is added.
+    proc, _ = run_shell(run_text, ws, raw_ver="3.0.0-141")
+    cfg = json.loads((ws / TEST / "config.json").read_text())
+    check(proc.returncode == 0 and cfg.get("version") == "3.0.0.141", "next build still updates the version")
+    check(cfg.get("breaking_versions") == ["3.0.0.140"], "next build keeps breaking_versions as is")
+    check((ws / TEST / "NOTICE.md").read_text().splitlines()[0] == "3.0.0.140", "next build keeps the last NOTICE.md")
+
+    # A second breaking build appends to breaking_versions.
+    (ws / TEST / "BREAKING.md").write_text("Second change.\n")
+    proc, _ = run_shell(run_text, ws, raw_ver="3.0.0-142")
+    cfg = json.loads((ws / TEST / "config.json").read_text())
+    check(sorted(cfg.get("breaking_versions", [])) == ["3.0.0.140", "3.0.0.142"], f"second breaking build appends (got {cfg.get('breaking_versions')!r})")
+
+
 def test_test_update_repo(tmp):
     wf = load_workflow("build_ha_addon_test.yml")
     edge = load_workflow("build_ha_addon_edge.yml")
@@ -578,6 +611,7 @@ def main():
         test_edge_version_step,
         test_edge_version_step_exact_tag_passthrough,
         test_test_version_step,
+        test_test_breaking_notice,
         test_test_update_repo,
         test_on_pr_increment,
         test_stable_version_step,
