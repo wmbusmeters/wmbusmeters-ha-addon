@@ -31,6 +31,25 @@ jobs:
           echo "version=$VER" >> $GITHUB_OUTPUT
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$VER\"\,|g" wmbusmeters-ha-addon-test/config.json
           sed -i "1s|^|## $VER \n- Updated to version [$VER](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-test/CHANGELOG.md
+          # A pending BREAKING.md announces a breaking change with this version:
+          # it is added to the changelog entry (HA shows it in the update dialog),
+          # the version goes into breaking_versions (HA then requires a manual update,
+          # even with auto-update on) and it becomes NOTICE.md, which the add-on shows
+          # once as a persistent notification after the update.
+          BREAKING=wmbusmeters-ha-addon-test/BREAKING.md
+          if [ -s "$BREAKING" ]; then
+            CHANGELOG=wmbusmeters-ha-addon-test/CHANGELOG.md
+            { head -n 2 "$CHANGELOG"; echo "- **Breaking change:**"; sed 's/^/  /' "$BREAKING"; tail -n +3 "$CHANGELOG"; } > "$CHANGELOG.new"
+            mv "$CHANGELOG.new" "$CHANGELOG"
+            CONFIG=wmbusmeters-ha-addon-test/config.json
+            if grep -q '"breaking_versions"' "$CONFIG"; then
+              sed -i "s|\"breaking_versions\": \[|\"breaking_versions\": [\"$VER\", |" "$CONFIG"
+            else
+              sed -i "s|^\(\s\{4,\}\)\"version\": \"$VER\",|&\n\1\"breaking_versions\": [\"$VER\"],|" "$CONFIG"
+            fi
+            { echo "$VER"; cat "$BREAKING"; } > wmbusmeters-ha-addon-test/NOTICE.md
+            rm "$BREAKING"
+          fi
 
       - uses: actions/upload-artifact@v7
         with:

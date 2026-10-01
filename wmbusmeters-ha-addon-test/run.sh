@@ -3,6 +3,23 @@
 CONFIG_PATH=/data/options_custom.json
 RESET_CONF=$(bashio::config 'reset_config')
 
+# A breaking change of this version (NOTICE.md, written by the build from BREAKING.md:
+# the version on the first line, the text below) is shown once as a persistent
+# notification in HA. Fresh installs have nothing to migrate, they only remember it.
+if [ -s /NOTICE.md ]; then
+    NOTICE_VERSION=$(head -n 1 /NOTICE.md)
+    if [ "$(cat /data/notice_shown 2>/dev/null)" != "${NOTICE_VERSION}" ]; then
+        if [ ! -f ${CONFIG_PATH} ]; then
+            echo "${NOTICE_VERSION}" > /data/notice_shown
+        elif curl -sf -X POST                 -H "Authorization: Bearer ${SUPERVISOR_TOKEN}"                 -H "Content-Type: application/json"                 -d "$(jq -n --arg title "Wmbusmeters ${NOTICE_VERSION}: breaking change"                             --arg message "$(tail -n +2 /NOTICE.md)"                             --arg id "wmbusmeters_breaking_${NOTICE_VERSION}"                             '{title: $title, message: $message, notification_id: $id}')"                 http://supervisor/core/api/services/persistent_notification/create > /dev/null; then
+            bashio::log.info "Breaking change notice for ${NOTICE_VERSION} shown in Home Assistant."
+            echo "${NOTICE_VERSION}" > /data/notice_shown
+        else
+            bashio::log.warning "Could not show the breaking change notice for ${NOTICE_VERSION}, will retry on next start."
+        fi
+    fi
+fi
+
 if [ ! -f ${CONFIG_PATH} ]
 then
     echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
