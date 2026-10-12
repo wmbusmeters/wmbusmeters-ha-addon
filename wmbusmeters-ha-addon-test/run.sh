@@ -15,6 +15,13 @@ if [ -z "$(jq -r '.conf.metershell // empty' ${CONFIG_PATH} 2>/dev/null)" ]; the
     jq 'del(.conf.meter_shell) | .conf.metershell = "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
 fi
 
+# wmbusmeters only accepts addtelegramdetails in the config file, rename the old telegramdetails key
+if [ "$(jq -r '.conf | has("telegramdetails")' ${CONFIG_PATH} 2>/dev/null)" = "true" ]; then
+    bashio::log.info "Renaming telegramdetails to addtelegramdetails in configuration ..."
+    tmp_cfg=$(mktemp)
+    jq '.conf.addtelegramdetails //= .conf.telegramdetails | del(.conf.telegramdetails)' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
+fi
+
 # MQTT discovery is now sent on demand. When the FIRST telegram from a
 # meter arrives then this happens:
 # wmbusmeters executes the "metershell" config setting which
@@ -27,7 +34,7 @@ fi
 if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
-    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "telegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
     bashio::addon.option "reset_config" "no"
     bashio::addon.restart
 fi
