@@ -165,6 +165,406 @@
       "value_template": "{% if value_json.{attribute} is defined %}{{ \"OFF\" if value_json.{attribute} in [\"OK\", \"\"] else \"ON\" }}{% endif %}"
     }
   },
+  "status_alarm": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Abnormal condition/alarm. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "alarm",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_alarm",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"ALARM\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_burst": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The flow of water has been consistently high for half an hour, which indicates a pipe burst.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "burst",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_burst",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"BURST\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_busy": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Meter busy. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "busy",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_busy",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"BUSY\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_dry": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"There is no water in the meter. Nothing will be measured.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "dry",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_dry",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"DRY\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_error": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Meter error; details via error reporting. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "error",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_error",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"ERROR\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_flow_above_q4": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The water flow has exceeded the upper flow limit Q4 which can cause too high error rate.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "flow above q4",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_flow_above_q4",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"FLOW_ABOVE_Q4\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_high_ambient_temperature": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The ambient temperature is above the configured upper temperature limit.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "high ambient temperature",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_high_ambient_temperature",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"HIGH_AMBIENT_TEMPERATURE\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_leak": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The flow of water has not stopped for at least one continuous hour during the last 24 hours.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "leak",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_leak",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"LEAK\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_low_ambient_temperature": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The ambient temperature is below the configured lower temperature limit.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "low ambient temperature",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_low_ambient_temperature",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"LOW_AMBIENT_TEMPERATURE\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_low_battery": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The battery is running low. Less than 6 months remaining.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "low battery",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_low_battery",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"LOW_BATTERY\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_no_consumption": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"No flow of water has occurred for the last 15 days.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "no consumption",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_no_consumption",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"NO_CONSUMPTION\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_permanent_error": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Permanent meter error. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "permanent error",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_permanent_error",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"PERMANENT_ERROR\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_power_low": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Power low. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "power low",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_power_low",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"POWER_LOW\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_reverse": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The water flows through the meter in the wrong direction.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "reverse",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_reverse",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"REVERSE\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_tamper": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Attempt of fraud. The meter is no longer valid for billing.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "tamper",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_tamper",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"TAMPER\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_temporary_error": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_23813076"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "KAW,3c,16",
+        "name": "MM",
+        "serial_number": 23813076
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Temporary meter error. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/MM",
+      "name": "temporary error",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/MM",
+      "unique_id": "wmbusmeters_23813076_status_temporary_error",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"TEMPORARY_ERROR\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
   "status_text": {
     "component": "sensor",
     "discovery_payload": {
