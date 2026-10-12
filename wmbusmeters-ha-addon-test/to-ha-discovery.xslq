@@ -115,8 +115,23 @@ xsl:stylesheet(version                 = 1.0
         _ {
             xsl:variable(name   = manufacturer
                          select = $drvx/driver/manufacturer)
-            xsl:variable(name   = mvt
-                         select = telegram/details/mvt)
+            /* The device model is the driver info (e.g. "Water meter") followed by
+               the manufacturer, version and type, e.g. "Water meter (APA,14,07)". */
+            xsl:variable(name = model) {
+                xsl:variable(name   = info
+                             select = "normalize-space(telegram/details/info)")
+                xsl:choose {
+                    xsl:when(test = "$info = ''") {
+                        xsl:value-of(select = telegram/details/mvt)
+                    }
+                    xsl:when(test = "substring($info, string-length($info)) = '.'") {
+                        xsl:value-of(select = "concat(substring($info, 1, string-length($info) - 1), ' (', telegram/details/mvt, ')')")
+                    }
+                    xsl:otherwise {
+                        xsl:value-of(select = "concat($info, ' (', telegram/details/mvt, ')')")
+                    }
+                }
+            }
             xsl:variable(name   = driver
                          select = telegram/driver)
             xsl:variable(name   = metertype
@@ -354,7 +369,7 @@ xsl:stylesheet(version                 = 1.0
                                 xsl:value-of(select = $manufacturer)
                             }
                             model {
-                                xsl:value-of(select = $mvt)
+                                xsl:value-of(select = $model)
                             }
                             name {
                                 xsl:value-of(select = $meter_name)
@@ -456,7 +471,7 @@ xsl:stylesheet(version                 = 1.0
                                     xsl:value-of(select = $manufacturer)
                                 }
                                 model {
-                                    xsl:value-of(select = $mvt)
+                                    xsl:value-of(select = $model)
                                 }
                                 name {
                                     xsl:value-of(select = $meter_name)
@@ -527,7 +542,7 @@ xsl:stylesheet(version                 = 1.0
                                     xsl:value-of(select = $manufacturer)
                                 }
                                 model {
-                                    xsl:value-of(select = $mvt)
+                                    xsl:value-of(select = $model)
                                 }
                                 name {
                                     xsl:value-of(select = $meter_name)
@@ -600,7 +615,7 @@ xsl:stylesheet(version                 = 1.0
                             xsl:value-of(select = $manufacturer)
                         }
                         model {
-                            xsl:value-of(select = $mvt)
+                            xsl:value-of(select = $model)
                         }
                         name {
                             xsl:value-of(select = $meter_name)
@@ -638,7 +653,7 @@ xsl:stylesheet(version                 = 1.0
                             xsl:value-of(select = $manufacturer)
                         }
                         model {
-                            xsl:value-of(select = $mvt)
+                            xsl:value-of(select = $model)
                         }
                         name {
                             xsl:value-of(select = $meter_name)
@@ -677,7 +692,7 @@ xsl:stylesheet(version                 = 1.0
                                 xsl:value-of(select = $manufacturer)
                             }
                             model {
-                                xsl:value-of(select = $mvt)
+                                xsl:value-of(select = $model)
                             }
                             name {
                                 xsl:value-of(select = $meter_name)
