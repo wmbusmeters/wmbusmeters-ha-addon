@@ -214,6 +214,18 @@ MESSAGE=\$2
 /usr/bin/mosquitto_pub ${pub_args_quoted[@]} -r -t "\$TOPIC" -m "\$MESSAGE"
 EOL
 
+    # Used by send_meter_discovery.sh to remove discovery that is no longer published.
+    cat > /wmbusmeters/mosquitto_retained.sh << EOL
+#!/usr/bin/with-contenv bashio
+# list <filter>: print the topics of the retained messages matching the filter
+# clear <topic>: remove the retained message of the topic
+case "\$1" in
+    list)  /usr/bin/mosquitto_sub ${pub_args_quoted[@]} -t "\$2" --retained-only -F "%t" -W 2 ;;
+    clear) /usr/bin/mosquitto_pub ${pub_args_quoted[@]} -r -t "\$2" -n ;;
+esac
+EOL
+    chmod a+x /wmbusmeters/mosquitto_retained.sh
+
 fi
 
 chmod a+x /wmbusmeters/mosquitto_pub.sh

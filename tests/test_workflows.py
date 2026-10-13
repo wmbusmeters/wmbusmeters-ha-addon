@@ -643,6 +643,48 @@ def test_test_conf_split(tmp):
     check(got == expected, f"conf split keeps ';' inside CMD(...) and splits outside it (got {got!r})")
 
 
+def test_test_discovery_cleanup(tmp):
+    """After publishing the discovery of a meter, send_meter_discovery.sh removes the
+    retained discovery of the same meter that was not published now (renamed or
+    dropped fields), and leaves other meters alone."""
+    run_text = (ROOT / TEST / "run.sh").read_text()
+    check(
+        "--retained-only" in run_text and "-r -t \"\\$2\" -n" in run_text,
+        f"{TEST}/run.sh generates the retained list/clear helper",
+    )
+    send_text = (ROOT / TEST / "send_meter_discovery.sh").read_text()
+    if not check(
+        send_text.count("# BEGIN discovery cleanup") == 1 and send_text.count("# END discovery cleanup") == 1,
+        f"{TEST}/send_meter_discovery.sh marks the discovery cleanup block",
+    ):
+        return
+    block = send_text.split("# BEGIN discovery cleanup", 1)[1].split("# END discovery cleanup", 1)[0]
+    ws = Path(tmp) / "discovery_cleanup"
+    ws.mkdir(parents=True)
+    keep = "homeassistant/sensor/wmbusmeters/04913581_total_m3/config"
+    stale = "homeassistant/binary_sensor/wmbusmeters/04913581_status_LOW_BATTERY/config"
+    similar_id = "homeassistant/sensor/wmbusmeters/049135810_total_m3/config"
+    other_meter = "homeassistant/sensor/wmbusmeters/12345678_status_LOW_BATTERY/config"
+    helper = ws / "retained.sh"
+    helper.write_text(
+        "#!/bin/bash\n"
+        f'if [ "$1" = list ]; then printf "%s\\n" {keep} {stale} {similar_id} {other_meter}; fi\n'
+        f'if [ "$1" = clear ]; then echo "$2" >> {ws}/cleared; fi\n'
+    )
+    helper.chmod(0o755)
+    sim = (
+        f"ID=04913581\nPUBLISHED=' {keep} homeassistant/binary_sensor/wmbusmeters/04913581_status/config'\n"
+        + block.replace("/wmbusmeters/mosquitto_retained.sh", str(helper))
+    )
+    proc = subprocess.run(["bash", "-c", sim], capture_output=True, text=True, timeout=30)
+    check(proc.returncode == 0, f"discovery cleanup exits 0 ({proc.stderr.strip()[:200]})")
+    cleared = (ws / "cleared").read_text().split() if (ws / "cleared").exists() else []
+    check(
+        cleared == [stale],
+        f"discovery cleanup removes only the stale topic of this meter (got {cleared!r})",
+    )
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -660,6 +702,7 @@ def main():
         test_test_discovery_hook,
         test_data_path_migration,
         test_test_conf_split,
+        test_test_discovery_cleanup,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:

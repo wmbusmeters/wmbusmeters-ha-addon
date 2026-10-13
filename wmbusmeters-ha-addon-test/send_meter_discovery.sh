@@ -72,6 +72,7 @@ if [ ! -x "$PUB" ]; then
 fi
 
 # --- Publish discovery for this driver's attributes --------------------------
+PUBLISHED=""
 for attribute in $(jq -r 'keys[]' "$DISCOVERY_FILE" 2>/dev/null)
 do
     component=$(jq -r ".${attribute}.component // empty" "$DISCOVERY_FILE" 2>/dev/null)
@@ -93,6 +94,30 @@ do
     payload="${payload//\{attribute\}/${attribute}}"
 
     "$PUB" "$topic" "$payload"
+    PUBLISHED="$PUBLISHED $topic"
 done
+
+# --- Remove the discovery of this meter that is not published any more -------
+# E.g. entities of fields that the driver renamed or dropped, which HA would
+# otherwise keep as unavailable entities forever.
+# BEGIN discovery cleanup
+RETAINED=/wmbusmeters/mosquitto_retained.sh
+if [ -x "$RETAINED" ] && [ -n "$PUBLISHED" ]; then
+    for old in $("$RETAINED" list "homeassistant/+/wmbusmeters/+/config" 2>/dev/null)
+    do
+        case "$old" in
+            */wmbusmeters/"${ID}"_*/config) ;;
+            *) continue ;;
+        esac
+        case " $PUBLISHED " in
+            *" $old "*) ;;
+            *)
+                echo "metershell: removing discovery that is not published any more: $old" >&2
+                "$RETAINED" clear "$old"
+                ;;
+        esac
+    done
+fi
+# END discovery cleanup
 
 exit 0
