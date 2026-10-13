@@ -63,7 +63,9 @@ xsl:stylesheet(version                 = 1.0
         entry(key = pa) = Pa
         entry(key = rh) = %
     }
+    /* wmbusmeters renamed Instant to Sample, both are accepted. */
     this:tostateclass {
+        entry(key = Sample) = measurement
         entry(key = Instant) = measurement
         entry(key = Net) = total
         entry(key = Increasing) = total_increasing
@@ -156,10 +158,10 @@ xsl:stylesheet(version                 = 1.0
                              select = "translate(substring-before(concat($deprecated_by, ' '), ' '), ',', '')")
                 xsl:variable(name   = deadline
                              select = "substring($deprecated_by, string-length($deprecated_by) - 9)")
-                /* text: status strings etc, datetime/date: points in time, number: everything else. */
+                /* text: status strings and flags, datetime/date: points in time, number: everything else. */
                 xsl:variable(name = kind) {
                     xsl:choose {
-                        xsl:when(test = "$quantity = 'Text'") {
+                        xsl:when(test = "$quantity = 'Text' or $quantity = 'Flags'") {
                             xsl:text = text
                         }
                         xsl:when(test = "$quantity = 'PointInTime' and $unit = 'datetime'") {
@@ -202,7 +204,7 @@ xsl:stylesheet(version                 = 1.0
                                  select = "document('')/*/this:tostateclass/entry[@key = $change]")
                     xsl:variable(name   = totalonly
                                  select = "document('')/*/this:totalonly/entry[@key = $deviceclass]")
-                    /* Most drivers do not set change yet, then it defaults to Instant.
+                    /* Drivers that do not set change get a default from the quantity (Sample or Increasing).
                        Counters are recognized by name/unit until the drivers are updated. */
                     xsl:choose {
                         xsl:when(test = "$kind != 'number'") {
