@@ -127,27 +127,42 @@ fi
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
 
-# read each line of config file
-while read -r line; do
-    # split the line into parameter and values
-    param="${line%=*}"
+# A value with ";" lists several values for the same key, e.g. device=auto:t1;rtlwmbus
+# becomes two device= lines. A ";" inside parentheses belongs to the value itself,
+# e.g. the shell command in CMD(...), and does not split it.
+# BEGIN conf split
+split_outside_parens() {
+    local s="$1" part="" depth=0 c i
+    for (( i=0; i<${#s}; i++ )); do
+        c="${s:i:1}"
+        case "$c" in
+            "(") depth=$((depth + 1)) ;;
+            ")") [ $depth -gt 0 ] && depth=$((depth - 1)) ;;
+        esac
+        if [ "$c" = ";" ] && [ $depth -eq 0 ]; then
+            printf '%s\n' "$part"
+            part=""
+        else
+            part+="$c"
+        fi
+    done
+    printf '%s\n' "$part"
+}
+
+while IFS= read -r line; do
+    # The key ends at the first "=", the value may contain "=" too.
+    key="${line%%=*}"
     values="${line#*=}"
-    # check if values contain the delimiter ";"
     if [[ "$values" == *";"* ]]; then
-        # split values into an array using ";" as the delimiter
-        IFS=";" read -ra arr <<< "$values"
-        # extract the first key from the parameter
-        first_key="${param%=*}"
-        # loop through the array and create separate key-value pairs
-        for value in "${arr[@]}"; do
-            echo "$first_key=$value"
+        split_outside_parens "$values" | while IFS= read -r value; do
+            echo "$key=$value"
         done
     else
-        # if values do not contain ";", print the original key-value pair
         echo "$line"
     fi
 done < $CONFIG_DATA_PATH/etc/wmbusmeters.conf > $CONFIG_DATA_PATH/etc/wmbusmeters.conf_tmp
 mv $CONFIG_DATA_PATH/etc/wmbusmeters.conf_tmp $CONFIG_DATA_PATH/etc/wmbusmeters.conf
+# END conf split
 
 bashio::log.info "Registering meters ..."
 rm -f $CONFIG_DATA_PATH/etc/wmbusmeters.d/*
