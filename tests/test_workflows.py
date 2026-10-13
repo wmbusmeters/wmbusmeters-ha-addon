@@ -280,12 +280,14 @@ def test_test_breaking_notice(tmp):
     run_text = get_step(wf, "prepare", step_id="version")["run"]
     ws = sandbox(tmp, "test_breaking")
     notice = "Entity names changed, see the changelog."
+    # The real config.json may already list earlier breaking versions.
+    earlier = json.loads((ws / TEST / "config.json").read_text()).get("breaking_versions", [])
     (ws / TEST / "BREAKING.md").write_text(notice + "\n")
     proc, _ = run_shell(run_text, ws, raw_ver="3.0.0-140")
     check(proc.returncode == 0, f"breaking version step exits 0 ({proc.stderr.strip()[:200]})")
     cfg = json.loads((ws / TEST / "config.json").read_text())
     check(cfg.get("version") == "3.0.0.140", "breaking build keeps the version")
-    check(cfg.get("breaking_versions") == ["3.0.0.140"], f"breaking_versions gets the version (got {cfg.get('breaking_versions')!r})")
+    check(cfg.get("breaking_versions") == ["3.0.0.140"] + earlier, f"breaking_versions gets the version (got {cfg.get('breaking_versions')!r})")
     lines = (ws / TEST / "CHANGELOG.md").read_text().splitlines()
     check(lines[0].startswith("## 3.0.0.140"), "CHANGELOG head is still the new version")
     check("- **Breaking change:**" in lines[1:4] and f"  {notice}" in lines[1:5], "CHANGELOG entry carries the breaking change text")
@@ -296,14 +298,14 @@ def test_test_breaking_notice(tmp):
     proc, _ = run_shell(run_text, ws, raw_ver="3.0.0-141")
     cfg = json.loads((ws / TEST / "config.json").read_text())
     check(proc.returncode == 0 and cfg.get("version") == "3.0.0.141", "next build still updates the version")
-    check(cfg.get("breaking_versions") == ["3.0.0.140"], "next build keeps breaking_versions as is")
+    check(cfg.get("breaking_versions") == ["3.0.0.140"] + earlier, "next build keeps breaking_versions as is")
     check((ws / TEST / "NOTICE.md").read_text().splitlines()[0] == "3.0.0.140", "next build keeps the last NOTICE.md")
 
     # A second breaking build appends to breaking_versions.
     (ws / TEST / "BREAKING.md").write_text("Second change.\n")
     proc, _ = run_shell(run_text, ws, raw_ver="3.0.0-142")
     cfg = json.loads((ws / TEST / "config.json").read_text())
-    check(sorted(cfg.get("breaking_versions", [])) == ["3.0.0.140", "3.0.0.142"], f"second breaking build appends (got {cfg.get('breaking_versions')!r})")
+    check(sorted(cfg.get("breaking_versions", [])) == sorted(["3.0.0.140", "3.0.0.142"] + earlier), f"second breaking build appends (got {cfg.get('breaking_versions')!r})")
 
 
 def test_test_update_repo(tmp):
