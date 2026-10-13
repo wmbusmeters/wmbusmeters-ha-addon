@@ -99,6 +99,9 @@ COPY send_meter_discovery.sh /usr/bin/send_meter_discovery.sh
 COPY to-ha-discovery.xslq /usr/bin/to-ha-discovery.xslq
 RUN chmod a+x /usr/bin/send_meter_discovery.sh
 
+# Breaking change notice of this version (empty when there is none), see run.sh.
+COPY NOTICE.md /NOTICE.md
+
 COPY run.sh /
 RUN chmod a+x /run.sh
 
