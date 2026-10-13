@@ -604,6 +604,45 @@ def test_data_path_migration(tmp):
                     )
 
 
+def test_test_conf_split(tmp):
+    """run.sh splits a config value on ";" into several key= lines (several
+    devices), but a ";" inside parentheses belongs to the value, e.g. the
+    shell command in CMD(...), and the key ends at the first "="."""
+    run_text = (ROOT / TEST / "run.sh").read_text()
+    if not check(
+        run_text.count("# BEGIN conf split") == 1 and run_text.count("# END conf split") == 1,
+        f"{TEST}/run.sh marks the conf split block",
+    ):
+        return
+    block = run_text.split("# BEGIN conf split", 1)[1].split("# END conf split", 1)[0]
+    ws = Path(tmp) / "conf_split"
+    (ws / "etc").mkdir(parents=True)
+    conf_in = [
+        "loglevel=normal",
+        "device=auto:t1;rtlwmbus",
+        "device=rtlwmbus:CMD(mosquitto_sub -t a/b | sed -u 's/^/T1;1;1;;-50;;;0x/')",
+        "device=rtlwmbus:CMD(echo a=b;c);auto:c1",
+        'shell=/wmbusmeters/mosquitto_pub.sh "wmbusmeters/$METER_NAME" "$METER_JSON"',
+    ]
+    expected = [
+        "loglevel=normal",
+        "device=auto:t1",
+        "device=rtlwmbus",
+        "device=rtlwmbus:CMD(mosquitto_sub -t a/b | sed -u 's/^/T1;1;1;;-50;;;0x/')",
+        "device=rtlwmbus:CMD(echo a=b;c)",
+        "device=auto:c1",
+        'shell=/wmbusmeters/mosquitto_pub.sh "wmbusmeters/$METER_NAME" "$METER_JSON"',
+    ]
+    (ws / "etc" / "wmbusmeters.conf").write_text("\n".join(conf_in) + "\n")
+    proc = subprocess.run(
+        ["bash", "-c", f"CONFIG_DATA_PATH={ws}\n{block}"],
+        capture_output=True, text=True, timeout=30,
+    )
+    check(proc.returncode == 0, f"conf split exits 0 ({proc.stderr.strip()[:200]})")
+    got = (ws / "etc" / "wmbusmeters.conf").read_text().splitlines()
+    check(got == expected, f"conf split keeps ';' inside CMD(...) and splits outside it (got {got!r})")
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -620,6 +659,7 @@ def main():
         test_ci_runs_the_harness,
         test_test_discovery_hook,
         test_data_path_migration,
+        test_test_conf_split,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:
