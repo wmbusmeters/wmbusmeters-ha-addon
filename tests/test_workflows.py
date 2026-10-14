@@ -687,6 +687,63 @@ def test_test_discovery_cleanup(tmp):
     )
 
 
+def test_test_discovery_flag(tmp):
+    """[test] honours "Enable mqtt discovery": send_meter_discovery.sh checks it before
+    publishing, new configs default to true, and existing configs (which got discovery
+    regardless of the old default "false") are switched to true once."""
+    run_text = (ROOT / TEST / "run.sh").read_text()
+    send_text = (ROOT / TEST / "send_meter_discovery.sh").read_text()
+    flag_check = send_text.find(".enable_mqtt_discovery | tostring")
+    check(
+        0 < flag_check < send_text.find("PUB=/wmbusmeters/mosquitto_pub.sh"),
+        f"{TEST}/send_meter_discovery.sh checks enable_mqtt_discovery before publishing",
+    )
+    defaults = [
+        json.loads(m)
+        for m in re.findall(r"^    echo '(\{.*\})' \| jq \. > \$\{CONFIG_PATH\}$", run_text, re.M)
+    ]
+    check(
+        len(defaults) == 2 and all(c.get("enable_mqtt_discovery") == "true" for c in defaults),
+        f"{TEST}/run.sh default configs enable MQTT discovery",
+    )
+    if not check(
+        run_text.count("# BEGIN discovery flag migration") == 1
+        and run_text.count("# END discovery flag migration") == 1,
+        f"{TEST}/run.sh marks the discovery flag migration block",
+    ):
+        return
+    block = run_text.split("# BEGIN discovery flag migration", 1)[1].split(
+        "# END discovery flag migration", 1
+    )[0]
+    cases = [
+        ("old default", '"false"', False, True),
+        ("chosen false", "false", True, False),
+        ("already true", "true", False, True),
+    ]
+    for label, value, migrated, expected in cases:
+        ws = Path(tmp) / f"flag_{label.replace(' ', '_')}"
+        (ws / "data").mkdir(parents=True)
+        cfg = ws / "data" / "options_custom.json"
+        cfg.write_text('{"enable_mqtt_discovery": ' + value + ', "conf": {}}')
+        if migrated:
+            (ws / "data" / "discovery_flag_migrated").touch()
+        sim = (
+            'bashio::log.info() { echo "INFO: $*"; }\n'
+            f"CONFIG_PATH={cfg}\n" + block.replace("/data/", f"{ws}/data/")
+        )
+        proc = subprocess.run(["bash", "-c", sim], capture_output=True, text=True, timeout=30)
+        check(proc.returncode == 0, f"discovery flag sim '{label}' exits 0 ({proc.stderr.strip()[:200]})")
+        got = json.loads(cfg.read_text()).get("enable_mqtt_discovery")
+        check(
+            str(got).lower() == str(expected).lower(),
+            f"discovery flag sim '{label}': enable_mqtt_discovery becomes {expected} (got {got!r})",
+        )
+        check(
+            (ws / "data" / "discovery_flag_migrated").exists(),
+            f"discovery flag sim '{label}': the one-time switch is remembered",
+        )
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -705,6 +762,7 @@ def main():
         test_data_path_migration,
         test_test_conf_split,
         test_test_discovery_cleanup,
+        test_test_discovery_flag,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:
