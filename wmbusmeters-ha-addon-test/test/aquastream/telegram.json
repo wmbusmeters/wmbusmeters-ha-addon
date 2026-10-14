@@ -1,0 +1,89 @@
+{
+  "_": "telegram",
+  "media": "water",
+  "driver": "aquastream",
+  "name": "AqWater",
+  "id": "05933237",
+  "battery_y": 15.328767,
+  "target_m3": 6.217,
+  "target_date": "2023-10-31",
+  "total_m3": 16.899,
+  "total_backwards_m3": 0,
+  "meter_datetime": "2023-11-22 16:13",
+  "status": "OK",
+  "timestamp": "2026-10-14T15:50:55Z",
+  "details": {
+    "fields": {
+      "battery_y": {
+        "quantity": "Time",
+        "unit": "y",
+        "change": "Increasing",
+        "info": ""
+      },
+      "target_m3": {
+        "quantity": "Volume",
+        "unit": "m3",
+        "change": "Increasing",
+        "info": "The {water} volume recorded at the last billing date."
+      },
+      "target_date": {
+        "quantity": "PointInTime",
+        "unit": "date",
+        "change": "Sample",
+        "info": "The target date. Usually the end of the previous billing period."
+      },
+      "total_m3": {
+        "quantity": "Volume",
+        "unit": "m3",
+        "change": "Increasing",
+        "info": "The total {media} volume recorded."
+      },
+      "total_backwards_m3": {
+        "quantity": "Volume",
+        "unit": "m3",
+        "change": "Increasing",
+        "info": ""
+      },
+      "meter_datetime": {
+        "quantity": "Text",
+        "info": "Date and time when the meter sent the telegram."
+      },
+      "status": {
+        "quantity": "Flags",
+        "info": "status_and_error_flags",
+        "flags": [
+          "ALARM",
+          "BURST",
+          "BUSY",
+          "ERROR",
+          "LEAK",
+          "LOW_BATTERY",
+          "NO_FLOW",
+          "OVERFLOW",
+          "PERMANENT_ERROR",
+          "POWER_LOW",
+          "REVERSE",
+          "TAMPER",
+          "TEMPORARY_ERROR"
+        ]
+      }
+    },
+    "mvt": "IMT,01,07",
+    "info": "Water meter",
+    "flags": {
+      "ALARM": "Abnormal condition/alarm. (tpl sts)",
+      "BURST": "A pipe burst has been detected.",
+      "BUSY": "Meter busy. (tpl sts)",
+      "ERROR": "Meter error; details via error reporting. (tpl sts)",
+      "LEAK": "A leak has been detected.",
+      "LOW_BATTERY": "The battery is low.",
+      "NO_FLOW": "There is no flow of water.",
+      "OVERFLOW": "The flow is above the maximum flow rate of the meter.",
+      "PERMANENT_ERROR": "Permanent meter error. (tpl sts)",
+      "POWER_LOW": "Power low. (tpl sts)",
+      "REVERSE": "The water flows through the meter in the wrong direction.",
+      "TAMPER": "Tampering with the meter has been detected.",
+      "TEMPORARY_ERROR": "Temporary meter error. (tpl sts)"
+    }
+  }
+}
