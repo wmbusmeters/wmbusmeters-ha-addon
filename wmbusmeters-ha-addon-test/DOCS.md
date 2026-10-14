@@ -58,7 +58,20 @@ By default it is not enabled and leverages the _Moquitto broker_ addon details p
 
 ## Home Assistant integration
 
-Finally, you need to tell Home Assistant how to extract the readings from the MQTT. You can add the following sensor definition into your `mqtt:` section of `configuration.yaml`.
+### MQTT discovery
+
+With "Enable mqtt discovery" turned on, the add-on creates the Home Assistant entities itself. When the first telegram of a meter arrives after the add-on starts, the discovery is generated from that telegram and the meter driver: one entity per field of the telegram, with the unit, device class and state class that the driver describes.
+
+- Status fields get a problem sensor, a text sensor with the status text, and one binary sensor per flag the driver knows. The flag sensors are disabled by default: enable the ones that matter to you. Their `info` attribute describes the flag.
+- Discovery that is no longer published for a meter, e.g. for a field that a driver renamed, is removed when the meter's discovery is sent.
+- A meter that uses a deprecated driver gets a "driver (deprecated, use ... before ...)" entity. Change `driver=` of the meter to the driver it names.
+- Entities of meters that you removed from the configuration are not removed automatically; delete them in Home Assistant.
+
+A status like `DRY ERROR_FLAGS_128` contains a bit that the driver does not describe yet (here bit value 128 of the `ERROR_FLAGS` lookup). If you know what it means for your meter, please tell the [wmbusmeters project](https://github.com/wmbusmeters/wmbusmeters/issues), so that the driver can describe it.
+
+### Manual configuration
+
+Without discovery, you need to tell Home Assistant how to extract the readings from the MQTT. You can add the following sensor definition into your `mqtt:` section of `configuration.yaml`.
 
 ```yaml
 mqtt:

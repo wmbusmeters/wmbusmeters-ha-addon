@@ -273,10 +273,10 @@ def test_test_version_step(tmp):
     )
 
 
-def test_test_breaking_notice(tmp):
+def test_test_breaking_notice(tmp, TEST=TEST, WF="build_ha_addon_test.yml"):
     """A pending BREAKING.md is applied once by the test version step: changelog entry,
     breaking_versions in config.json and NOTICE.md for the run.sh notification."""
-    wf = load_workflow("build_ha_addon_test.yml")
+    wf = load_workflow(WF)
     run_text = get_step(wf, "prepare", step_id="version")["run"]
     ws = sandbox(tmp, "test_breaking")
     notice = "Entity names changed, see the changelog."
@@ -350,10 +350,17 @@ def test_test_update_repo(tmp):
     )
     # The BREAKING.md consumed by the prepare job must also leave the repository,
     # otherwise every later build announces the same breaking change again.
+    for j, addon in ((job, TEST), (edge_job, EDGE)):
+        check_breaking_removal(tmp, j, addon)
+
+
+def check_breaking_removal(tmp, job, addon):
+    steps_of = lambda j: j.get("steps", [])
+    commit = next((s for s in steps_of(job) if str(s.get("uses", "")).startswith("EndBug/add-and-commit")), None)
     remove = next((s for s in steps_of(job) if "BREAKING.md" in s.get("run", "")), None)
     if not check(
-        remove is not None and steps_of(job).index(remove) < steps_of(job).index(commit),
-        "test update-repo removes the announced BREAKING.md before pushing",
+        remove is not None and commit is not None and steps_of(job).index(remove) < steps_of(job).index(commit),
+        f"{addon} update-repo removes the announced BREAKING.md before pushing",
     ):
         return
     cases = [
@@ -362,17 +369,17 @@ def test_test_update_repo(tmp):
         ("no BREAKING.md", "3.0.0.226", False, False),
     ]
     for label, notice_ver, has_breaking, kept in cases:
-        ws = Path(tmp) / f"update_repo_{label.replace(' ', '_')}" / TEST
+        ws = Path(tmp) / f"update_repo_{addon}_{label.replace(' ', '_')}" / addon
         ws.mkdir(parents=True)
         (ws / "NOTICE.md").write_text(f"{notice_ver}\nSome change.\n")
         if has_breaking:
             (ws / "BREAKING.md").write_text("Some change.\n")
         script = remove["run"].replace("${{ needs.prepare.outputs.version }}", "3.0.0.226")
         proc = subprocess.run(["bash", "-c", script], cwd=ws.parent, capture_output=True, text=True, timeout=30)
-        check(proc.returncode == 0, f"update-repo BREAKING.md step '{label}' exits 0 ({proc.stderr.strip()[:200]})")
+        check(proc.returncode == 0, f"{addon} update-repo BREAKING.md step '{label}' exits 0 ({proc.stderr.strip()[:200]})")
         check(
             (ws / "BREAKING.md").exists() == kept,
-            f"update-repo BREAKING.md step '{label}': BREAKING.md {'kept' if kept else 'removed or absent'}",
+            f"{addon} update-repo BREAKING.md step '{label}': BREAKING.md {'kept' if kept else 'removed or absent'}",
         )
 
 
@@ -459,7 +466,7 @@ def test_ci_runs_the_harness(tmp):
     check(found, "a workflow runs tests/test_workflows.py")
 
 
-def test_test_discovery_hook(tmp):
+def test_test_discovery_hook(tmp, TEST=TEST):
     """The test add-on generates discovery on the first telegram via the
     metershell hook. wmbusmeters only accepts the key "metershell"
     (src/config.cc), and the hook needs the xmq binary plus libxslt in
@@ -632,7 +639,7 @@ def test_data_path_migration(tmp):
                     )
 
 
-def test_test_conf_split(tmp):
+def test_test_conf_split(tmp, TEST=TEST):
     """run.sh splits a config value on ";" into several key= lines (several
     devices), but a ";" inside parentheses belongs to the value, e.g. the
     shell command in CMD(...), and the key ends at the first "="."""
@@ -671,7 +678,7 @@ def test_test_conf_split(tmp):
     check(got == expected, f"conf split keeps ';' inside CMD(...) and splits outside it (got {got!r})")
 
 
-def test_test_discovery_cleanup(tmp):
+def test_test_discovery_cleanup(tmp, TEST=TEST):
     """After publishing the discovery of a meter, send_meter_discovery.sh removes the
     retained discovery of the same meter that was not published now (renamed or
     dropped fields), and leaves other meters alone."""
@@ -770,6 +777,27 @@ def test_test_discovery_flag(tmp):
         )
 
 
+def test_edge_discovery_flag(tmp):
+    """Edge honours "Enable mqtt discovery" like [test], but keeps "false" as the default and
+    has no one-time switch: in edge "false" can be a real choice of the user."""
+    run_text = (ROOT / EDGE / "run.sh").read_text()
+    send_text = (ROOT / EDGE / "send_meter_discovery.sh").read_text()
+    flag_check = send_text.find(".enable_mqtt_discovery | tostring")
+    check(
+        0 < flag_check < send_text.find("PUB=/wmbusmeters/mosquitto_pub.sh"),
+        f"{EDGE}/send_meter_discovery.sh checks enable_mqtt_discovery before publishing",
+    )
+    check("discovery flag migration" not in run_text, f"{EDGE}/run.sh has no one-time discovery switch")
+    defaults = [
+        json.loads(m)
+        for m in re.findall(r"^    echo '(\{.*\})' \| jq \. > \$\{CONFIG_PATH\}$", run_text, re.M)
+    ]
+    check(
+        len(defaults) == 2 and all(c.get("enable_mqtt_discovery") == "false" for c in defaults),
+        f"{EDGE}/run.sh default configs keep MQTT discovery off",
+    )
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -789,6 +817,11 @@ def main():
         test_test_conf_split,
         test_test_discovery_cleanup,
         test_test_discovery_flag,
+        lambda tmp: test_test_breaking_notice(f"{tmp}/edge", EDGE, "build_ha_addon_edge.yml"),
+        lambda tmp: test_test_discovery_hook(f"{tmp}/edge", EDGE),
+        lambda tmp: test_test_conf_split(f"{tmp}/edge", EDGE),
+        lambda tmp: test_test_discovery_cleanup(f"{tmp}/edge", EDGE),
+        test_edge_discovery_flag,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:
