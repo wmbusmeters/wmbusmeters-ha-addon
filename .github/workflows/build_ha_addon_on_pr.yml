@@ -1,4 +1,4 @@
-name: Build HA addon edge on PR
+name: Build HA add-ons on push
 
 on:
   push:
@@ -7,88 +7,35 @@ on:
     paths-ignore:
       - 'wmbusmeters-ha-addon/**'
 
-concurrency:
-  group: ha-addon-build-edge
-  cancel-in-progress: true
-
 jobs:
-  prepare:
+  dispatch:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
         with:
-          token: '${{ secrets.HA_PAT }}'
+          fetch-depth: 0
 
-      - name: Update README and set version in config.json
-        id: version
+      - name: Did the [test] add-on change?
+        id: changed
         run: |
-          v=$(cat wmbusmeters-ha-addon-edge/config.json | grep version | cut -d\" -f4)
-          if [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            # dotted scheme (3.0.0.N, issue #2076): bump the build number
-            ver="${v%.*}.$((${v##*.} + 1))"
-          elif [[ $(cat wmbusmeters-ha-addon-edge/config.json | grep version | awk -F \- '{print NF-1}') == 1 ]]; then
-            ver="${v}-1"
-          else
-            fp=${v%-*}
-            lc=${v##*-}
-            nlc=$((++lc))
-            ver="$fp-$nlc"
+          if git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" | grep -q -e '^wmbusmeters-ha-addon-test/' -e '^.github/workflows/build_ha_addon_test.yml'; then
+            echo "test=true" >> $GITHUB_OUTPUT
           fi
-          echo "version=$ver" >> $GITHUB_OUTPUT
-          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$ver\"\,|g" wmbusmeters-ha-addon-edge/config.json
-          sed -i "1s|^|## $ver \n- Updated to version [$ver](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)\n|" wmbusmeters-ha-addon-edge/CHANGELOG.md
 
-      - uses: actions/upload-artifact@v7
+      # The builds run in the same workflows as for a wmbusmeters commit, so the version
+      # numbering and the BREAKING.md announcement are handled in one place.
+      - name: Build edge
+        uses: peter-evans/repository-dispatch@v4
         with:
-          name: ha-addon_artifact-${{ steps.version.outputs.version }}
-          path: ${{ github.workspace }}
-          retention-days: 1
+          token: ${{ secrets.HA_PAT }}
+          event-type: build_ha_edge
+          client-payload: '{"ver": ""}'
 
-  build:
-    needs: prepare
-    runs-on: ubuntu-latest
-    name: Build ${{ matrix.arch }} ${{ matrix.addon }} add-on
-    strategy:
-      matrix:
-        addon: ["wmbusmeters"]
-        arch: ["amd64", "aarch64"]
-    steps:
-      - uses: actions/download-artifact@v8
+      - name: Build test
+        if: steps.changed.outputs.test == 'true'
+        uses: peter-evans/repository-dispatch@v4
         with:
-          name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v4.5.2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PAT }}
-
-      - name: Build ${{ matrix.addon }} ${{ matrix.arch }} HA add-on
-        uses: home-assistant/builder@master
-        with:
-          args: |
-            --${{ matrix.arch }} \
-            --target wmbusmeters-ha-addon-edge \
-            --version ${{ needs.prepare.outputs.version }}
-
-  update-repo:
-    needs: [prepare, build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v7
-        with:
-          token: '${{ secrets.HA_PAT }}'
-
-      - uses: actions/download-artifact@v8
-        with:
-          name: ha-addon_artifact-${{ needs.prepare.outputs.version }}
-
-      - name: Push changed files back to repo
-        uses: EndBug/add-and-commit@v11
-        with:
-          default_author: github_actions
-          message: "Auto Push - update ha-addon config and changelog for ${{ needs.prepare.outputs.version }} - [no ci]"
+          token: ${{ secrets.HA_PAT }}
+          event-type: build_ha_test
+          client-payload: '{"ver": ""}'
