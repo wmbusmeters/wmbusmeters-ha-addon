@@ -40,8 +40,8 @@ RUN cmake -B build -G Ninja \
 WORKDIR /wmbusmeters
 RUN ./configure && make
 
-#WORKDIR /xmq
-#RUN ./configure && make VERBOSE= && make install
+WORKDIR /xmq
+RUN ./configure && make VERBOSE= && make install
 
 #WORKDIR /wmbusmeters/drivers
 #RUN make generate_ha_discovery
@@ -70,6 +70,7 @@ RUN apk add --no-cache \
     curl \
     libusb \
     libxml2 \
+    libxslt \
     netcat-openbsd \
     nginx \
     py3-pip \
@@ -85,14 +86,21 @@ COPY --from=build /librtlsdr/build/src/librtlsdr.so.* /usr/lib/
 COPY --from=build /librtlsdr/rtl-sdr.rules /usr/lib/udev/rules.d/rtl-sdr.rules
 COPY --from=build /librtlsdr/build/src/rtl_* /usr/bin/
 COPY --from=build /wmbusmeters/build/wmbusmeters /wmbusmeters/wmbusmeters
-#COPY --from=build /wmbusmeters/drivers/build/ha_mqtt_discovery/ /ha_mqtt_discovery/
 COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
 
-COPY mqtt_discovery/ /mqtt_discovery/
-COPY mqtt_discovery.sh /
-RUN chmod a+x /mqtt_discovery.sh
+# send_meter_discovery.sh renders the discovery json with an xmq transform.
+COPY --from=build /usr/local/bin/xmq /usr/local/bin/xmq
+
+# first-telegram discovery hook, invoked by wmbusmeters' metershell config
+COPY send_meter_discovery.sh /usr/bin/send_meter_discovery.sh
+# the transform is used to convert telegram_with_details + driver to discovery json.
+COPY to-ha-discovery.xslq /usr/bin/to-ha-discovery.xslq
+RUN chmod a+x /usr/bin/send_meter_discovery.sh
+
+# Breaking change notice of this version (empty when there is none), see run.sh.
+COPY NOTICE.md /NOTICE.md
 
 COPY run.sh /
 RUN chmod a+x /run.sh
