@@ -348,6 +348,32 @@ def test_test_update_repo(tmp):
         and (commit.get("with") or {}).get("message") == (edge_commit.get("with") or {}).get("message"),
         "test auto-push message matches the edge auto-push message",
     )
+    # The BREAKING.md consumed by the prepare job must also leave the repository,
+    # otherwise every later build announces the same breaking change again.
+    remove = next((s for s in steps_of(job) if "BREAKING.md" in s.get("run", "")), None)
+    if not check(
+        remove is not None and steps_of(job).index(remove) < steps_of(job).index(commit),
+        "test update-repo removes the announced BREAKING.md before pushing",
+    ):
+        return
+    cases = [
+        ("announced now", "3.0.0.226", True, False),
+        ("added after this build started", "3.0.0.222", True, True),
+        ("no BREAKING.md", "3.0.0.226", False, False),
+    ]
+    for label, notice_ver, has_breaking, kept in cases:
+        ws = Path(tmp) / f"update_repo_{label.replace(' ', '_')}" / TEST
+        ws.mkdir(parents=True)
+        (ws / "NOTICE.md").write_text(f"{notice_ver}\nSome change.\n")
+        if has_breaking:
+            (ws / "BREAKING.md").write_text("Some change.\n")
+        script = remove["run"].replace("${{ needs.prepare.outputs.version }}", "3.0.0.226")
+        proc = subprocess.run(["bash", "-c", script], cwd=ws.parent, capture_output=True, text=True, timeout=30)
+        check(proc.returncode == 0, f"update-repo BREAKING.md step '{label}' exits 0 ({proc.stderr.strip()[:200]})")
+        check(
+            (ws / "BREAKING.md").exists() == kept,
+            f"update-repo BREAKING.md step '{label}': BREAKING.md {'kept' if kept else 'removed or absent'}",
+        )
 
 
 def test_on_pr_increment(tmp):
