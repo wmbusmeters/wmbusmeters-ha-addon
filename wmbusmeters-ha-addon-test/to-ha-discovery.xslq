@@ -365,8 +365,10 @@ xsl:stylesheet(version                 = 1.0
                                     xsl:value-of(select = $meter_id)
                                 }
                             }
-                            manufacturer {
-                                xsl:value-of(select = $manufacturer)
+                            xsl:if(test = "$manufacturer != ''") {
+                                manufacturer {
+                                    xsl:value-of(select = $manufacturer)
+                                }
                             }
                             model {
                                 xsl:value-of(select = $model)
@@ -467,8 +469,10 @@ xsl:stylesheet(version                 = 1.0
                                         xsl:value-of(select = $meter_id)
                                     }
                                 }
-                                manufacturer {
-                                    xsl:value-of(select = $manufacturer)
+                                xsl:if(test = "$manufacturer != ''") {
+                                    manufacturer {
+                                        xsl:value-of(select = $manufacturer)
+                                    }
                                 }
                                 model {
                                     xsl:value-of(select = $model)
@@ -538,8 +542,10 @@ xsl:stylesheet(version                 = 1.0
                                         xsl:value-of(select = $meter_id)
                                     }
                                 }
-                                manufacturer {
-                                    xsl:value-of(select = $manufacturer)
+                                xsl:if(test = "$manufacturer != ''") {
+                                    manufacturer {
+                                        xsl:value-of(select = $manufacturer)
+                                    }
                                 }
                                 model {
                                     xsl:value-of(select = $model)
@@ -611,8 +617,10 @@ xsl:stylesheet(version                 = 1.0
                                 xsl:value-of(select = $meter_id)
                             }
                         }
-                        manufacturer {
-                            xsl:value-of(select = $manufacturer)
+                        xsl:if(test = "$manufacturer != ''") {
+                            manufacturer {
+                                xsl:value-of(select = $manufacturer)
+                            }
                         }
                         model {
                             xsl:value-of(select = $model)
@@ -649,8 +657,10 @@ xsl:stylesheet(version                 = 1.0
                                 xsl:value-of(select = $meter_id)
                             }
                         }
-                        manufacturer {
-                            xsl:value-of(select = $manufacturer)
+                        xsl:if(test = "$manufacturer != ''") {
+                            manufacturer {
+                                xsl:value-of(select = $manufacturer)
+                            }
                         }
                         model {
                             xsl:value-of(select = $model)
@@ -688,8 +698,10 @@ xsl:stylesheet(version                 = 1.0
                                     xsl:value-of(select = $meter_id)
                                 }
                             }
-                            manufacturer {
-                                xsl:value-of(select = $manufacturer)
+                            xsl:if(test = "$manufacturer != ''") {
+                                manufacturer {
+                                    xsl:value-of(select = $manufacturer)
+                                }
                             }
                             model {
                                 xsl:value-of(select = $model)
