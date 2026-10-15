@@ -6,6 +6,7 @@ on:
       - 'main'
     paths-ignore:
       - 'wmbusmeters-ha-addon/**'
+      - '.github/workflows/build_ha_addon_stable.yml'
 
 jobs:
   dispatch:

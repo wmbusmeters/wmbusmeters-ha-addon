@@ -18,15 +18,46 @@ jobs:
           token: '${{ secrets.HA_PAT }}'
 
       - name: Update README and set version in config.json
+        env:
+          VER: ${{ github.event.client_payload.ver }}
         run: |
-          rsync -a --delete wmbusmeters-ha-addon-edge/ wmbusmeters-ha-addon/ --exclude CHANGELOG.md
-          sed -i 's/\[edge\] //g; s/-edge//g' wmbusmeters-ha-addon/config.json
-          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"${{ github.event.client_payload.ver }}\"\,|g" wmbusmeters-ha-addon/config.json
-          sed -i "1s|^|## ${{ github.event.client_payload.ver }} \n- Updated to version [${{ github.event.client_payload.ver }}](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)\n|" wmbusmeters-ha-addon/CHANGELOG.md
+          S=wmbusmeters-ha-addon
+          # Stable is a copy of edge, but keeps its own changelog and breaking change
+          # announcements: its pending BREAKING.md, its NOTICE.md and its breaking_versions.
+          STABLE_BREAKING_VERSIONS=$(grep -m 1 '"breaking_versions"' $S/config.json || true)
+          rsync -a --delete wmbusmeters-ha-addon-edge/ $S/ --exclude CHANGELOG.md --exclude BREAKING.md --exclude NOTICE.md
+          sed -i 's/\[edge\] //g; s/-edge//g' $S/config.json
+          sed -i '/"breaking_versions"/d' $S/config.json
+          sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$VER\"\,|g" $S/config.json
+          if [ -n "$STABLE_BREAKING_VERSIONS" ]; then
+            sed -i "s|^\(\s\{4,\}\)\"version\": \"$VER\",|&\n$STABLE_BREAKING_VERSIONS|" $S/config.json
+          fi
+          sed -i "1s|^|## $VER \n- Updated to version [$VER](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)\n|" $S/CHANGELOG.md
+          # A pending BREAKING.md announces a breaking change with this version, as in the
+          # edge build: it is added to the changelog entry (HA shows it in the update dialog),
+          # the version goes into breaking_versions (HA then requires a manual update, even
+          # with auto-update on) and it becomes NOTICE.md, which the add-on shows once as a
+          # persistent notification after the update.
+          BREAKING=$S/BREAKING.md
+          if [ -s "$BREAKING" ]; then
+            CHANGELOG=$S/CHANGELOG.md
+            { head -n 2 "$CHANGELOG"; echo "- **Breaking change:**"; sed 's/^/  /' "$BREAKING"; tail -n +3 "$CHANGELOG"; } > "$CHANGELOG.new"
+            mv "$CHANGELOG.new" "$CHANGELOG"
+            CONFIG=$S/config.json
+            if grep -q '"breaking_versions"' "$CONFIG"; then
+              sed -i "s|\"breaking_versions\": \[|\"breaking_versions\": [\"$VER\", |" "$CONFIG"
+            else
+              sed -i "s|^\(\s\{4,\}\)\"version\": \"$VER\",|&\n\1\"breaking_versions\": [\"$VER\"],|" "$CONFIG"
+            fi
+            { echo "$VER"; cat "$BREAKING"; } > $S/NOTICE.md
+            rm "$BREAKING"
+          fi
+          # The Dockerfile copies NOTICE.md, empty when stable never had a breaking change.
+          touch $S/NOTICE.md
 
       - uses: actions/upload-artifact@v7
         with:
-          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          name: ha-addon_artifact-${{ github.run_id }}
           path: ${{ github.workspace }}
           retention-days: 1
 
@@ -41,7 +72,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v8
         with:
-          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          name: ha-addon_artifact-${{ github.run_id }}
 
       - name: Login to DockerHub
         uses: docker/login-action@v4.5.2
@@ -68,7 +99,16 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          name: ha-addon_artifact-${{ github.run_id }}
+
+      - name: Remove the BREAKING.md announced by this build
+        # download-artifact only adds and overwrites files: the BREAKING.md consumed by the
+        # prepare job would stay in the repository and be announced again by the next release.
+        run: |
+          S=wmbusmeters-ha-addon
+          if [ -f "$S/BREAKING.md" ] && [ "$(head -n 1 "$S/NOTICE.md" 2>/dev/null)" = "${{ github.event.client_payload.ver }}" ]; then
+            rm "$S/BREAKING.md"
+          fi
 
       - name: Wait before repository update
         run: sleep 120
