@@ -19,8 +19,9 @@ jobs:
 
       - name: Update README and set version in config.json
         env:
-          VER: ${{ github.event.client_payload.ver }}
+          RAW_VER: ${{ github.event.client_payload.ver }}
         run: |
+          VER="$RAW_VER"
           S=wmbusmeters-ha-addon
           # Stable is a copy of edge, but keeps its own changelog and breaking change
           # announcements: its pending BREAKING.md, its NOTICE.md and its breaking_versions.
