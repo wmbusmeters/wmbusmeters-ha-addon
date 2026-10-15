@@ -3,6 +3,13 @@ name: Build HA addon test
 on:
   repository_dispatch:
     types: [build_ha_test]
+  # "Run workflow" in the Actions tab rebuilds without a wmbusmeters commit.
+  workflow_dispatch:
+    inputs:
+      ver:
+        description: "Version, e.g. 3.0.0-230 (empty: the current one + 1)"
+        required: false
+        default: ""
 
 concurrency:
   group: ha-addon-build-test
@@ -22,12 +29,25 @@ jobs:
       - name: Update README and set version in config.json
         id: version
         env:
-          RAW_VER: ${{ github.event.client_payload.ver }}
+          RAW_VER: ${{ github.event.client_payload.ver || github.event.inputs.ver }}
         run: |
           # AwesomeVersion cannot order versions like "3.0.0-135" (issue #2076, numeric
           # prerelease identifiers); normalize to dotted "3.0.0.135", which orders
           # correctly and is greater than any installed "3.0.0-N" or "3.0.0-N-k".
           VER="$(echo "$RAW_VER" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)$/\1.\2/')"
+          # A version is never reused: a build without a version (a push to this repo or
+          # "Run workflow") or with a version that is not higher than the current one gets
+          # the current one + 1. Exact tags like 3.0.0-RC1 pass through.
+          CUR=$(grep -m 1 '"version"' wmbusmeters-ha-addon-test/config.json | cut -d '"' -f 4)
+          if [[ "$CUR" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            NEXT="${CUR%.*}.$((${CUR##*.} + 1))"
+            if [ -z "$VER" ] || { [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] && [ "$(printf '%s\n%s\n' "$VER" "$NEXT" | sort -V | tail -n 1)" = "$NEXT" ]; }; then
+              VER="$NEXT"
+            fi
+          elif [ -z "$VER" ]; then
+            # older version schemes, as the former push build did
+            if [[ "$CUR" == *-*-* ]]; then VER="${CUR%-*}-$((${CUR##*-} + 1))"; else VER="${CUR}-1"; fi
+          fi
           echo "version=$VER" >> $GITHUB_OUTPUT
           sed -i "s|\s\{4,\}\"version\".*|    \"version\": \"$VER\"\,|g" wmbusmeters-ha-addon-test/config.json
           sed -i "1s|^|## $VER \n- Updated to version [$VER](https://github.com/wmbusmeters/wmbusmeters/commits/master)\n|" wmbusmeters-ha-addon-test/CHANGELOG.md
@@ -53,7 +73,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          name: ha-addon_artifact-${{ github.run_id }}
           path: ${{ github.workspace }}
           retention-days: 1
 
@@ -68,7 +88,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v8
         with:
-          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          name: ha-addon_artifact-${{ github.run_id }}
 
       - name: Login to DockerHub
         uses: docker/login-action@v4.5.2
@@ -95,7 +115,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: ha-addon_artifact-${{ github.event.client_payload.ver }}
+          name: ha-addon_artifact-${{ github.run_id }}
 
       - name: Remove the BREAKING.md announced by this build
         # download-artifact only adds and overwrites files: the BREAKING.md consumed by the
@@ -110,5 +130,5 @@ jobs:
         uses: EndBug/add-and-commit@v11
         with:
           default_author: github_actions
-          message: "Auto Push - update ha-addon config and changelog for ${{ github.event.client_payload.ver }} - [no ci]"
+          message: "Auto Push - update ha-addon config and changelog for ${{ needs.prepare.outputs.version }} - [no ci]"
           pull: '--rebase --autostash'

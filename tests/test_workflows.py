@@ -196,10 +196,11 @@ def test_edge_version_step(tmp):
     if not check(step is not None, "edge workflow has an id: version step"):
         return
     check(
-        (step.get("env") or {}).get("RAW_VER") == "${{ github.event.client_payload.ver }}",
-        "edge version step reads RAW_VER from the client payload",
+        (step.get("env") or {}).get("RAW_VER") == "${{ github.event.client_payload.ver || github.event.inputs.ver }}",
+        "edge version step reads RAW_VER from the client payload or the Run workflow input",
     )
     ws = sandbox(tmp, "edge")
+    seed_version(ws / EDGE, "3.0.0.100")
     before = snapshot(ws, [STABLE, TEST])
     proc, outputs = run_shell(step["run"], ws, raw_ver="3.0.0-138")
     check(proc.returncode == 0, f"edge version step exits 0 ({proc.stderr.strip()[:200]})")
@@ -242,8 +243,8 @@ def test_test_version_step(tmp):
     if not check(step is not None, "test workflow has an id: version step"):
         return
     check(
-        (step.get("env") or {}).get("RAW_VER") == "${{ github.event.client_payload.ver }}",
-        "test version step reads RAW_VER from the client payload",
+        (step.get("env") or {}).get("RAW_VER") == "${{ github.event.client_payload.ver || github.event.inputs.ver }}",
+        "test version step reads RAW_VER from the client payload or the Run workflow input",
     )
     run_text = step["run"]
     check(
@@ -255,6 +256,7 @@ def test_test_version_step(tmp):
         "test version step no longer edits the edge add-on config (PR #92 regression)",
     )
     ws = sandbox(tmp, "test")
+    seed_version(ws / TEST, "3.0.0.100")
     before = snapshot(ws, [STABLE, EDGE])
     proc, outputs = run_shell(run_text, ws, raw_ver="3.0.0-138")
     check(proc.returncode == 0, f"test version step exits 0 ({proc.stderr.strip()[:200]})")
@@ -279,6 +281,7 @@ def test_test_breaking_notice(tmp, TEST=TEST, WF="build_ha_addon_test.yml"):
     wf = load_workflow(WF)
     run_text = get_step(wf, "prepare", step_id="version")["run"]
     ws = sandbox(tmp, "test_breaking")
+    seed_version(ws / TEST, "3.0.0.100")
     notice = "Entity names changed, see the changelog."
     # The real config.json may already list earlier breaking versions.
     earlier = json.loads((ws / TEST / "config.json").read_text()).get("breaking_versions", [])
@@ -383,29 +386,55 @@ def check_breaking_removal(tmp, job, addon):
         )
 
 
-def test_on_pr_increment(tmp):
+def test_push_dispatches_builds(tmp):
+    """A push to main dispatches the edge build, and the test build when the [test]
+    add-on changed, to the same workflows as a wmbusmeters commit (version numbering
+    and BREAKING.md in one place)."""
     wf = load_workflow("build_ha_addon_on_pr.yml")
-    step = get_step(wf, "prepare", step_id="version")
-    if not check(step is not None, "on_pr workflow has an id: version step"):
-        return
+    steps = [st for job in wf["jobs"].values() for st in job.get("steps", [])]
+    dispatch = {
+        (st.get("with") or {}).get("event-type"): st
+        for st in steps
+        if str(st.get("uses", "")).startswith("peter-evans/repository-dispatch")
+    }
+    check(set(dispatch) == {"build_ha_edge", "build_ha_test"}, f"push dispatches edge and test builds (got {sorted(dispatch)})")
+    check("if" not in dispatch.get("build_ha_edge", {}), "push always dispatches the edge build")
+    check("steps.changed.outputs.test" in str(dispatch.get("build_ha_test", {}).get("if", "")), "push dispatches the test build only when [test] changed")
+    check(
+        not any(str(st.get("uses", "")).startswith("home-assistant/builder") for st in steps),
+        "push workflow does not build an add-on itself",
+    )
+
+
+def test_version_never_reused(tmp):
+    """Without a version, or with one that is not higher than the current one, a build
+    gets the current one + 1; a higher version is used as is."""
     cases = [
-        ("3.0.0.135", "3.0.0.136"),
-        ("3.0.0-134-3", "3.0.0-134-4"),
-        ("3.0.0-134", "3.0.0-134-1"),
+        # current, requested, expected
+        ("3.0.0.229", "", "3.0.0.230"),
+        ("3.0.0.229", "3.0.0-229", "3.0.0.230"),
+        ("3.0.0.229", "3.0.0-150", "3.0.0.230"),
+        ("3.0.0.229", "3.0.0-231", "3.0.0.231"),
+        ("3.0.0.229", "3.0.0-RC1", "3.0.0-RC1"),
+        ("3.0.0-134-3", "", "3.0.0-134-4"),
+        ("3.0.0-134", "", "3.0.0-134-1"),
     ]
-    for seed, expected in cases:
-        ws = sandbox(tmp, f"onpr_{seed.replace('.', '_')}")
-        seed_version(ws / EDGE, seed)
-        proc, outputs = run_shell(step["run"], ws)
-        check(proc.returncode == 0, f"on_pr increment of {seed} exits 0")
-        check(
-            outputs.get("version") == expected,
-            f"on_pr increments {seed} to {expected} (got {outputs.get('version')!r})",
-        )
-        check(
-            config_version(ws, EDGE) == expected,
-            f"on_pr writes {expected} into the edge config",
-        )
+    for wf_name, addon in (("build_ha_addon_test.yml", TEST), ("build_ha_addon_edge.yml", EDGE)):
+        step = get_step(load_workflow(wf_name), "prepare", step_id="version")
+        if not check(step is not None, f"{wf_name} has an id: version step"):
+            continue
+        for cur, req, expected in cases:
+            ws = sandbox(tmp, f"ver_{addon}_{cur}_{req or 'none'}".replace(".", "_"))
+            seed_version(ws / addon, cur)
+            breaking = ws / addon / "BREAKING.md"
+            if breaking.exists():
+                breaking.unlink()
+            proc, outputs = run_shell(step["run"], ws, raw_ver=req)
+            check(proc.returncode == 0, f"{addon} version {cur} + {req!r} exits 0 ({proc.stderr.strip()[:200]})")
+            check(
+                outputs.get("version") == expected and config_version(ws, addon) == expected,
+                f"{addon}: current {cur}, requested {req!r} gives {expected} (got {outputs.get('version')!r})",
+            )
 
 
 def test_stable_version_step(tmp):
@@ -807,7 +836,8 @@ def main():
         test_test_version_step,
         test_test_breaking_notice,
         test_test_update_repo,
-        test_on_pr_increment,
+        test_push_dispatches_builds,
+        test_version_never_reused,
         test_stable_version_step,
         test_dockerhub_matrix,
         test_lint_path,
