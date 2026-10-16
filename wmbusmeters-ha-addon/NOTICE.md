@@ -1,3 +1,4 @@
+3.1.0
 **MQTT discovery is now generated from the meter data** instead of fixed files for a few drivers. It works for every driver and creates more entities, with units and classes from the driver.
 
 - The discovery of a meter is sent when its first telegram arrives after the add-on starts, no longer at start for all configured meters. "Enable mqtt discovery" still turns it on or off.

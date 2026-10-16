@@ -1,6 +1,7 @@
 {
     "name": "Wmbusmeters (W-MBus to MQTT)",
-    "version": "3.0.0-RC1",
+    "version": "3.1.0",
+    "breaking_versions": ["3.1.0"],
     "slug": "wmbusmeters-ha-addon",
     "description": "Acquire utility meter readings using the wireless mbus protocol (WMBUS)",
     "arch": ["aarch64", "amd64"],
@@ -9,6 +10,7 @@
     "panel_icon": "mdi:home-automation",
     "init" : false,
     "ingress": true,
+    "homeassistant_api": true,
     "devices": ["/dev/ttyUSB0", "/dev/ttyAMA0", "/dev/ttyACM0" ],
     "usb": true,
     "uart": true,
