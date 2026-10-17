@@ -749,81 +749,254 @@ def test_test_discovery_cleanup(tmp, TEST=TEST):
     )
 
 
-def test_test_discovery_flag(tmp):
-    """[test] honours "Enable mqtt discovery": send_meter_discovery.sh checks it before
-    publishing, new configs default to true, and existing configs (which got discovery
-    regardless of the old default "false") are switched to true once."""
-    run_text = (ROOT / TEST / "run.sh").read_text()
-    send_text = (ROOT / TEST / "send_meter_discovery.sh").read_text()
-    flag_check = send_text.find(".enable_mqtt_discovery | tostring")
-    check(
-        0 < flag_check < send_text.find("PUB=/wmbusmeters/mosquitto_pub.sh"),
-        f"{TEST}/send_meter_discovery.sh checks enable_mqtt_discovery before publishing",
-    )
-    defaults = [
-        json.loads(m)
-        for m in re.findall(r"^    echo '(\{.*\})' \| jq \. > \$\{CONFIG_PATH\}$", run_text, re.M)
-    ]
-    check(
-        len(defaults) == 2 and all(c.get("enable_mqtt_discovery") == "true" for c in defaults),
-        f"{TEST}/run.sh default configs enable MQTT discovery",
-    )
-    if not check(
-        run_text.count("# BEGIN discovery flag migration") == 1
-        and run_text.count("# END discovery flag migration") == 1,
-        f"{TEST}/run.sh marks the discovery flag migration block",
+def _mode_migration_block(run_text, addon):
+    """The real "MQTT discovery" mode migration block of run.sh, or None."""
+    if not (
+        run_text.count("# BEGIN mqtt discovery mode migration") == 1
+        and run_text.count("# END mqtt discovery mode migration") == 1
     ):
-        return
-    block = run_text.split("# BEGIN discovery flag migration", 1)[1].split(
-        "# END discovery flag migration", 1
+        check(False, f"{addon}/run.sh marks the mqtt discovery mode migration block")
+        return None
+    check(True, f"{addon}/run.sh marks the mqtt discovery mode migration block")
+    return run_text.split("# BEGIN mqtt discovery mode migration", 1)[1].split(
+        "# END mqtt discovery mode migration", 1
     )[0]
-    cases = [
-        ("old default", '"false"', False, True),
-        ("chosen false", "false", True, False),
-        ("already true", "true", False, True),
-    ]
-    for label, value, migrated, expected in cases:
-        ws = Path(tmp) / f"flag_{label.replace(' ', '_')}"
-        (ws / "data").mkdir(parents=True)
-        cfg = ws / "data" / "options_custom.json"
-        cfg.write_text('{"enable_mqtt_discovery": ' + value + ', "conf": {}}')
-        if migrated:
-            (ws / "data" / "discovery_flag_migrated").touch()
-        sim = (
-            'bashio::log.info() { echo "INFO: $*"; }\n'
-            f"CONFIG_PATH={cfg}\n" + block.replace("/data/", f"{ws}/data/")
-        )
-        proc = subprocess.run(["bash", "-c", sim], capture_output=True, text=True, timeout=30)
-        check(proc.returncode == 0, f"discovery flag sim '{label}' exits 0 ({proc.stderr.strip()[:200]})")
-        got = json.loads(cfg.read_text()).get("enable_mqtt_discovery")
-        check(
-            str(got).lower() == str(expected).lower(),
-            f"discovery flag sim '{label}': enable_mqtt_discovery becomes {expected} (got {got!r})",
-        )
-        check(
-            (ws / "data" / "discovery_flag_migrated").exists(),
-            f"discovery flag sim '{label}': the one-time switch is remembered",
-        )
 
 
-def test_edge_discovery_flag(tmp):
-    """Edge honours "Enable mqtt discovery" like [test], but keeps "false" as the default and
-    has no one-time switch: in edge "false" can be a real choice of the user."""
-    run_text = (ROOT / EDGE / "run.sh").read_text()
-    send_text = (ROOT / EDGE / "send_meter_discovery.sh").read_text()
-    flag_check = send_text.find(".enable_mqtt_discovery | tostring")
-    check(
-        0 < flag_check < send_text.find("PUB=/wmbusmeters/mosquitto_pub.sh"),
-        f"{EDGE}/send_meter_discovery.sh checks enable_mqtt_discovery before publishing",
+def _run_mode_migration(tmp, addon, run_text, label, config, expected_gone=("enable_mqtt_discovery",)):
+    """Run the mode migration of run.sh on a sandboxed options_custom.json."""
+    block = _mode_migration_block(run_text, addon)
+    if block is None:
+        return None
+    ws = Path(tmp) / f"mode_{addon.replace('wmbusmeters-ha-addon-', '')}_{label.replace(' ', '_')}"
+    (ws / "data").mkdir(parents=True)
+    cfg = ws / "data" / "options_custom.json"
+    cfg.write_text(json.dumps(config, indent=True) + "\n")
+    sim = (
+        'bashio::log.info() { echo "INFO: $*"; }\n'
+        f"CONFIG_PATH={cfg}\n"
+        + block.replace("/data/", f"{ws}/data/")
     )
-    check("discovery flag migration" not in run_text, f"{EDGE}/run.sh has no one-time discovery switch")
+    proc = subprocess.run(["bash", "-c", sim], capture_output=True, text=True, timeout=30)
+    check(
+        proc.returncode == 0,
+        f"{addon} mode sim '{label}' exits 0 ({proc.stderr.strip()[:200]})",
+    )
+    return json.loads(cfg.read_text())
+
+
+def _check_mode_wiring(addon, default_mode):
+    """Both discovery pipelines must honour the mode, and the manual one must
+    actually work at runtime: the script, its templates and the panel choice."""
+    send_text = (ROOT / addon / "send_meter_discovery.sh").read_text()
+    run_text = (ROOT / addon / "run.sh").read_text()
+
+    mode_check = send_text.find(".mqtt_discovery // empty")
+    check(
+        0 < mode_check < send_text.find("PUB=/wmbusmeters/mosquitto_pub.sh"),
+        f"{addon}/send_meter_discovery.sh checks the mqtt_discovery mode before publishing",
+    )
+    check(
+        '!= "auto"' in send_text[mode_check : mode_check + 200],
+        f"{addon}/send_meter_discovery.sh publishes the generated discovery in the auto mode only",
+    )
+    check(
+        ".enable_mqtt_discovery" not in send_text,
+        f"{addon}/send_meter_discovery.sh no longer reads the legacy flag",
+    )
+
     defaults = [
         json.loads(m)
         for m in re.findall(r"^    echo '(\{.*\})' \| jq \. > \$\{CONFIG_PATH\}$", run_text, re.M)
     ]
     check(
-        len(defaults) == 2 and all(c.get("enable_mqtt_discovery") == "false" for c in defaults),
-        f"{EDGE}/run.sh default configs keep MQTT discovery off",
+        len(defaults) == 2 and all(c.get("mqtt_discovery") == default_mode for c in defaults),
+        f"{addon}/run.sh default configs use mqtt_discovery={default_mode!r}",
+    )
+    check(
+        all("enable_mqtt_discovery" not in c for c in defaults),
+        f"{addon}/run.sh default configs have no legacy discovery flag",
+    )
+
+    manual_call = run_text.find("/mqtt_discovery.sh")
+    if check(manual_call > 0, f"{addon}/run.sh calls mqtt_discovery.sh (manual mode)"):
+        check(
+            '= "manual"' in run_text[max(0, manual_call - 300) : manual_call],
+            f"{addon}/run.sh calls mqtt_discovery.sh in the manual mode only",
+        )
+
+    script = (ROOT / addon / "mqtt_discovery.sh").read_text()
+    check(
+        '!= "manual"' in script and ".mqtt_discovery" in script,
+        f"{addon}/mqtt_discovery.sh publishes only in the manual mode",
+    )
+    check(
+        "cp -n /mqtt_discovery/*" in script,
+        f"{addon}/mqtt_discovery.sh never overwrites a template the user edited",
+    )
+
+    templates = sorted(p.name for p in (ROOT / addon / "mqtt_discovery").glob("*.json"))
+    check(
+        len(templates) > 30 and "hydrus.json" in templates,
+        f"{addon}/mqtt_discovery holds the templates of the pre-3.1 add-on (got {len(templates)})",
+    )
+    dockerfile = (ROOT / addon / "Dockerfile").read_text()
+    runtime = dockerfile.split("AS runtime", 1)[1]
+    check(
+        "COPY mqtt_discovery/ /mqtt_discovery/" in runtime and "COPY mqtt_discovery.sh /" in runtime,
+        f"{addon}/Dockerfile ships the manual pipeline",
+    )
+    docs = (ROOT / addon / "DOCS.md").read_text()
+    check(
+        all(word in docs for word in ("Disable", "Automatic", "Manual")),
+        f"{addon}/DOCS.md documents the three MQTT discovery modes",
+    )
+
+
+def test_test_discovery_mode(tmp):
+    """[test] honours the three-way "MQTT discovery" (disable/auto/manual):
+    the generated hook publishes in auto only, manual templates are published
+    by run.sh in manual only, and the old flag becomes a mode once."""
+    _check_mode_wiring(TEST, "auto")
+    run_text = (ROOT / TEST / "run.sh").read_text()
+
+    cases = [
+        # (label, config, expected mode)
+        ("old default false becomes auto",
+         {"enable_mqtt_discovery": "false", "conf": {}}, "auto"),
+        ("old true becomes auto",
+         {"enable_mqtt_discovery": True, "conf": {}}, "auto"),
+        ("new mode survives",
+         {"mqtt_discovery": "manual", "conf": {}}, "manual"),
+        ("new mode wins over the old flag",
+         {"mqtt_discovery": "disable", "enable_mqtt_discovery": True}, "disable"),
+    ]
+    for label, config, expected in cases:
+        opts = _run_mode_migration(tmp, TEST, run_text, label, config)
+        if opts is None:
+            return
+        check(
+            opts.get("mqtt_discovery") == expected,
+            f"{TEST} mode sim '{label}': mqtt_discovery becomes {expected!r} (got {opts.get('mqtt_discovery')!r})",
+        )
+        check(
+            "enable_mqtt_discovery" not in opts,
+            f"{TEST} mode sim '{label}': the legacy key is dropped",
+        )
+
+
+def test_edge_discovery_mode(tmp):
+    """Edge honours the three-way "MQTT discovery" like [test], but keeps the
+    generated discovery off unless the user asks for it (no one-time switch),
+    and translates the old boolean instead of forcing auto."""
+    _check_mode_wiring(EDGE, "disable")
+    run_text = (ROOT / EDGE / "run.sh").read_text()
+
+    cases = [
+        # (label, config, expected mode, old key dropped)
+        ("chosen false becomes disable",
+         {"enable_mqtt_discovery": "false", "conf": {}}, "disable", True),
+        ("true becomes auto",
+         {"enable_mqtt_discovery": "true", "conf": {}}, "auto", True),
+        ("legacy true becomes auto",
+         {"enable_mqtt_discovery": True, "conf": {}}, "auto", True),
+        ("new mode survives",
+         {"mqtt_discovery": "manual", "conf": {}}, "manual", False),
+        ("new mode wins over the old flag",
+         {"mqtt_discovery": "auto", "enable_mqtt_discovery": "false"}, "auto", True),
+        ("no discovery keys at all stays untouched",
+         {"conf": {}}, None, False),
+    ]
+    for label, config, expected, legacy_gone in cases:
+        opts = _run_mode_migration(tmp, EDGE, run_text, label, config)
+        if opts is None:
+            return
+        if expected is None:
+            check(
+                "mqtt_discovery" not in opts,
+                f"{EDGE} mode sim '{label}': no mode is invented for a config without any setting",
+            )
+        else:
+            check(
+                opts.get("mqtt_discovery") == expected,
+                f"{EDGE} mode sim '{label}': mqtt_discovery becomes {expected!r} (got {opts.get('mqtt_discovery')!r})",
+            )
+        if legacy_gone:
+            check(
+                "enable_mqtt_discovery" not in opts,
+                f"{EDGE} mode sim '{label}': the legacy key is dropped",
+            )
+
+
+def test_panel_dom_ids(tmp):
+    """The panel script must only look up elements the template provides: a
+    checkbox that was removed while main.js kept listening on it throws at load
+    time and takes the whole panel (including Save) down with it."""
+    for addon in (EDGE, TEST):
+        js = (ROOT / addon / "rootfs/flask/static/main.js").read_text()
+        html = (ROOT / addon / "rootfs/flask/templates/index.html").read_text()
+        html_ids = set(re.findall(r'id="([^"]+)"', html))
+        # created by renderMqtt()/renderSection() at runtime, not in the template
+        runtime_ids = {"mqtt_input"}
+        looked_up = set(re.findall(r"getElementById\('([^']+)'\)", js))
+        missing = sorted(looked_up - html_ids - runtime_ids)
+        check(
+            not missing,
+            f"{addon} main.js only looks up elements of index.html (missing: {missing})",
+        )
+        check(
+            "mqtt-status" not in js and "mqtt-status" not in html,
+            f"{addon} panel no longer references the removed discovery checkbox",
+        )
+        check(
+            js.count("{") == js.count("}"),
+            f"{addon} main.js has balanced braces",
+        )
+
+
+def test_channels_share_the_manual_pipeline(tmp):
+    """weetmuts asked for edge and test at the same time (#2138): the manual
+    pipeline and the panel must be the same in both channels, only the default
+    mode and the migration differ."""
+    for rel in ("mqtt_discovery.sh", "rootfs/flask/templates/index.html",
+                "rootfs/flask/static/main.js"):
+        edge = (ROOT / EDGE / rel).read_text()
+        test = (ROOT / TEST / rel).read_text()
+        check(
+            edge == test,
+            f"{rel} is identical in edge and test",
+        )
+    edge_templates = sorted(p.name for p in (ROOT / EDGE / "mqtt_discovery").glob("*.json"))
+    test_templates = sorted(p.name for p in (ROOT / TEST / "mqtt_discovery").glob("*.json"))
+    check(
+        edge_templates == test_templates and edge_templates,
+        f"edge and test ship the same {len(edge_templates)} discovery templates",
+    )
+    for addon in (EDGE, TEST):
+        html = (ROOT / addon / "rootfs/flask/templates/index.html").read_text()
+        check(
+            'id="mqtt-discovery"' in html and 'value="manual"' in html and "mqtt-status" not in html,
+            f"{addon} panel offers the three-way MQTT discovery option",
+        )
+        js = (ROOT / addon / "rootfs/flask/static/main.js").read_text()
+        check(
+            "'mqtt_discovery': mqtt_discovery" in js and "getElementById('mqtt-discovery')" in js,
+            f"{addon} panel saves the mqtt_discovery mode",
+        )
+
+
+def test_no_deprecated_bashio_names(tmp):
+    # bashio 0.18.0 renamed the addon.* namespace to app.*; the old names are
+    # deprecated aliases that log a warning on every call (issue #2131).
+    for addon in ADDONS:
+        for path in sorted((ROOT / addon).rglob("*.sh")):
+            check(
+                "bashio::addon." not in path.read_text(),
+                f"{addon}/{path.relative_to(ROOT / addon)} does not use the deprecated bashio::addon.* names",
+            )
+    check(
+        "bashio::app.ingress_entry" in (ROOT / TEST / "rootfs/etc/cont-init.d/nginx.sh").read_text(),
+        f"{TEST}/rootfs/etc/cont-init.d/nginx.sh uses bashio::app.ingress_entry",
     )
 
 
@@ -846,12 +1019,15 @@ def main():
         test_data_path_migration,
         test_test_conf_split,
         test_test_discovery_cleanup,
-        test_test_discovery_flag,
+        test_test_discovery_mode,
         lambda tmp: test_test_breaking_notice(f"{tmp}/edge", EDGE, "build_ha_addon_edge.yml"),
         lambda tmp: test_test_discovery_hook(f"{tmp}/edge", EDGE),
         lambda tmp: test_test_conf_split(f"{tmp}/edge", EDGE),
         lambda tmp: test_test_discovery_cleanup(f"{tmp}/edge", EDGE),
-        test_edge_discovery_flag,
+        test_edge_discovery_mode,
+        test_panel_dom_ids,
+        test_channels_share_the_manual_pipeline,
+        test_no_deprecated_bashio_names,
     ]
     with tempfile.TemporaryDirectory() as tmp:
         for test in tests:

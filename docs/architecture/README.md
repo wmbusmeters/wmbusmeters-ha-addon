@@ -9,4 +9,4 @@ stays the canonical source for installation and usage.
 |------|------|-------|-------------------|
 | Channel architecture | [channel-architecture.md](channel-architecture.md) | Three channels, workflows, publish targets, Docker Hub | 0002 |
 | Version lifecycle | [version-lifecycle.md](version-lifecycle.md) | Tag -> dispatch -> normalize -> auto-push -> HA ordering | 0003 |
-| Discovery pipeline | [discovery-pipeline.md](discovery-pipeline.md) | telegramdetails -> meter_shell -> xslq -> MQTT | 0004 |
+| Discovery pipeline | [discovery-pipeline.md](discovery-pipeline.md) | telegramdetails -> meter_shell -> xslq -> MQTT, three modes | 0004, 0006 |
