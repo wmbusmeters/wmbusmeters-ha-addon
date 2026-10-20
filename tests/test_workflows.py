@@ -668,6 +668,93 @@ def test_data_path_migration(tmp):
                     )
 
 
+def test_conf_path_migration(tmp):
+    """The homeassistant_config mapping also breaks paths in conf: a logfile or
+    meterfiles under /config cannot be written and wmbusmeters exits with
+    status 14 (wmbusmeters#2140). run.sh must migrate every conf value under
+    /config to /homeassistant when it is mounted, create the directories,
+    back up options_custom.json and log each key; other values stay."""
+    for addon in ADDONS:
+        run_text = (ROOT / addon / "run.sh").read_text()
+        if not check(
+            run_text.count("# BEGIN conf path migration") == 1
+            and run_text.count("# END conf path migration") == 1,
+            f"{addon}/run.sh marks the conf path migration block",
+        ):
+            continue
+        check(
+            run_text.index("# END conf path migration") < run_text.index("CONFIG_CONF=$(bashio::jq"),
+            f"{addon}/run.sh migrates the conf paths before reading conf",
+        )
+        block = run_text.split("# BEGIN conf path migration", 1)[1].split(
+            "# END conf path migration", 1
+        )[0]
+        cases = [
+            ("mounted", True),
+            ("not mounted", False),
+            ("nothing to migrate", True),
+        ]
+        for label, mounted in cases:
+            ws = Path(tmp) / f"confmig_{addon}_{label.replace(' ', '_')}"
+            ws.mkdir(parents=True)
+            old, new = f"{ws}/config/", f"{ws}/homeassistant/"
+            sim_block = block.replace(
+                'CONF_OLD_PREFIX="/config/"', f'CONF_OLD_PREFIX="{old}"'
+            ).replace('CONF_NEW_PREFIX="/homeassistant/"', f'CONF_NEW_PREFIX="{new}"')
+            conf = {
+                "logfile": "/dev/stdout" if label == "nothing to migrate" else old + "wmbusmeters/logs/logfile.txt",
+                "meterfiles": "/data/readings" if label == "nothing to migrate" else old + "wmbusmeters/logs/meter_readings",
+                "shell": '/wmbusmeters/mosquitto_pub.sh "wmbusmeters/$METER_NAME" "$METER_JSON"',
+                "loglevel": "normal",
+            }
+            (ws / "options_custom.json").write_text(
+                json.dumps({"data_path": "/data/x", "conf": conf, "meters": [], "mqtt": {}})
+            )
+            sim = (
+                "config_dir_mounted() { [ -n \"$HA_MOUNTED\" ]; }\n"
+                'bashio::log.info() { echo "INFO: $*"; }\n'
+                'bashio::log.warning() { echo "WARNING: $*"; }\n'
+                f"HA_MOUNTED={'1' if mounted else ''}\nCONFIG_PATH={ws}/options_custom.json\n"
+                f"{sim_block}\n"
+            )
+            proc = subprocess.run(["bash", "-c", sim], capture_output=True, text=True, timeout=30)
+            check(
+                proc.returncode == 0,
+                f"{addon} conf migration sim '{label}' exits 0 ({proc.stderr.strip()[:200]})",
+            )
+            got = json.loads((ws / "options_custom.json").read_text())["conf"]
+            backup = ws / "options_custom.json.conf_paths.bak"
+            if label == "mounted":
+                check(
+                    got["logfile"] == new + "wmbusmeters/logs/logfile.txt"
+                    and got["meterfiles"] == new + "wmbusmeters/logs/meter_readings",
+                    f"{addon} conf sim '{label}': logfile and meterfiles move to /homeassistant (got {got['logfile']!r}, {got['meterfiles']!r})",
+                )
+                check(
+                    got["shell"] == conf["shell"] and got["loglevel"] == "normal",
+                    f"{addon} conf sim '{label}': other conf values are untouched",
+                )
+                check(
+                    (ws / "homeassistant/wmbusmeters/logs/meter_readings").is_dir(),
+                    f"{addon} conf sim '{label}': the meterfiles directory is created",
+                )
+                check(
+                    backup.exists() and old in backup.read_text(),
+                    f"{addon} conf sim '{label}': backup of the original options exists",
+                )
+                check(
+                    proc.stdout.count("Migrated ") == 2,
+                    f"{addon} conf sim '{label}': each migrated key is logged",
+                )
+            else:
+                check(got == conf, f"{addon} conf sim '{label}': conf is unchanged")
+                check(not backup.exists(), f"{addon} conf sim '{label}': no backup without a migration")
+                check(
+                    ("WARNING" in proc.stdout) == (label == "not mounted"),
+                    f"{addon} conf sim '{label}': a warning only when /config paths stay",
+                )
+
+
 def test_test_conf_split(tmp, TEST=TEST):
     """run.sh splits a config value on ";" into several key= lines (several
     devices), but a ";" inside parentheses belongs to the value, e.g. the
@@ -844,6 +931,7 @@ def main():
         test_ci_runs_the_harness,
         test_test_discovery_hook,
         test_data_path_migration,
+        test_conf_path_migration,
         test_test_conf_split,
         test_test_discovery_cleanup,
         test_test_discovery_flag,

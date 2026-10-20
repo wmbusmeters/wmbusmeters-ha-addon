@@ -112,6 +112,39 @@ case "${CONFIG_DATA_PATH}" in
         ;;
 esac
 # END data_path migration
+# The same mapping change applies to the paths in conf: a logfile or meterfiles
+# under /config cannot be written and wmbusmeters exits with status 14
+# (wmbusmeters#2140). Migrate every conf value that is a path under /config to
+# /homeassistant, the same host directory, with a backup and a log line per key.
+# BEGIN conf path migration
+CONF_OLD_PREFIX="/config/"
+CONF_NEW_PREFIX="/homeassistant/"
+CONF_OLD_PATHS=$(jq -r --arg old "${CONF_OLD_PREFIX}" '(.conf // {}) | to_entries[] | select((.value | type) == "string" and (.value | startswith($old))) | "\(.key)=\(.value)"' ${CONFIG_PATH})
+if [ -n "${CONF_OLD_PATHS}" ]; then
+    if config_dir_mounted; then
+        cp -p ${CONFIG_PATH} ${CONFIG_PATH}.conf_paths.bak
+        tmp_cfg=$(mktemp)
+        if jq --arg old "${CONF_OLD_PREFIX}" --arg new "${CONF_NEW_PREFIX}" '.conf |= with_entries(if (.value | type) == "string" and (.value | startswith($old)) then .value = $new + (.value | ltrimstr($old)) else . end)' ${CONFIG_PATH} > ${tmp_cfg}; then
+            mv ${tmp_cfg} ${CONFIG_PATH}
+            while IFS='=' read -r conf_key conf_old; do
+                conf_new="${CONF_NEW_PREFIX}${conf_old#"${CONF_OLD_PREFIX}"}"
+                # wmbusmeters does not create the directories itself.
+                case "${conf_key}" in
+                    meterfiles) mkdir -p "${conf_new}" ;;
+                    logfile) mkdir -p "$(dirname "${conf_new}")" ;;
+                esac
+                bashio::log.info "Migrated ${conf_key} from ${conf_old} to ${conf_new} (the same host directory as before the homeassistant_config mapping)."
+            done <<< "${CONF_OLD_PATHS}"
+            bashio::log.info "Backup of the configuration before the conf path migration: ${CONFIG_PATH}.conf_paths.bak"
+        else
+            rm -f ${tmp_cfg}
+            bashio::log.warning "Could not rewrite the /config paths in conf of ${CONFIG_PATH}, keeping them ..."
+        fi
+    else
+        bashio::log.warning "conf has paths under /config, which refer to the pre-homeassistant_config mapping, but /homeassistant is not mounted - keeping them. Change them to /homeassistant/... in the add-on configuration."
+    fi
+fi
+# END conf path migration
 CONFIG_CONF=$(bashio::jq "${CONFIG_PATH}" '.conf')
 CONFIG_METERS=$(bashio::jq "${CONFIG_PATH}" '.meters')
 
