@@ -1,3 +1,5 @@
+## 3.1.0.45 
+- Updated to version [3.1.0.45](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.1.0.43 
 - Updated to version [3.1.0.43](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.1.0.40 
