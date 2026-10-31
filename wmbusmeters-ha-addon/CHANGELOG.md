@@ -1,3 +1,5 @@
+## 3.1.1 
+- Updated to version [3.1.1](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)
 ## 3.1.0 
 - Updated to version [3.1.0](https://github.com/wmbusmeters/wmbusmeters/blob/master/CHANGES)
 - **Breaking change:**
