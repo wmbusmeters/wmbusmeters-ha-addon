@@ -60,7 +60,19 @@ By default it is not enabled and leverages the _Moquitto broker_ addon details p
 
 ### MQTT discovery
 
-With "Enable mqtt discovery" turned on, the add-on creates the Home Assistant entities itself. When the first telegram of a meter arrives after the add-on starts, the discovery is generated from that telegram and the meter driver: one entity per field of the telegram, with the unit, device class and state class that the driver describes.
+"MQTT discovery" has three settings:
+
+- **Disable**: no Home Assistant entities are created or updated; the meter data is still published to MQTT. Configure the entities yourself (see _Manual configuration_ below).
+- **Automatic**: the add-on creates the Home Assistant entities itself. When the first telegram of a meter arrives after the add-on starts, the discovery is generated from that telegram and the meter driver: one entity per field of the telegram, with the unit, device class and state class that the driver describes. This is the behaviour of 3.1 and later. The `[test]` add-on is delivered with this setting, the `[edge]` and stable add-ons with _Disable_: turning it on there is your choice.
+- **Manual**: the add-on publishes the discovery payloads from the templates in `<data path>/etc/mqtt_discovery/<driver>.json`, one file per driver, like the add-on did before 3.1. This is for entities that the generated discovery does not describe the way you need them, e.g. a flow sensor that needs `force_update: true` so that every telegram, including a repeated `0`, reaches Home Assistant (#2138).
+
+A configuration that was written before this option existed keeps its setting: the old "Enable mqtt discovery" (`true`/`false`) becomes _Automatic_/_Disable_ on the first start after the update.
+
+A meter whose driver has no template gets no discovery in the manual mode; the templates of the add-on are only a starting point. Existing templates are never overwritten: the add-on copies its own templates only when the file does not exist, so your edits survive an update. To go back to the bundled version of a template, delete the file in `<data path>/etc/mqtt_discovery` and restart the add-on.
+
+The manual mode removes the retained discovery topics of this broker that the templates do not publish, so entities of deleted templates or meters do not stay in Home Assistant forever.
+
+In the automatic mode:
 
 - Status fields get a problem sensor, a text sensor with the status text, and one binary sensor per flag the driver knows. The flag sensors are disabled by default: enable the ones that matter to you. Their `info` attribute describes the flag.
 - Discovery that is no longer published for a meter, e.g. for a field that a driver renamed, is removed when the meter's discovery is sent.

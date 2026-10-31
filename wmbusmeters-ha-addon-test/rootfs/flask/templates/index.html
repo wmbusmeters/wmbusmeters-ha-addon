@@ -49,14 +49,16 @@
           <button id="add-section" class="btn btn-outline-primary" type="button">Add New meter</button>
           <hr class="my-4">
           <h4 class="mb-3">MQTT section</h4>
-          <div class="input-group mb-3 mt-3">
-            <span class="input-group-text" id="basic">Enable mqtt discovery</span>
-            <div class="input-group-text">
-              <input class="form-check-input mt-0" type="checkbox" id="mqtt-status" name="mqtt-status" value="false">
-            </div>
+          <div class="input-group mb-3 mt-3" style="max-width: 28rem">
+            <span class="input-group-text" id="basic">MQTT discovery</span>
+            <select class="form-select" id="mqtt-discovery" name="mqtt-discovery">
+              <option value="disable">Disable</option>
+              <option value="auto">Automatic</option>
+              <option value="manual">Manual (templates in etc/mqtt_discovery)</option>
+            </select>
           </div>
-          <div class="input-group mb-3 mt-3">
-            <span class="input-group-text" id="basic">Custom MQTT configuration</span>
+          <div class="input-group mb-3 mt-3" style="max-width: 28rem">
+            <span class="input-group-text flex-grow-1" id="basic">Custom MQTT configuration</span>
             <div class="input-group-text">
               <input class="form-check-input mt-0" type="checkbox" id="mqtt-enabled" name="mqtt_enabled">
             </div>
