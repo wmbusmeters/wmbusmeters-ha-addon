@@ -1,3 +1,5 @@
+## 3.1.1.15 
+- Updated to version [3.1.1.15](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.1.1.12 
 - Updated to version [3.1.1.12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.1.1.11 
