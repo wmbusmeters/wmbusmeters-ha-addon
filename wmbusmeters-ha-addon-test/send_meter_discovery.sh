@@ -18,6 +18,13 @@ if [ -z "$METER_JSON" ]; then
     exit 0
 fi
 
+# AVAILABILITY_TOPIC is written here by run.sh. Sourcing is best-effort:
+# if the file is missing we simply skip the availability-topic injection
+# below and publish discovery as the upstream flow would.
+AVAILABILITY_ENV="/var/run/wmbusmeters/availability.env"
+# shellcheck disable=SC1090
+[ -f "$AVAILABILITY_ENV" ] && . "$AVAILABILITY_ENV"
+
 METER_DRIVER="${2:-}"
 if [ -z "$METER_DRIVER" ]; then
     exit 0
@@ -99,6 +106,18 @@ do
     payload="${payload//\{id\}/${ID}}"
     payload="${payload//\{driver\}/${DRIVER}}"
     payload="${payload//\{attribute\}/${attribute}}"
+
+    # Attach the shared availability topic so HA marks every entity
+    # unavailable in sync with wmbusmeters/bridge/state. See run.sh and
+    # /availability_filter.sh for how that topic's online/offline state
+    # is produced. Skip when AVAILABILITY_TOPIC is unset (standalone use).
+    # BEGIN availability injection
+    if [ -n "${AVAILABILITY_TOPIC:-}" ]; then
+        payload=$(printf '%s' "$payload" | jq -c \
+            --arg t "$AVAILABILITY_TOPIC" \
+            '. + {availability_topic: $t, payload_available: "online", payload_not_available: "offline"}')
+    fi
+    # END availability injection
 
     "$PUB" "$topic" "$payload"
     PUBLISHED="$PUBLISHED $topic"

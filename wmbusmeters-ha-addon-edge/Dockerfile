@@ -102,6 +102,10 @@ RUN chmod a+x /usr/bin/send_meter_discovery.sh
 # Breaking change notice of this version (empty when there is none), see run.sh.
 COPY NOTICE.md /NOTICE.md
 
+COPY availability.sh /
+COPY availability_filter.sh /
+RUN chmod a+x /availability.sh /availability_filter.sh
+
 COPY run.sh /
 RUN chmod a+x /run.sh
 
@@ -114,6 +118,8 @@ RUN chmod a+x \
     /etc/services.d/flask/finish \
     /etc/services.d/wmbusmeters/run \
     /etc/services.d/wmbusmeters/finish \
+    /etc/services.d/availability/run \
+    /etc/services.d/availability/finish \
     /etc/cont-init.d/nginx.sh
 
 ENTRYPOINT ["/init"]

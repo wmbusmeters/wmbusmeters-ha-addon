@@ -914,6 +914,155 @@ def test_edge_discovery_flag(tmp):
     )
 
 
+def test_test_availability_wiring(tmp, TEST=TEST):
+    """The availability feature wires three signals so HA marks entities unavailable
+    when the wmbus device is lost: run.sh pins the shared bridge topic and writes
+    the env file in both MQTT branches, send_meter_discovery.sh sources it, the
+    wmbusmeters finish hook publishes offline on exit, and a dedicated s6 service
+    holds a Last-Will connection to the broker."""
+    run_text = (ROOT / TEST / "run.sh").read_text()
+    check(
+        'AVAILABILITY_TOPIC="wmbusmeters/bridge/state"' in run_text,
+        f"{TEST}/run.sh pins the shared availability topic",
+    )
+    check(
+        run_text.count("# BEGIN availability env") == 1
+        and run_text.count("# END availability env") == 1,
+        f"{TEST}/run.sh marks the availability env block",
+    )
+    env_writes = run_text.count('cat > "$AVAILABILITY_ENV"')
+    check(
+        env_writes == 2,
+        f"{TEST}/run.sh writes the availability env file in both MQTT branches (got {env_writes})",
+    )
+    check(
+        '-t "${AVAILABILITY_TOPIC}" -m "offline"' in run_text,
+        f"{TEST}/run.sh publishes an initial offline to the availability topic",
+    )
+    check(
+        "| /availability_filter.sh" in run_text,
+        f"{TEST}/run.sh pipes wmbusmeters output through /availability_filter.sh",
+    )
+    send_text = (ROOT / TEST / "send_meter_discovery.sh").read_text()
+    check(
+        "/var/run/wmbusmeters/availability.env" in send_text,
+        f"{TEST}/send_meter_discovery.sh sources the availability env file",
+    )
+    finish_text = (
+        ROOT / TEST / "rootfs/etc/services.d/wmbusmeters/finish"
+    ).read_text()
+    check(
+        "publish_offline" in finish_text and "AVAILABILITY_TOPIC" in finish_text,
+        f"{TEST}/wmbusmeters/finish publishes offline on exit",
+    )
+    avail_sh = ROOT / TEST / "availability.sh"
+    avail_filter = ROOT / TEST / "availability_filter.sh"
+    check(avail_sh.exists(), f"{TEST} ships availability.sh (LWT holder)")
+    check(avail_filter.exists(), f"{TEST} ships availability_filter.sh (log filter)")
+    if avail_sh.exists():
+        avail_sh_text = avail_sh.read_text()
+        check(
+            "--will-topic" in avail_sh_text and "--will-payload" in avail_sh_text,
+            f"{TEST}/availability.sh arms MQTT Last Will",
+        )
+    if avail_filter.exists():
+        filter_text = avail_filter.read_text()
+        check(
+            '"Started config"' in filter_text
+            and '"No wmbus device detected"' in filter_text,
+            f"{TEST}/availability_filter.sh matches Started config / No wmbus device detected",
+        )
+    for name in ("run", "finish"):
+        p = ROOT / TEST / "rootfs/etc/services.d/availability" / name
+        check(p.exists(), f"{TEST} ships the availability s6 {name} script")
+    dockerfile = (ROOT / TEST / "Dockerfile").read_text()
+    runtime = dockerfile.split("AS runtime", 1)[1]
+    check(
+        "COPY availability.sh" in runtime
+        and "COPY availability_filter.sh" in runtime,
+        f"{TEST}/Dockerfile ships the availability scripts in the runtime image",
+    )
+    check(
+        "/etc/services.d/availability/run" in runtime
+        and "/etc/services.d/availability/finish" in runtime,
+        f"{TEST}/Dockerfile chmods the availability s6 service scripts",
+    )
+
+
+def test_test_availability_injection(tmp, TEST=TEST):
+    """send_meter_discovery.sh stamps availability_topic (plus payload_available /
+    payload_not_available) into every discovery payload when AVAILABILITY_TOPIC
+    is set, and leaves the payload untouched when it is not (standalone use)."""
+    send_text = (ROOT / TEST / "send_meter_discovery.sh").read_text()
+    if not check(
+        send_text.count("# BEGIN availability injection") == 1
+        and send_text.count("# END availability injection") == 1,
+        f"{TEST}/send_meter_discovery.sh marks the availability injection block",
+    ):
+        return
+    block = send_text.split("# BEGIN availability injection", 1)[1].split(
+        "# END availability injection", 1
+    )[0]
+    base_payload = '{"name":"total","unique_id":"wmbusmeters_x_total"}'
+
+    # Case 1: AVAILABILITY_TOPIC set -> three availability keys added.
+    sim_set = (
+        f"payload='{base_payload}'\n"
+        'AVAILABILITY_TOPIC="wmbusmeters/bridge/state"\n'
+        + block
+        + '\nprintf "%s" "$payload"\n'
+    )
+    proc = subprocess.run(
+        ["bash", "-c", sim_set], capture_output=True, text=True, timeout=30
+    )
+    if check(
+        proc.returncode == 0,
+        f"availability injection runs with AVAILABILITY_TOPIC set ({proc.stderr.strip()[:200]})",
+    ):
+        try:
+            got = json.loads(proc.stdout)
+        except Exception as exc:
+            check(False, f"availability-injection output is valid JSON ({exc})")
+        else:
+            check(
+                got.get("availability_topic") == "wmbusmeters/bridge/state",
+                f"availability-injection sets availability_topic (got {got.get('availability_topic')!r})",
+            )
+            check(
+                got.get("payload_available") == "online",
+                f"availability-injection sets payload_available (got {got.get('payload_available')!r})",
+            )
+            check(
+                got.get("payload_not_available") == "offline",
+                f"availability-injection sets payload_not_available (got {got.get('payload_not_available')!r})",
+            )
+            # The pre-existing keys survive.
+            check(
+                got.get("name") == "total"
+                and got.get("unique_id") == "wmbusmeters_x_total",
+                "availability-injection preserves the original payload keys",
+            )
+
+    # Case 2: AVAILABILITY_TOPIC unset -> payload unchanged.
+    sim_unset = (
+        f"payload='{base_payload}'\n"
+        "unset AVAILABILITY_TOPIC\n"
+        + block
+        + '\nprintf "%s" "$payload"\n'
+    )
+    proc = subprocess.run(
+        ["bash", "-c", sim_unset], capture_output=True, text=True, timeout=30
+    )
+    if check(
+        proc.returncode == 0,
+        f"availability injection runs with AVAILABILITY_TOPIC unset ({proc.stderr.strip()[:200]})",
+    ):
+        check(
+            proc.stdout == base_payload,
+            f"availability-injection is a no-op when AVAILABILITY_TOPIC is unset (got {proc.stdout!r})",
+        )
+
+
 def main():
     tests = [
         test_workflows_parse_and_wiring,
@@ -935,10 +1084,14 @@ def main():
         test_test_conf_split,
         test_test_discovery_cleanup,
         test_test_discovery_flag,
+        test_test_availability_wiring,
+        test_test_availability_injection,
         lambda tmp: test_test_breaking_notice(f"{tmp}/edge", EDGE, "build_ha_addon_edge.yml"),
         lambda tmp: test_test_discovery_hook(f"{tmp}/edge", EDGE),
         lambda tmp: test_test_conf_split(f"{tmp}/edge", EDGE),
         lambda tmp: test_test_discovery_cleanup(f"{tmp}/edge", EDGE),
+        lambda tmp: test_test_availability_wiring(f"{tmp}/edge", EDGE),
+        lambda tmp: test_test_availability_injection(f"{tmp}/edge", EDGE),
         test_edge_discovery_flag,
     ]
     with tempfile.TemporaryDirectory() as tmp:
