@@ -3,20 +3,134 @@
 CONFIG_PATH=/data/options_custom.json
 RESET_CONF=$(bashio::config 'reset_config')
 
+# A breaking change of this version (NOTICE.md, written by the build from BREAKING.md:
+# the version on the first line, the text below) is shown once as a persistent
+# notification in HA. Fresh installs have nothing to migrate, they only remember it.
+if [ -s /NOTICE.md ]; then
+    NOTICE_VERSION=$(head -n 1 /NOTICE.md)
+    if [ "$(cat /data/notice_shown 2>/dev/null)" != "${NOTICE_VERSION}" ]; then
+        if [ ! -f ${CONFIG_PATH} ]; then
+            echo "${NOTICE_VERSION}" > /data/notice_shown
+        elif curl -sf -X POST                 -H "Authorization: Bearer ${SUPERVISOR_TOKEN}"                 -H "Content-Type: application/json"                 -d "$(jq -n --arg title "Wmbusmeters ${NOTICE_VERSION}: breaking change"                             --arg message "$(tail -n +2 /NOTICE.md)"                             --arg id "wmbusmeters_breaking_${NOTICE_VERSION}"                             '{title: $title, message: $message, notification_id: $id}')"                 http://supervisor/core/api/services/persistent_notification/create > /dev/null; then
+            bashio::log.info "Breaking change notice for ${NOTICE_VERSION} shown in Home Assistant."
+            echo "${NOTICE_VERSION}" > /data/notice_shown
+        else
+            bashio::log.warning "Could not show the breaking change notice for ${NOTICE_VERSION}, will retry on next start."
+        fi
+    fi
+fi
+
 if [ ! -f ${CONFIG_PATH} ]
 then
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
 fi
+
+# Ensure metershell (first-telegram MQTT discovery) exists for pre-existing configs
+if [ -z "$(jq -r '.conf.metershell // empty' ${CONFIG_PATH} 2>/dev/null)" ]; then
+    bashio::log.info "Adding metershell to configuration ..."
+    tmp_cfg=$(mktemp)
+    jq 'del(.conf.meter_shell) | .conf.metershell = "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
+fi
+
+# wmbusmeters only accepts addtelegramdetails in the config file, rename the old telegramdetails key
+if [ "$(jq -r '.conf | has("telegramdetails")' ${CONFIG_PATH} 2>/dev/null)" = "true" ]; then
+    bashio::log.info "Renaming telegramdetails to addtelegramdetails in configuration ..."
+    tmp_cfg=$(mktemp)
+    jq '.conf.addtelegramdetails //= .conf.telegramdetails | del(.conf.telegramdetails)' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
+fi
+
+# MQTT discovery is now sent on demand. When the FIRST telegram from a
+# meter arrives then this happens:
+# wmbusmeters executes the "metershell" config setting which
+# is send_meter_discovery.sh "$METER_JSON" "$METER_DRIVER"
+# which takes as arguments:
+#   the firs telegram with telegram details added
+#   and the meter driver.
+# These are used to generate a discovery json which is sent to HA.
 
 if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
-    echo '{"data_path": "/config/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
     bashio::addon.option "reset_config" "no"
     bashio::addon.restart
 fi
 
 CONFIG_DATA_PATH=$(bashio::jq "${CONFIG_PATH}" '.data_path')
+
+# f21a2e3a replaced the config mapping with homeassistant_config, which mounts
+# the HA configuration at /homeassistant instead of /config. A data_path under
+# /config now points at an empty ephemeral directory, so migrate it to
+# /homeassistant - the same host directory as before. Check the mount, back up
+# the configuration, rescue files that still exist at the old location and log
+# every step.
+# BEGIN data_path migration
+config_dir_mounted() {
+    grep -q " /homeassistant " /proc/mounts
+}
+
+case "${CONFIG_DATA_PATH}" in
+    /config/*)
+        OLD_DATA_PATH="${CONFIG_DATA_PATH}"
+        NEW_DATA_PATH="/homeassistant${CONFIG_DATA_PATH#/config}"
+        if config_dir_mounted; then
+            mkdir -p "${NEW_DATA_PATH}"
+            if [ -d "${OLD_DATA_PATH}" ] && [ -n "$(ls -A "${OLD_DATA_PATH}" 2>/dev/null)" ]; then
+                if cp -a -n "${OLD_DATA_PATH}/." "${NEW_DATA_PATH}/"; then
+                    bashio::log.info "Copied files that still existed at ${OLD_DATA_PATH} to ${NEW_DATA_PATH} ..."
+                else
+                    bashio::log.warning "Could not copy all files from ${OLD_DATA_PATH} to ${NEW_DATA_PATH} ..."
+                fi
+            fi
+            cp -p ${CONFIG_PATH} ${CONFIG_PATH}.bak
+            tmp_cfg=$(mktemp)
+            if jq --arg p "${NEW_DATA_PATH}" '.data_path = $p' ${CONFIG_PATH} > ${tmp_cfg}; then
+                mv ${tmp_cfg} ${CONFIG_PATH}
+                CONFIG_DATA_PATH="${NEW_DATA_PATH}"
+                bashio::log.info "Migrated data_path from ${OLD_DATA_PATH} to ${NEW_DATA_PATH} (the same host directory as before the homeassistant_config mapping). Backup: ${CONFIG_PATH}.bak"
+            else
+                rm -f ${tmp_cfg}
+                bashio::log.warning "Could not rewrite data_path in ${CONFIG_PATH}, keeping ${OLD_DATA_PATH} ..."
+            fi
+        else
+            bashio::log.warning "data_path ${OLD_DATA_PATH} refers to the pre-homeassistant_config mapping, but /homeassistant is not mounted - keeping ${OLD_DATA_PATH}. Files there are lost when the add-on is updated. Set the config location to ${NEW_DATA_PATH} instead."
+        fi
+        ;;
+esac
+# END data_path migration
+# The same mapping change applies to the paths in conf: a logfile or meterfiles
+# under /config cannot be written and wmbusmeters exits with status 14
+# (wmbusmeters#2140). Migrate every conf value that is a path under /config to
+# /homeassistant, the same host directory, with a backup and a log line per key.
+# BEGIN conf path migration
+CONF_OLD_PREFIX="/config/"
+CONF_NEW_PREFIX="/homeassistant/"
+CONF_OLD_PATHS=$(jq -r --arg old "${CONF_OLD_PREFIX}" '(.conf // {}) | to_entries[] | select((.value | type) == "string" and (.value | startswith($old))) | "\(.key)=\(.value)"' ${CONFIG_PATH})
+if [ -n "${CONF_OLD_PATHS}" ]; then
+    if config_dir_mounted; then
+        cp -p ${CONFIG_PATH} ${CONFIG_PATH}.conf_paths.bak
+        tmp_cfg=$(mktemp)
+        if jq --arg old "${CONF_OLD_PREFIX}" --arg new "${CONF_NEW_PREFIX}" '.conf |= with_entries(if (.value | type) == "string" and (.value | startswith($old)) then .value = $new + (.value | ltrimstr($old)) else . end)' ${CONFIG_PATH} > ${tmp_cfg}; then
+            mv ${tmp_cfg} ${CONFIG_PATH}
+            while IFS='=' read -r conf_key conf_old; do
+                conf_new="${CONF_NEW_PREFIX}${conf_old#"${CONF_OLD_PREFIX}"}"
+                # wmbusmeters does not create the directories itself.
+                case "${conf_key}" in
+                    meterfiles) mkdir -p "${conf_new}" ;;
+                    logfile) mkdir -p "$(dirname "${conf_new}")" ;;
+                esac
+                bashio::log.info "Migrated ${conf_key} from ${conf_old} to ${conf_new} (the same host directory as before the homeassistant_config mapping)."
+            done <<< "${CONF_OLD_PATHS}"
+            bashio::log.info "Backup of the configuration before the conf path migration: ${CONFIG_PATH}.conf_paths.bak"
+        else
+            rm -f ${tmp_cfg}
+            bashio::log.warning "Could not rewrite the /config paths in conf of ${CONFIG_PATH}, keeping them ..."
+        fi
+    else
+        bashio::log.warning "conf has paths under /config, which refer to the pre-homeassistant_config mapping, but /homeassistant is not mounted - keeping them. Change them to /homeassistant/... in the add-on configuration."
+    fi
+fi
+# END conf path migration
 CONFIG_CONF=$(bashio::jq "${CONFIG_PATH}" '.conf')
 CONFIG_METERS=$(bashio::jq "${CONFIG_PATH}" '.meters')
 
@@ -46,27 +160,42 @@ fi
 
 echo -e "$CONFIG_CONF" | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > $CONFIG_DATA_PATH/etc/wmbusmeters.conf
 
-# read each line of config file
-while read -r line; do
-    # split the line into parameter and values
-    param="${line%=*}"
+# A value with ";" lists several values for the same key, e.g. device=auto:t1;rtlwmbus
+# becomes two device= lines. A ";" inside parentheses belongs to the value itself,
+# e.g. the shell command in CMD(...), and does not split it.
+# BEGIN conf split
+split_outside_parens() {
+    local s="$1" part="" depth=0 c i
+    for (( i=0; i<${#s}; i++ )); do
+        c="${s:i:1}"
+        case "$c" in
+            "(") depth=$((depth + 1)) ;;
+            ")") [ $depth -gt 0 ] && depth=$((depth - 1)) ;;
+        esac
+        if [ "$c" = ";" ] && [ $depth -eq 0 ]; then
+            printf '%s\n' "$part"
+            part=""
+        else
+            part+="$c"
+        fi
+    done
+    printf '%s\n' "$part"
+}
+
+while IFS= read -r line; do
+    # The key ends at the first "=", the value may contain "=" too.
+    key="${line%%=*}"
     values="${line#*=}"
-    # check if values contain the delimiter ";"
     if [[ "$values" == *";"* ]]; then
-        # split values into an array using ";" as the delimiter
-        IFS=";" read -ra arr <<< "$values"
-        # extract the first key from the parameter
-        first_key="${param%=*}"
-        # loop through the array and create separate key-value pairs
-        for value in "${arr[@]}"; do
-            echo "$first_key=$value"
+        split_outside_parens "$values" | while IFS= read -r value; do
+            echo "$key=$value"
         done
     else
-        # if values do not contain ";", print the original key-value pair
         echo "$line"
     fi
 done < $CONFIG_DATA_PATH/etc/wmbusmeters.conf > $CONFIG_DATA_PATH/etc/wmbusmeters.conf_tmp
 mv $CONFIG_DATA_PATH/etc/wmbusmeters.conf_tmp $CONFIG_DATA_PATH/etc/wmbusmeters.conf
+# END conf split
 
 bashio::log.info "Registering meters ..."
 rm -f $CONFIG_DATA_PATH/etc/wmbusmeters.d/*
@@ -118,8 +247,18 @@ MESSAGE=\$2
 /usr/bin/mosquitto_pub ${pub_args_quoted[@]} -r -t "\$TOPIC" -m "\$MESSAGE"
 EOL
 
-    # Running MQTT discovery
-    /mqtt_discovery.sh ${pub_args[@]} -c $CONFIG_PATH -w $CONFIG_DATA_PATH || true
+    # Used by send_meter_discovery.sh to remove discovery that is no longer published.
+    cat > /wmbusmeters/mosquitto_retained.sh << EOL
+#!/usr/bin/with-contenv bashio
+# list <filter>: print the topics of the retained messages matching the filter
+# clear <topic>: remove the retained message of the topic
+case "\$1" in
+    list)  /usr/bin/mosquitto_sub ${pub_args_quoted[@]} -t "\$2" --retained-only -F "%t" -W 2 ;;
+    clear) /usr/bin/mosquitto_pub ${pub_args_quoted[@]} -r -t "\$2" -n ;;
+esac
+EOL
+    chmod a+x /wmbusmeters/mosquitto_retained.sh
+
 fi
 
 chmod a+x /wmbusmeters/mosquitto_pub.sh
@@ -128,4 +267,4 @@ bashio::log.info "Running wmbusmeters ..."
 if pgrep wmbusmeters > /dev/null; then
     pkill wmbusmeters
 fi
-/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 
+/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH

@@ -1,12 +1,14 @@
 #!/usr/bin/env bashio
 # ==============================================================================
-# Take down the S6 supervision tree when service fails
+# The web configuration service is restarted by s6 when it stops. A failure of
+# the configuration UI must not take down wmbusmeters, so the add-on is not halted.
 # s6-overlay docs: https://github.com/just-containers/s6-overlay
 # ==============================================================================
 
 if [[ "$1" -ne 0 ]] && [[ "$1" -ne 256 ]]; then
-  bashio::log.warning "Halt add-on"
-  exec /run/s6/basedir/bin/halt
+  bashio::log.warning "Web configuration service exited with status $1, restarting it."
+  sleep 5
+  exit 0
 fi
 
 bashio::log.info "Service restart after closing"

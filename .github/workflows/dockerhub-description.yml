@@ -10,7 +10,7 @@ jobs:
   dockerHubDescription:
     strategy:
       matrix:
-        release: [wmbusmeters-ha-addon, wmbusmeters-ha-addon-edge]
+        release: [wmbusmeters-ha-addon, wmbusmeters-ha-addon-edge, wmbusmeters-ha-addon-test]
         arch: [amd64, aarch64]
     runs-on: ubuntu-latest
     steps:

@@ -1,5 +1,197 @@
-## 3.0.1
+## 3.1.2
 - Add MQTT availability so Home Assistant flags meter entities as unavailable when the wmbus device is lost. State is published to `wmbusmeters/bridge/state` (`online`/`offline`) and referenced by every auto-discovery entity; driven by wmbusmeters log output (`No wmbus device detected` → offline, `Started config` → online), MQTT Last Will, and the service exit hook.
+## 3.1.1.21 
+- Updated to version [3.1.1.21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.20 
+- Updated to version [3.1.1.20](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.19 
+- Updated to version [3.1.1.19](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.18 
+- Updated to version [3.1.1.18](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.17 
+- Updated to version [3.1.1.17](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.15 
+- Updated to version [3.1.1.15](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.12 
+- Updated to version [3.1.1.12](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.11 
+- Updated to version [3.1.1.11](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.1.4 
+- Updated to version [3.1.1.4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.46 
+- Updated to version [3.1.0.46](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.45 
+- Updated to version [3.1.0.45](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.43 
+- Updated to version [3.1.0.43](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.40 
+- Updated to version [3.1.0.40](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.39 
+- Updated to version [3.1.0.39](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.36 
+- Updated to version [3.1.0.36](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.35 
+- Updated to version [3.1.0.35](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.33 
+- Updated to version [3.1.0.33](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.32 
+- Updated to version [3.1.0.32](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.31 
+- Updated to version [3.1.0.31](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.25 
+- Updated to version [3.1.0.25](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.23 
+- Updated to version [3.1.0.23](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.21 
+- Updated to version [3.1.0.21](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.9 
+- Updated to version [3.1.0.9](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.4 
+- Updated to version [3.1.0.4](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.3 
+- Updated to version [3.1.0.3](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.1.0.1 
+- Updated to version [3.1.0.1](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.247 
+- Updated to version [3.0.0.247](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.245 
+- Updated to version [3.0.0.245](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.244 
+- Updated to version [3.0.0.244](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.241 
+- Updated to version [3.0.0.241](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.231 
+- Updated to version [3.0.0.231](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.230 
+- Updated to version [3.0.0.230](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+- **Breaking change:**
+  **MQTT discovery is now generated from the meter data** instead of fixed files for a few drivers. It works for every driver and creates more entities, with units and classes from the driver.
+  
+  - The discovery of a meter is sent when its first telegram arrives after the add-on starts, no longer at start for all configured meters. "Enable mqtt discovery" still turns it on or off.
+  - Entities of fields that keep their name keep their history.
+  - Some entities change: the flag sensors are now named in lower case (e.g. `status_low_battery_level` instead of `status_LOW_BATTERY_LEVEL`) and are disabled by default, so enable the ones you need again; a few fields were renamed in the drivers since the fixed files were written (e.g. amiplus `device_date_time` is now `device_datetime`). The old entities are removed when the meter's discovery is sent; update dashboards and automations that used them.
+  - Own discovery templates in `<data path>/etc/mqtt_discovery` are no longer used.
+  - Entities of meters removed from the configuration are no longer removed automatically; delete them in Home Assistant.
+  
+  See the add-on documentation, section "MQTT discovery".
+## 3.0.0.229 
+- Updated to version [3.0.0.229](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.228 
+- Updated to version [3.0.0.228](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.227 
+- Updated to version [3.0.0.227](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.223 
+- Updated to version [3.0.0.223](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.222 
+- Updated to version [3.0.0.222](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.218 
+- Updated to version [3.0.0.218](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.216 
+- Updated to version [3.0.0.216](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.213 
+- Updated to version [3.0.0.213](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.212 
+- Updated to version [3.0.0.212](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.204 
+- Updated to version [3.0.0.204](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.200 
+- Updated to version [3.0.0.200](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.197 
+- Updated to version [3.0.0.197](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.193 
+- Updated to version [3.0.0.193](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.192 
+- Updated to version [3.0.0.192](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.188 
+- Updated to version [3.0.0.188](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.182 
+- Updated to version [3.0.0.182](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.178 
+- Updated to version [3.0.0.178](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.178 
+- Updated to version [3.0.0.178](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.177 
+- Updated to version [3.0.0.177](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.174 
+- Updated to version [3.0.0.174](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.173 
+- Updated to version [3.0.0.173](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.172 
+- Updated to version [3.0.0.172](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.171 
+- Updated to version [3.0.0.171](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.167 
+- Updated to version [3.0.0.167](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.166 
+- Updated to version [3.0.0.166](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.152 
+- Updated to version [3.0.0.152](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.150 
+- Updated to version [3.0.0.150](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.148 
+- Updated to version [3.0.0.148](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.148 
+- Updated to version [3.0.0.148](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.147 
+- Updated to version [3.0.0.147](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.145 
+- Updated to version [3.0.0.145](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.144 
+- Updated to version [3.0.0.144](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.143 
+- Updated to version [3.0.0.143](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.141 
+- Updated to version [3.0.0.141](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.139 
+- Updated to version [3.0.0.139](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0.138 
+- Updated to version [3.0.0.138](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0.137 
+- Updated to version [3.0.0.137](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-134-3 
+- Updated to version [3.0.0-134-3](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0-134-2 
+- Updated to version [3.0.0-134-2](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0-134-1 
+- Updated to version [3.0.0-134-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0-134 
+- Updated to version [3.0.0-134](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-133 
+- Updated to version [3.0.0-133](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-131 
+- Updated to version [3.0.0-131](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-130-1 
+- Updated to version [3.0.0-130-1](https://github.com/wmbusmeters/wmbusmeters-ha-addon/commits/main)
+## 3.0.0-130 
+- Updated to version [3.0.0-130](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-126 
+- Updated to version [3.0.0-126](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-110 
+- Updated to version [3.0.0-110](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-106 
+- Updated to version [3.0.0-106](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-104 
+- Updated to version [3.0.0-104](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-101 
+- Updated to version [3.0.0-101](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-97 
+- Updated to version [3.0.0-97](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-95 
+- Updated to version [3.0.0-95](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-87 
+- Updated to version [3.0.0-87](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-85 
+- Updated to version [3.0.0-85](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-83 
+- Updated to version [3.0.0-83](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-82 
+- Updated to version [3.0.0-82](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-71 
+- Updated to version [3.0.0-71](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-64 
+- Updated to version [3.0.0-64](https://github.com/wmbusmeters/wmbusmeters/commits/master)
+## 3.0.0-54 
+- Updated to version [3.0.0-54](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.0.0-53 
 - Updated to version [3.0.0-53](https://github.com/wmbusmeters/wmbusmeters/commits/master)
 ## 3.0.0-52 

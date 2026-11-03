@@ -8,6 +8,8 @@ Edge - that will contain the latest changes from both wmbusmeters and add-on cha
 
 Stable - will contain wmbusmeters stable release combined with add-on changes on that time. 
 
+Test - that contains the same content as the edge channel but is built and published as a separate add-on (wmbusmeters-ha-addon-test), currently identical to edge.
+
 # Upgrade from older add-on versions
 
 1. Manualy backup existing configs and uninstall wmbusmeters addon
@@ -30,6 +32,13 @@ or to install manually simply add wmbusmeters Home Assistant Add-on repository:
 https://github.com/wmbusmeters/wmbusmeters-ha-addon
 ```
 Please refer to the wmbusmeters [documentation](https://github.com/wmbusmeters/wmbusmeters/blob/master/README.md) and add-on [documentation](https://github.com/wmbusmeters/wmbusmeters-ha-addon/blob/main/wmbusmeters-ha-addon-edge/DOCS.md) for detailed information on how to install and configure the Add-on.
+
+## Documentation
+
+Architecture decisions are recorded in
+[docs/adr/](docs/adr/0001-architecture-decision-records.md) and
+mermaid views of the add-on plumbing live in
+[docs/architecture/](docs/architecture/README.md).
 
 ## Issues
 Issues are being tracked centrally, so if you find any issues with the add-on, please check the [central issue tracker](https://github.com/wmbusmeters/wmbusmeters/issues) for similar issues and open new if needed. 

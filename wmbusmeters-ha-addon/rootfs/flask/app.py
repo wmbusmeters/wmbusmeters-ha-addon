@@ -1,4 +1,4 @@
-import json, requests, os, re, base64, zipfile, xmltodict, subprocess
+import json, requests, os, re, base64, zipfile, xmltodict, subprocess, time
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from waitress import serve
 from threading import Thread
@@ -16,13 +16,29 @@ SUPERVISOR_URL = os.environ.get("SUPERVISOR", "http://supervisor")
 SUPERVISOR_TOKEN = os.environ["SUPERVISOR_TOKEN"]
 
 def get_addon_slug() -> str:
-    r = requests.get(
-        f"{SUPERVISOR_URL}/addons/self/info",
-        headers={"Authorization": f"Bearer {SUPERVISOR_TOKEN}"},
-        timeout=5,
-    )
-    r.raise_for_status()
-    return r.json()["data"]["slug"]
+    # Right after an add-on update the Supervisor can be too busy to answer within
+    # a few seconds, so retry for up to two minutes instead of failing at once.
+    delay = 2
+    deadline = time.monotonic() + 120
+    while True:
+        try:
+            r = requests.get(
+                f"{SUPERVISOR_URL}/addons/self/info",
+                headers={"Authorization": f"Bearer {SUPERVISOR_TOKEN}"},
+                timeout=10,
+            )
+            r.raise_for_status()
+            return r.json()["data"]["slug"]
+        except requests.RequestException as e:
+            if time.monotonic() + delay > deadline:
+                # The slug is only used for the Logs link. The container hostname
+                # is the slug with "-" instead of the first "_".
+                slug = os.environ.get("HOSTNAME", "").replace("-", "_", 1)
+                print(f"Could not get the add-on slug from the Supervisor ({e}), using {slug!r}", flush=True)
+                return slug
+            print(f"Supervisor not answering yet ({e}), retrying in {delay} s", flush=True)
+            time.sleep(delay)
+            delay = min(delay * 2, 30)
 
 ADDON_SLUG = get_addon_slug()
 

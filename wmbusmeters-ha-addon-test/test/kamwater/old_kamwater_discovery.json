@@ -1,0 +1,241 @@
+{
+  "external_temperature_c": {
+    "component": "sensor",
+    "discovery_payload": {
+      "availability": {
+        "payload_available": "True",
+        "payload_not_available": "False",
+        "topic": "wmbusmeters/{name}",
+        "value_template": "{{ value_json.{attribute} != 127 }}"
+      },
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "temperature",
+      "enabled_by_default": false,
+      "icon": "mdi:thermometer",
+      "name": "ambient temperature",
+      "state_class": "measurement",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "°C",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "flow_temperature_c": {
+    "component": "sensor",
+    "discovery_payload": {
+      "availability": {
+        "payload_available": "True",
+        "payload_not_available": "False",
+        "topic": "wmbusmeters/{name}",
+        "value_template": "{{ value_json.{attribute} != 127 }}"
+      },
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "temperature",
+      "enabled_by_default": false,
+      "icon": "mdi:thermometer-water",
+      "name": "water temperature",
+      "state_class": "measurement",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "°C",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "max_flow_m3h": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "enabled_by_default": false,
+      "icon": "mdi:waves-arrow-right",
+      "name": "max flow",
+      "state_class": "measurement",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "m³/h",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "rssi_dbm": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "signal_strength",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "icon": "mdi:signal",
+      "name": "rssi",
+      "state_class": "measurement",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "dBm",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "status_burst": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "problem",
+      "enabled_by_default": true,
+      "name": "status burst",
+      "payload_off": "False",
+      "payload_on": "True",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "value_template": "{{ 'BURST' in value_json.current_status }}"
+    }
+  },
+  "status_dry": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "problem",
+      "enabled_by_default": true,
+      "name": "status dry",
+      "payload_off": "False",
+      "payload_on": "True",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "value_template": "{{ 'DRY' in value_json.current_status }}"
+    }
+  },
+  "status_leak": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "problem",
+      "enabled_by_default": true,
+      "name": "status leak",
+      "payload_off": "False",
+      "payload_on": "True",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "value_template": "{{ 'LEAK' in value_json.current_status }}"
+    }
+  },
+  "status_reversed": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "problem",
+      "enabled_by_default": true,
+      "name": "status reversed",
+      "payload_off": "False",
+      "payload_on": "True",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "value_template": "{{ 'REVERSED' in value_json.current_status }}"
+    }
+  },
+  "target_m3": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "water",
+      "enabled_by_default": true,
+      "icon": "mdi:gauge",
+      "name": "target",
+      "state_class": "total",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "m³",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "total_m3": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "hw_version": "{id}",
+        "identifiers": [
+          "wmbusmeters_{id}"
+        ],
+        "manufacturer": "Kamstrup",
+        "model": "{driver}",
+        "name": "{name}"
+      },
+      "device_class": "water",
+      "enabled_by_default": true,
+      "icon": "mdi:gauge",
+      "json_attributes_topic": "wmbusmeters/{name}",
+      "name": "total",
+      "state_class": "total",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "m³",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start wmbusmeters service
+# ==============================================================================
+
+bashio::log.info "Starting wmbusmeters service."
+exec /run.sh

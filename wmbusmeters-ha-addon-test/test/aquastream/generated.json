@@ -1,0 +1,534 @@
+{
+  "battery_y": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:battery-clock",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "battery",
+      "state_class": "total_increasing",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_battery_y",
+      "unit_of_measurement": "years",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
+    }
+  },
+  "meter_datetime": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "enabled_by_default": true,
+      "icon": "mdi:list-status",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "meter datetime",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_meter_datetime",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "rssi_dbm": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "{id}"
+      },
+      "device_class": "signal_strength",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "icon": "mdi:signal",
+      "name": "rssi",
+      "state_class": "measurement",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_{id}_{attribute}",
+      "unit_of_measurement": "dBm",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "status": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": true,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"status\": value_json.{attribute} if value_json.{attribute} is defined else this.attributes.get(\"status\")} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "status",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status",
+      "value_template": "{% if value_json.{attribute} is defined %}{{ \"OFF\" if value_json.{attribute} in [\"OK\", \"\"] else \"ON\" }}{% endif %}"
+    }
+  },
+  "status_alarm": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Abnormal condition/alarm. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "alarm",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_alarm",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"ALARM\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_burst": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"A pipe burst has been detected.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "burst",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_burst",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"BURST\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_busy": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Meter busy. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "busy",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_busy",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"BUSY\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_error": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Meter error; details via error reporting. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "error",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_error",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"ERROR\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_leak": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"A leak has been detected.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "leak",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_leak",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"LEAK\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_low_battery": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The battery is low.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "low battery",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_low_battery",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"LOW_BATTERY\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_no_flow": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"There is no flow of water.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "no flow",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_no_flow",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"NO_FLOW\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_overflow": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The flow is above the maximum flow rate of the meter.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "overflow",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_overflow",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"OVERFLOW\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_permanent_error": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Permanent meter error. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "permanent error",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_permanent_error",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"PERMANENT_ERROR\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_power_low": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Power low. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "power low",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_power_low",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"POWER_LOW\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_reverse": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"The water flows through the meter in the wrong direction.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "reverse",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_reverse",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"REVERSE\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_tamper": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Tampering with the meter has been detected.\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "tamper",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_tamper",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"TAMPER\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_temporary_error": {
+    "component": "binary_sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "problem",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "json_attributes_template": "{{ {\"info\": \"Temporary meter error. (tpl sts)\"} | tojson }}",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "temporary error",
+      "payload_off": "OFF",
+      "payload_on": "ON",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_temporary_error",
+      "value_template": "{% if value_json.status is defined %}{{ \"ON\" if \"TEMPORARY_ERROR\" in value_json.status.split() else \"OFF\" }}{% endif %}"
+    }
+  },
+  "status_text": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "enabled_by_default": true,
+      "entity_category": "diagnostic",
+      "icon": "mdi:list-status",
+      "name": "status text",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_status_text",
+      "value_template": "{{ value_json.status if value_json.status is defined else this.state }}"
+    }
+  },
+  "target_date": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "date",
+      "enabled_by_default": true,
+      "icon": "mdi:calendar",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "target date",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_target_date",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else this.state }}"
+    }
+  },
+  "target_m3": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "water",
+      "enabled_by_default": true,
+      "icon": "mdi:water",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "target",
+      "state_class": "total_increasing",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_target_m3",
+      "unit_of_measurement": "m³",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
+    }
+  },
+  "timestamp": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "timestamp",
+      "enabled_by_default": false,
+      "entity_category": "diagnostic",
+      "icon": "mdi:calendar-clock",
+      "name": "timestamp",
+      "state_topic": "wmbusmeters/{name}",
+      "unique_id": "wmbusmeters_05933237_timestamp",
+      "value_template": "{{ value_json.{attribute} }}"
+    }
+  },
+  "total_backwards_m3": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "water",
+      "enabled_by_default": true,
+      "icon": "mdi:water",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "total backwards",
+      "state_class": "total_increasing",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_total_backwards_m3",
+      "unit_of_measurement": "m³",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
+    }
+  },
+  "total_m3": {
+    "component": "sensor",
+    "discovery_payload": {
+      "device": {
+        "identifiers": [
+          "wmbusmeters_05933237"
+        ],
+        "model": "Water meter (IMT,01,07)",
+        "name": "AqWater",
+        "serial_number": "05933237"
+      },
+      "device_class": "water",
+      "enabled_by_default": true,
+      "icon": "mdi:water",
+      "json_attributes_topic": "wmbusmeters/AqWater",
+      "name": "total",
+      "state_class": "total_increasing",
+      "state_topic": "wmbusmeters/AqWater",
+      "unique_id": "wmbusmeters_05933237_total_m3",
+      "unit_of_measurement": "m³",
+      "value_template": "{{ value_json.{attribute} if value_json.{attribute} is defined else \"\" }}"
+    }
+  }
+}

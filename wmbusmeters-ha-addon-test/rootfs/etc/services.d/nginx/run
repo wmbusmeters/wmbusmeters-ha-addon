@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start NGINX service
+# ==============================================================================
+
+# Wait for backend to become available
+bashio::net.wait_for 5000 localhost 900
+
+bashio::log.info "Starting Nginx..."
+exec nginx

@@ -1,0 +1,30 @@
+{
+  "_": "telegram",
+  "media": "water",
+  "driver": "iperl",
+  "name": "MyMeter",
+  "id": "33225544",
+  "details": {
+    "max_flow_m3h": {
+      "quantity": "Flow",
+      "unit": "m3h",
+      "change": "Instant",
+      "info": "The maximum water flow recorded during previous period."
+    },
+    "total_m3": {
+      "quantity": "Volume",
+      "unit": "m3",
+      "change": "Increasing",
+      "info": "The total water consumption."
+    },
+    "status": {
+      "quantity": "Text",
+      "info": "Meter status including the tpl status."
+    }
+  },
+  "mvt": "SEN,68,07",
+  "max_flow_m3h": 0,
+  "total_m3": 123.529,
+  "status": "OK",
+  "timestamp": "2026-09-19T11:27:26Z"
+}
