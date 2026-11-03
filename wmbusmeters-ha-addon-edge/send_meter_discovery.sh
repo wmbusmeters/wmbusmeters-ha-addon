@@ -111,11 +111,13 @@ do
     # unavailable in sync with wmbusmeters/bridge/state. See run.sh and
     # /availability_filter.sh for how that topic's online/offline state
     # is produced. Skip when AVAILABILITY_TOPIC is unset (standalone use).
+    # BEGIN availability injection
     if [ -n "${AVAILABILITY_TOPIC:-}" ]; then
         payload=$(printf '%s' "$payload" | jq -c \
             --arg t "$AVAILABILITY_TOPIC" \
             '. + {availability_topic: $t, payload_available: "online", payload_not_available: "offline"}')
     fi
+    # END availability injection
 
     "$PUB" "$topic" "$payload"
     PUBLISHED="$PUBLISHED $topic"

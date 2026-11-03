@@ -3,6 +3,10 @@
 CONFIG_PATH=/data/options_custom.json
 RESET_CONF=$(bashio::config 'reset_config')
 
+AVAILABILITY_TOPIC="wmbusmeters/bridge/state"
+AVAILABILITY_ENV="/var/run/wmbusmeters/availability.env"
+mkdir -p "$(dirname "$AVAILABILITY_ENV")"
+
 # A breaking change of this version (NOTICE.md, written by the build from BREAKING.md:
 # the version on the first line, the text below) is shown once as a persistent
 # notification in HA. Fresh installs have nothing to migrate, they only remember it.
@@ -273,6 +277,26 @@ esac
 EOL
     chmod a+x /wmbusmeters/mosquitto_retained.sh
 
+    # BEGIN availability env
+    cat > "$AVAILABILITY_ENV" << EOL
+MQTT_HOST='${MQTT_HOST}'
+MQTT_PORT='${MQTT_PORT:-}'
+MQTT_USER='${MQTT_USER:-}'
+MQTT_PASSWORD='${MQTT_PASSWORD:-}'
+AVAILABILITY_TOPIC='${AVAILABILITY_TOPIC}'
+EOL
+    # END availability env
+
+    # Mark entities unavailable until wmbusmeters logs that the device is up.
+    # send_meter_discovery.sh will stamp the same availability_topic into every
+    # discovery payload it publishes, so entities bind to this state.
+    /usr/bin/mosquitto_pub ${pub_args[@]} -r -q 1 \
+        -t "${AVAILABILITY_TOPIC}" -m "offline" || true
+else
+    cat > "$AVAILABILITY_ENV" << EOL
+MQTT_HOST='none'
+AVAILABILITY_TOPIC='${AVAILABILITY_TOPIC}'
+EOL
 fi
 
 chmod a+x /wmbusmeters/mosquitto_pub.sh
@@ -281,4 +305,7 @@ bashio::log.info "Running wmbusmeters ..."
 if pgrep wmbusmeters > /dev/null; then
     pkill wmbusmeters
 fi
-/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH
+# Pipe through the availability filter so device-lost / device-found log
+# lines are translated into MQTT availability state.
+set -o pipefail
+/wmbusmeters/wmbusmeters --useconfig=$CONFIG_DATA_PATH 2>&1 | /availability_filter.sh

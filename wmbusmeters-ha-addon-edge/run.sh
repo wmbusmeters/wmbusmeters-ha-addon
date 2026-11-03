@@ -263,6 +263,7 @@ esac
 EOL
     chmod a+x /wmbusmeters/mosquitto_retained.sh
 
+    # BEGIN availability env
     cat > "$AVAILABILITY_ENV" << EOL
 MQTT_HOST='${MQTT_HOST}'
 MQTT_PORT='${MQTT_PORT:-}'
@@ -270,6 +271,7 @@ MQTT_USER='${MQTT_USER:-}'
 MQTT_PASSWORD='${MQTT_PASSWORD:-}'
 AVAILABILITY_TOPIC='${AVAILABILITY_TOPIC}'
 EOL
+    # END availability env
 
     # Mark entities unavailable until wmbusmeters logs that the device is up.
     # send_meter_discovery.sh will stamp the same availability_topic into every
