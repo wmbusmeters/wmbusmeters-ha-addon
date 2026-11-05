@@ -21,11 +21,14 @@ window.addEventListener('load', () => {
           case 'data_path':
             document.getElementById('file-path').value = dataForParse[key];
             break;
+          case 'mqtt_discovery':
+            document.getElementById('mqtt-discovery').value = dataForParse[key];
+            break;
+          // Configurations written before the mode became a choice: the panel
+          // shows them as auto/disable, run.sh rewrites them on the next start.
           case 'enable_mqtt_discovery':
-            if (dataForParse[key]) {
-              document.getElementById('mqtt-status').value = true;
-              document.getElementById('mqtt-status').checked = true;
-            }
+            document.getElementById('mqtt-discovery').value =
+              String(dataForParse[key]) === 'true' ? 'auto' : 'disable';
             break;
           case 'conf':
             //console.log(dataForParse);
@@ -96,17 +99,6 @@ window.addEventListener('load', () => {
       document.getElementById('mqtt').removeChild(input);
     }
   });
-
-  document.getElementById('mqtt-status').addEventListener('change', event => {
-    if (event.target.checked) {
-      document.getElementById('mqtt-status').value = true;
-      document.getElementById('mqtt-status').checked = true;
-    } else {
-      document.getElementById('mqtt-status').value = false;
-      document.getElementById('mqtt-status').checked = false;
-    }
-  });
-
 
   document.getElementById('add-pair').addEventListener('click', () => {
     renderJsonPair();
@@ -207,7 +199,7 @@ window.addEventListener('load', () => {
   document.getElementById('save-json').addEventListener('click', event => {
     event.preventDefault();
     const data_path = document.getElementById('file-path').value;
-    const mqtt_status = document.getElementById('mqtt-status').value === 'true';
+    const mqtt_discovery = document.getElementById('mqtt-discovery').value;
     const keys = document.querySelectorAll('.key');
     const values = document.querySelectorAll('.value');
     let confData = {};
@@ -242,7 +234,7 @@ window.addEventListener('load', () => {
     }
     const json = {
       'data_path': data_path,
-      'enable_mqtt_discovery': mqtt_status,
+      'mqtt_discovery': mqtt_discovery,
       'conf': confData,
       'meters': sectionsData,
       'mqtt': mqttData

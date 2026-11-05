@@ -1,0 +1,388 @@
+{
+    "total_water_m3": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "total",
+            "device_class": "water",
+            "name": "Total water volume",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:water"
+        }
+    },
+
+    "flow_water_m3h": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "name": "Water volume flow",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "m³/h",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:waves-arrow-right"
+        }
+    },
+
+    "total_kwh": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "json_attributes_topic": "wmbusmeters/{name}",
+            "state_class": "total",
+            "device_class": "energy",
+            "name": "Total energy consumption",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kWh",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:home-lightning-bolt-outline"
+        }
+    },
+
+    "power_kw": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "power",
+            "name": "Current power consumption",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "kW",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:waves-arrow-right"
+        }
+    },
+
+    "forward_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "Forward water temperature",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:thermometer-water"
+        }
+    },
+
+    "return_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "Return water temperature",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:thermometer-water"
+        }
+    },
+
+    "difference_c": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "state_class": "measurement",
+            "device_class": "temperature",
+            "name": "Water temperature difference forward-return",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "°C",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:thermometer-chevron-down"
+        }
+    },
+
+    "status_OK": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "name": "Status OK",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'OK' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ERROR_TEMP_SENSOR_1_CABLE_BREAK": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "problem",
+            "name": "Status error (Temperature Sensor 1 Cable Break)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_CABLE_BREAK' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ERROR_TEMP_SENSOR_1_SHORT_CIRCUIT": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "problem",
+            "name": "Status error (Temperature Sensor 1 Short Circuit)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_1_SHORT_CIRCUIT' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ERROR_TEMP_SENSOR_2_CABLE_BREAK": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "problem",
+            "name": "Status error (Temperature Sensor 2 Cable Break)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_CABLE_BREAK' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ERROR_TEMP_SENSOR_2_SHORT_CIRCUIT": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "problem",
+            "name": "Status error (Temperature Sensor 2 Short Circuit)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ERROR_TEMP_SENSOR_2_SHORT_CIRCUIT' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ERROR_FLOW_MEASUREMENT_SYSTEM_ERROR": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "problem",
+            "name": "Status error (Flow Management System)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ERROR_FLOW_MEASUREMENT_SYSTEM_ERROR' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_ERROR_ELECTRONICS_DEFECT": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "problem",
+            "name": "Status error (Electronics Defective)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'ERROR_ELECTRONICS_DEFECT' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_OK_INSTRUMENT_RESET": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "name": "Status OK (instrument reset)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'OK_INSTRUMENT_RESET' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "status_OK_BATTERY_LOW": {
+        "component": "binary_sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "device_class": "battery",
+            "name": "Status OK (battery low)",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ 'OK_BATTERY_LOW' in value_json.status }}",
+            "payload_on": "True",
+            "payload_off": "False"
+        }
+    },
+
+    "timestamp": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": ["wmbusmeters_{id}"],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "name": "Timestamp",
+            "entity_category": "diagnostic",
+            "device_class": "timestamp",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:clock"
+        }
+    },
+
+    "rssi_dbm": {
+        "component": "sensor",
+        "discovery_payload": {
+            "device": {
+                "identifiers": [
+                    "wmbusmeters_{id}"
+                ],
+                "manufacturer": "Engelmann",
+                "model": "{driver}",
+                "name": "{name}",
+                "hw_version": "{id}"
+            },
+            "enabled_by_default": true,
+            "entity_category": "diagnostic",
+            "device_class": "signal_strength",
+            "state_class": "measurement",
+            "name": "Rssi",
+            "state_topic": "wmbusmeters/{name}",
+            "unique_id": "wmbusmeters_{id}_{attribute}",
+            "unit_of_measurement": "dBm",
+            "value_template": "{{ value_json.{attribute} }}",
+            "icon": "mdi:signal"
+        }
+    }
+}
