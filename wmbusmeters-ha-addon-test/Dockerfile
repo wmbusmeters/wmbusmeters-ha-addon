@@ -38,7 +38,13 @@ RUN cmake -B build -G Ninja \
     cmake --install build
 
 WORKDIR /wmbusmeters
-RUN ./configure && make DEBUG=true
+ARG TARGETARCH
+RUN ./configure && \
+    if [ "$TARGETARCH" = "arm64" ]; then \
+        make; \
+    else \
+        make DEBUG=true; \
+    fi
 
 WORKDIR /xmq
 RUN ./configure && make VERBOSE= && make install
