@@ -22,10 +22,10 @@ fi
 
 if [ ! -f ${CONFIG_PATH} ]
 then
-    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "true", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "true", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"onchange", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
 fi
 
-# Ensure metershell (first-telegram MQTT discovery) exists for pre-existing configs
+# Ensure metershell (first-telegram MQTT discovery and subsequent with more fields) exists for pre-existing configs
 if [ -z "$(jq -r '.conf.metershell // empty' ${CONFIG_PATH} 2>/dev/null)" ]; then
     bashio::log.info "Adding metershell to configuration ..."
     tmp_cfg=$(mktemp)
@@ -53,8 +53,8 @@ if [ "$(jq -r '.conf | has("telegramdetails")' ${CONFIG_PATH} 2>/dev/null)" = "t
     jq '.conf.addtelegramdetails //= .conf.telegramdetails | del(.conf.telegramdetails)' ${CONFIG_PATH} > ${tmp_cfg} && mv ${tmp_cfg} ${CONFIG_PATH}
 fi
 
-# MQTT discovery is now sent on demand. When the FIRST telegram from a
-# meter arrives then this happens:
+# MQTT discovery is now sent on demand. When the FIRST (and subsequent with more fields)
+# telegram from a meter arrives then this happens:
 # wmbusmeters executes the "metershell" config setting which
 # is send_meter_discovery.sh "$METER_JSON" "$METER_DRIVER"
 # which takes as arguments:
@@ -65,7 +65,7 @@ fi
 if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
-    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "true", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
+    echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "true", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"onchange", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
     bashio::addon.option "reset_config" "no"
     bashio::addon.restart
 fi
