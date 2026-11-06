@@ -91,7 +91,7 @@ WORKDIR /wmbusmeters
 COPY --from=build /librtlsdr/build/src/librtlsdr.so.* /usr/lib/
 COPY --from=build /librtlsdr/rtl-sdr.rules /usr/lib/udev/rules.d/rtl-sdr.rules
 COPY --from=build /librtlsdr/build/src/rtl_* /usr/bin/
-COPY --from=build /wmbusmeters/build_debug/wmbusmeters /wmbusmeters/wmbusmeters
+COPY --from=build /wmbusmeters/build*/wmbusmeters /wmbusmeters/wmbusmeters
 COPY --from=build /rtl-wmbus/build/rtl_wmbus /usr/bin/rtl_wmbus
 COPY --from=build /rtl_433/build/src/rtl_433 /usr/bin/rtl_433
 COPY --from=build /rtl_reset/rtl_reset /usr/bin/rtl_reset
