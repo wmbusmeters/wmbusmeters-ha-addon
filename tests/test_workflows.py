@@ -1749,8 +1749,10 @@ def test_panel_meter_cards(tmp):
 def test_telegramdetails_migration(tmp):
     """wmbusmeters master renamed addtelegramdetails=first to onchange.
     [edge] and [test] are built from master: their defaults use onchange and
-    a saved "first" becomes "onchange" once at start. The stable add-on is
-    built from a release that does not know onchange yet and keeps first."""
+    a saved "first" becomes "onchange" once at start. The stable add-on keeps
+    first until the next wmbusmeters release: that release copies edge into
+    stable (build_ha_addon_stable.yml), so stable then has onchange and the
+    migration too."""
     for addon in (EDGE, TEST):
         run_text = (ROOT / addon / "run.sh").read_text()
         defaults = [
@@ -1792,9 +1794,13 @@ def test_telegramdetails_migration(tmp):
                 f"{addon} addtelegramdetails {before!r}: migration {'is' if logged else 'is not'} logged",
             )
     stable = (ROOT / STABLE / "run.sh").read_text()
+    released = '"addtelegramdetails":"first"' in stable and "addtelegramdetails migration" not in stable
+    synced = ('"addtelegramdetails":"onchange"' in stable and '"addtelegramdetails":"first"' not in stable
+              and stable.count("# BEGIN addtelegramdetails migration") == 1)
     check(
-        '"addtelegramdetails":"first"' in stable and "addtelegramdetails migration" not in stable,
-        f"{STABLE}/run.sh keeps addtelegramdetails=first for the released wmbusmeters",
+        released or synced,
+        f"{STABLE}/run.sh either keeps first (before the next release) or, copied from edge, "
+        f"uses onchange with the migration",
     )
 
 
