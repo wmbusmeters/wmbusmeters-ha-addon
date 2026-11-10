@@ -914,8 +914,24 @@ def test_edge_discovery_flag(tmp):
     )
 
 
+def test_test_debug_build_ships_libasan(tmp):
+    """A DEBUG build of wmbusmeters is linked against libasan.so.8. The runtime
+    stage has no gcc, so the library must be copied from the build stage, or
+    wmbusmeters exits with 127 ("Error loading shared library libasan.so.8")."""
+    dockerfile = (ROOT / TEST / "Dockerfile").read_text()
+    build, runtime = dockerfile.split("AS runtime", 1)
+    if "DEBUG=true" not in build:
+        check(True, f"{TEST}/Dockerfile builds no DEBUG wmbusmeters")
+        return
+    check(
+        re.search(r"^COPY --from=build /usr/lib/libasan\.so\.8\S* /usr/lib/$", runtime, re.M) is not None,
+        f"{TEST}/Dockerfile copies libasan.so.8 into the runtime image for the DEBUG build",
+    )
+
+
 def main():
     tests = [
+        test_test_debug_build_ships_libasan,
         test_workflows_parse_and_wiring,
         test_addon_configs,
         test_edge_version_step,
