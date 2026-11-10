@@ -376,9 +376,7 @@ xsl:stylesheet(version                 = 1.0
                             name {
                                 xsl:value-of(select = $meter_name)
                             }
-                            serial_number {
-                                xsl:value-of(select = $meter_id)
-                            }
+                            serial_number = '{id}'
                         }
                         name {
                             xsl:value-of(select = $display_name)
@@ -480,9 +478,7 @@ xsl:stylesheet(version                 = 1.0
                                 name {
                                     xsl:value-of(select = $meter_name)
                                 }
-                                serial_number {
-                                    xsl:value-of(select = $meter_id)
-                                }
+                                serial_number = '{id}'
                             }
                             name {
                                 xsl:value-of(select = $display_name)
@@ -553,9 +549,7 @@ xsl:stylesheet(version                 = 1.0
                                 name {
                                     xsl:value-of(select = $meter_name)
                                 }
-                                serial_number {
-                                    xsl:value-of(select = $meter_id)
-                                }
+                                serial_number = '{id}'
                             }
                             /* The main status keeps the short name, other fields are named with the field. */
                             name {
@@ -628,9 +622,7 @@ xsl:stylesheet(version                 = 1.0
                         name {
                             xsl:value-of(select = $meter_name)
                         }
-                        serial_number {
-                            xsl:value-of(select = $meter_id)
-                        }
+                        serial_number = '{id}'
                     }
                     entity_category    = diagnostic
                     name               = timestamp
@@ -709,9 +701,7 @@ xsl:stylesheet(version                 = 1.0
                             name {
                                 xsl:value-of(select = $meter_name)
                             }
-                            serial_number {
-                                xsl:value-of(select = $meter_id)
-                            }
+                            serial_number = '{id}'
                         }
                         entity_category = diagnostic
                         name {

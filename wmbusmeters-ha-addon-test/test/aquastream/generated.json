@@ -8,7 +8,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "enabled_by_default": true,
       "icon": "mdi:battery-clock",
@@ -30,7 +30,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "enabled_by_default": true,
       "icon": "mdi:list-status",
@@ -73,7 +73,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": true,
@@ -97,7 +97,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -121,7 +121,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -145,7 +145,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -169,7 +169,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -193,7 +193,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -217,7 +217,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -241,7 +241,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -265,7 +265,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -289,7 +289,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -313,7 +313,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -337,7 +337,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -361,7 +361,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -385,7 +385,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "problem",
       "enabled_by_default": false,
@@ -409,7 +409,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "enabled_by_default": true,
       "entity_category": "diagnostic",
@@ -429,7 +429,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "date",
       "enabled_by_default": true,
@@ -450,7 +450,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "water",
       "enabled_by_default": true,
@@ -473,7 +473,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "timestamp",
       "enabled_by_default": false,
@@ -494,7 +494,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "water",
       "enabled_by_default": true,
@@ -517,7 +517,7 @@
         ],
         "model": "Water meter (IMT,01,07)",
         "name": "AqWater",
-        "serial_number": "05933237"
+        "serial_number": "{id}"
       },
       "device_class": "water",
       "enabled_by_default": true,

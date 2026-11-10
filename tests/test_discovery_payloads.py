@@ -15,6 +15,7 @@ regeneration that reintroduces the failure modes fails CI:
   - a date-like entity without device_class
   - a text status published as a numeric sensor instead of a binary_sensor
   - a cumulative total_/target_ sensor without state_class total/total_increasing
+  - a device.serial_number that is not a string (issue #2169)
 
 Pure stdlib, no Home Assistant installation required. Optional arguments
 are explicit payload files; by default every *.json under
@@ -23,6 +24,7 @@ is meter output, not discovery.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -81,6 +83,11 @@ def check_entity(name, entity):
     for key in DEVICE_STRING_KEYS:
         if device.get(key) == "":
             problems.append(f"device.{key} is an empty string")
+    serial = device.get("serial_number")
+    if serial is not None and not isinstance(serial, str):
+        problems.append(f"device.serial_number is a JSON {type(serial).__name__} "
+                        f"({serial!r}); a meter id like 217e0432 then becomes "
+                        f"inf and HA rejects the payload (issue #2169)")
 
     device_class = payload.get("device_class")
     state_class = payload.get("state_class")
@@ -131,7 +138,24 @@ def check_file(path):
         check_entity(name, entity)
 
 
+def check_generators():
+    """The generator must emit the meter id as a placeholder string.
+
+    Emitting it with xsl:value-of lets the JSON conversion turn an id that
+    looks like a number into one: 23813076 becomes a number and 217e0432
+    becomes 2.17E+434, i.e. inf, which HA rejects (issue #2169)."""
+    for xslq in sorted(ROOT.glob("wmbusmeters-ha-addon*/to-ha-discovery.xslq")):
+        name = f"{xslq.parent.name}/{xslq.name}"
+        text = xslq.read_text(encoding="utf-8")
+        if re.search(r"serial_number\s*\{\s*xsl:value-of", text):
+            fail(name, "serial_number is emitted with xsl:value-of; use "
+                 "serial_number = '{id}' so it stays a string (issue #2169)")
+        else:
+            ok(name, "serial_number stays a string")
+
+
 def main():
+    check_generators()
     files = sys.argv[1:]
     if not files:
         files = sorted(str(p) for p in TEST.glob("*/*.json")
