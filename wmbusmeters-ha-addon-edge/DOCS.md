@@ -47,7 +47,7 @@ See [project README for more information][docs]
 
 #### Section: `meters`
 
-Specify your meters configuration parameters. The `driver` and `id` values can be read from the add-on logs after the initial start (with empty `meters` configuration). The `name` is your label for the meter and `key` is the encryption key to decrypt telegrams (if your meter use any).
+Specify your meters configuration parameters. The `driver` and `id` values can be read from the add-on logs after the initial start (with empty `meters` configuration). The `name` is your label for the meter and `key` is the encryption key to decrypt telegrams (if your meter use any). Every meter also has its own `MQTT discovery` choice, see the _MQTT discovery_ section below; it is stored in the meter's configuration and is never handed to wmbusmeters.
 
 See [project README for more information][docs]
 
@@ -60,14 +60,50 @@ By default it is not enabled and leverages the _Moquitto broker_ addon details p
 
 ### MQTT discovery
 
-With "Enable mqtt discovery" turned on, the add-on creates the Home Assistant entities itself. When the first telegram of a meter arrives after the add-on starts, the discovery is generated from that telegram and the meter driver: one entity per field of the telegram, with the unit, device class and state class that the driver describes.
+"MQTT discovery (default for all meters)" has three settings:
+
+- **Disable**: no Home Assistant entities are created or updated; the meter data is still published to MQTT. Configure the entities yourself (see _Manual configuration_ below).
+- **Automatic**: the add-on creates the Home Assistant entities itself. When the first telegram of a meter arrives after the add-on starts, the discovery is generated from that telegram and the meter driver: one entity per field of the telegram, with the unit, device class and state class that the driver describes. When a later telegram brings new fields (meters that send several telegram formats), the discovery is sent again with the new entities added. This is the behaviour of 3.1 and later. The `[test]` add-on is delivered with this setting, the `[edge]` and stable add-ons with _Disable_: turning it on there is your choice.
+- **Manual**: you decide which entities a meter gets and how they are configured, and the add-on keeps that configuration until you apply another one. This is for entities that the generated discovery does not describe the way you need them, e.g. a flow sensor that needs `force_update: true` so that every telegram, including a repeated `0`, reaches Home Assistant (#2138).
+
+A configuration that was written before this option existed keeps its setting: the old "Enable mqtt discovery" (`true`/`false`) becomes _Automatic_/_Disable_ on the first start after the update.
+
+A manual configuration belongs to one meter (its id), so two meters with the same driver can differ (see also "Every meter can choose its own mode" below). It is made in the panel, in the "Manual MQTT discovery (Home Assistant entities)" box of the meter:
+
+- **Generate draft** makes a draft from the discovery that the add-on generated for the meter, in every mode. It keeps the entities of every telegram format that has arrived, also before a restart, so a meter that sends several formats gets all of them. If no telegram of the meter has arrived yet, try again once one did. An existing draft that differs is only replaced after you confirm.
+- **Download draft** saves the draft as a JSON file, to edit it, e.g. to add `force_update: true` to an entity or to remove entities you do not want.
+- **Upload draft** stores an edited file, or one of your own, as the draft of the meter. The file maps an attribute to its `component` and `discovery_payload`, the format of the generated discovery and of the templates of the add-on before 3.1; `{name}`, `{id}`, `{driver}` and `{attribute}` are replaced when it is published. An invalid file is refused and the draft stays as it was.
+- **Apply as manual...** shows which entities the draft adds, changes and removes, and after you confirm publishes it, removes the discovery of the meter that the draft does not hold any more, and switches the meter to the manual mode. If publishing fails, the meter keeps its entities and nothing is applied.
+
+The entities keep their topics, unique ids and device, so their history stays. The add-on publishes the applied configuration of every manual meter at every start; an add-on update, a restart or a new telegram does not change it. A newer add-on may generate more entities or better settings: generate a new draft, compare it with yours and apply it when you want to. A manual meter without an applied configuration keeps the discovery it has until you apply one. The files are kept in the add-on storage (`/data/discovery`), also when you switch back to automatic.
+
+The manual mode also removes the retained discovery of a meter that is not in the configuration any more. The discovery of the other meters is left alone: the generated one belongs to the meter that publishes it, and a disabled meter keeps what it has.
+
+In the automatic mode:
 
 - Status fields get a problem sensor, a text sensor with the status text, and one binary sensor per flag the driver knows. The flag sensors are disabled by default: enable the ones that matter to you. Their `info` attribute describes the flag.
-- Discovery that is no longer published for a meter, e.g. for a field that a driver renamed, is removed when the meter's discovery is sent.
+- A meter that sends several telegram formats gets the entities of every format: the discovery is sent again when a telegram brings fields the meter has not sent before. An entity is not removed because a telegram does not carry its field.
+- Discovery of a field that the driver does not define any more, e.g. a field that the driver renamed, is removed when the meter's discovery is sent.
 - A meter that uses a deprecated driver gets a "driver (deprecated, use ... before ...)" entity. Change `driver=` of the meter to the driver it names.
 - Entities of meters that you removed from the configuration are not removed automatically; delete them in Home Assistant.
 
 A status like `DRY ERROR_FLAGS_128` contains a bit that the driver does not describe yet (here bit value 128 of the `ERROR_FLAGS` lookup). If you know what it means for your meter, please tell the [wmbusmeters project](https://github.com/wmbusmeters/wmbusmeters/issues), so that the driver can describe it.
+
+### Every meter can choose its own mode
+
+The setting above is the default of every meter, and a meter can deviate from it. Every meter in the _Meters_ section of the configuration interface has its own `MQTT discovery for this meter` choice:
+
+- **Add-on default (...)**: the meter uses the setting above; the brackets name it, e.g. _Add-on default (Automatic)_.
+- **Disable**, **Automatic**, **Manual**: the meter uses this mode, whatever the add-on setting is.
+
+So one meter can publish the generated discovery, a second one its own manual configuration and all the others nothing at all, e.g.:
+
+- `MainWater`: **Disable** - no entities, the meter data is published to MQTT as before.
+- `Electricity`: **Automatic** - the generated entities of the driver and the first telegram.
+- `Gas`: **Manual** - the configuration applied in the panel for this meter.
+- `Heat`: **Add-on default** - whatever the setting above is.
+
+The add-on logs the meters that deviate from the add-on setting at every start, so that the log shows the effective mode of every meter.
 
 ### Manual configuration
 

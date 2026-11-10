@@ -52,8 +52,8 @@ if [ "${RESET_CONF}" = "yes" ]
 then
     bashio::log.info "RESET CONFIG selected - reseting add-on configuration to default ..."
     echo '{"data_path": "/homeassistant/wmbusmeters", "enable_mqtt_discovery": "false", "conf": {"loglevel": "normal", "device": "auto:t1", "addtelegramdetails":"first", "donotprobe": "/dev/ttyAMA0", "logtelegrams": "false", "format": "json", "logfile": "/dev/stdout", "shell": "/wmbusmeters/mosquitto_pub.sh \"wmbusmeters/$METER_NAME\" \"$METER_JSON\"", "metershell": "send_meter_discovery.sh \"$METER_JSON\" \"$METER_DRIVER\""}, "meters": [], "mqtt": {}}' | jq . > ${CONFIG_PATH}
-    bashio::addon.option "reset_config" "no"
-    bashio::addon.restart
+    bashio::app.option "reset_config" "no"
+    bashio::app.restart
 fi
 
 CONFIG_DATA_PATH=$(bashio::jq "${CONFIG_PATH}" '.data_path')
